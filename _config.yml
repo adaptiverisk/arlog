@@ -1,0 +1,16 @@
+# Site settings
+title: The AdaptiveRisk Blog
+email: info@adaptiverisk.com
+description: > # this means to ignore newlines until "baseurl:"
+  The blog about technical and market challenges and solutions we encounter
+  when building AdaptiveRisk.
+baseurl: "" # the subpath of your site, e.g. /blog/
+url: "http://yourdomain.com" # the base hostname & protocol for your site
+twitter_username: AdaptiveRisk
+#github_username:  skolos
+
+# Build settings
+markdown: kramdown
+
+kramdown:
+  syntax_highlighter: rouge
