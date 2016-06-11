@@ -9,8 +9,8 @@ categories: "power spot"
 ## Introduction
 
 The standard approach to modeling daily (spot) prices in commodity markets is
-to use model dynamics of monthly average up to the start of the month and then
-assume that spot prices evolve as geometric brownina
+to use model dynamics of monthly average (forwards) up to the start of the month 
+and then assume that spot prices evolve as geometric browni
 
 ## Conclusion
 

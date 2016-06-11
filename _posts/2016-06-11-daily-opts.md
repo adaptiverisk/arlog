@@ -2,28 +2,31 @@
 layout: post
 title: "Daily Options"
 categories: "power volatility"
+date: "2016-06-11 00:17"
+published: true
 ---
 
-## TLDR
+## Summary
 
-When computing the monthly strip of daily options it is never a good idea to
-approximate it with a daily option in the middle (15'th day) of the month as 
-errors in value or implied volatility can be as high as 4%. Instead, it is 
-better to take the daily option that expires after 13.9 days within a month 
-(this halves the errors of the previous method). An even better approach would 
-be to take option that expires depending on how far is the delivery month T - 
-with this method the errors are reduced by a factor of 10 (0.4%). However 
-this approximation does not work well for deep out of the money options.
+When computing a monthly strip of daily options it is never a good idea to
+approximate it with a daily option expiring in in the middle of the month 
+(15'th day) as errors in value or implied volatility can be as high as 4%. 
+Instead, it is better to take the daily option that expires after 13.9 days 
+within a month (this halves the errors of the previous method). An even better 
+approach would be to take option that expires depending on how far is the 
+delivery month T - with this method the errors are reduced by a factor of 10 
+(0.4%). However this approximation does not work well for deep out of the money 
+options.
 
 ## Introduction
 
 Daily options are popular contracts in power and natural gas markets. 
-These are European options where underlyings are daily forward contracts for 
+They are European options where underlyings are daily forward contracts for 
 the next day after the exercise. In power markets the forward contract can be
-peak, off-peak or base load, however in the US only the peak load usually 
-liquid. Usually these options are sold in strips (monthly, quarterly, annual).
-When quoting such a strip the price is given as an average option premium per 
-commodity unit (MWh or MMBtu).
+peak, off-peak or base load, however in the US only the peak load options are 
+usually liquid. Usually these options are sold in strips (monthly, quarterly, 
+annual).When quoting such a strip the price is given as an average option
+premium per commodity unit (MWh or MMBtu).
 
 Traders judge if an option is too expensive or too cheap by considering its 
 implied volatility, which is computed using the
@@ -35,8 +38,8 @@ $$ v_{opt}=B\left(T,F,\sigma\right) $$
 
 where $$v_{opt}$$ - option premium, 
 _B_ - [Black model](https://en.wikipedia.org/wiki/Black_model), 
-_F_ - price of underlying forward. Similarly, in the case of (say monthly) a
-strip of daily options one has to solve
+_F_ - price of underlying forward. Similarly, in the case of a monthly strip of 
+daily options one has to solve
  
 $$
 \begin{equation}
@@ -46,8 +49,8 @@ $$
 $$
 
 where $$\bar{v}_{opt}$$ - average premium of options in the strip, 
-_N_ - number of options in the strip, _T_ time to start of the strip (start of
-the month), $$\Delta t$$ - length of one day measured in years,
+_N_ - number of options in the strip, _T_ - time to the start of the strip 
+(start of the month), $$\Delta t$$ - length of one day measured in years,
 $$\sigma_i$$ - daily volatility for the _i_-th option in the strip.
  
 In practice, to speed up calculations, instead of formula (\ref{eq:strip}) one
@@ -68,19 +71,20 @@ approximation is.
 
 ## "Blended" Volatility
 
-Before investigating of the approximation described in the
+Before investigating the approximation described in the
 Introduction we need to specify how $$\bar{\sigma}_i$$ are computed. Forward 
 price dynamics  exhibit a term structure of volatility - the farther we are from 
 the delivery period, the lower the volatility ("Samuelson effect"). Therefore 
-the volatility of daily prices should be highest within the delivery month.
+the volatility of daily prices should be the highest within the delivery month.
 
 Traders in power markets think about price volatility of daily options in terms 
 of two periods - before the month starts and inside the month. The volatility 
-before the month is described by a monthly option, the market of which is 
-usually more liquid than for daily options. The volatility inside the month is 
-called spot volatility and describes how daily prices behave once we are inside
- the month. Forward volatilities are usually much lower than spot volatilities. 
-The daily volatilities are then computed by a process that is called "blending":
+before the month is described by a monthly option (forward volatility), the 
+market of which is usually more liquid than for daily options. The volatility 
+inside the month is called spot volatility and describes how daily prices behave 
+once we are inside the month. Forward volatilities are usually much lower than 
+spot volatilities. The daily volatilities are then computed by a process that is 
+called "blending":
 
 $$
 \begin{equation}
@@ -106,11 +110,11 @@ For our investigation we will make the following assumptions:
 * we set the forward price of commodity to $50 (per unit)
 
 We are interested in how the approximation (\ref{eq:simplified}) behaves
-for strikes of different moneyness and different time to delivery month _T_.
-For each case we will present three graphs:
+for strikes of different moneyness and different times to the delivery month 
+_T_. For each case we will present three graphs:
 
 1. First we are going to compute at which value of _n_ approximation 
-(\ref{eq:simplified}) yields an equality (i.e. at what value of _n_ the option's 
+(\ref{eq:simplified}) yields equality (i.e. at what value of _n_ the option's 
 premium equals the average premium of the strip of daily options.)
 2. Then we compute by how much the approximation is different from the
 exact average premium of daily options for a given _n_.
@@ -141,12 +145,12 @@ implied volatility:
 {: style="text-align: center"}
 
 Note that if _T_ is less than about half a year the premium and volatility
-error becomes big and reaches almost 4% at _T_ = 2 months.
+errors become big and reach almost 4% at _T_ = 2 months.
 
 #### _n_ = 13.9
 
-We can reduce errors observed in previous section if we pick smaller value of
-_n_ = 13.9. 
+We can reduce errors observed in the previous section if we pick a smaller value 
+of _n_ = 13.9. 
 
 ![v moneyness 13.9](/images/daily-options/v-moneyness-14.png)\\
 ![vol moneyness 13.9](/images/daily-options/vol-moneyness-14.png)
@@ -176,11 +180,11 @@ beyond 2% for small _T_.
 
 The results in the previous section show how the error becomes very large
 when _T_ is small. One reason this happens is that when moneyness is fixed,
-delta becomes extreme as _T_ goes to zero. The intuition here is that
+delta becomes very small as _T_ goes to zero. The intuition here is that
 the underlying distribution width is described by variance $$\sigma^2 T$$.
 When the variance is large even large strikes will fall in a very probable 
 region of the distribution. On the other hand when _T_ is small the variance is
-small, and even modest strike can be in a very improbable region of the 
+small, and even a modest strike can be in a very improbable region of the 
 distribution.
 
 One way to describe moneyness while taking into account the above fact is to
@@ -198,13 +202,13 @@ $$
 $$
 
 where _d_ is some constant. We select this constant to ensure that $$K/F = 1.2$$
-at 6 months for OTM case and $$F/K = 1.2$$ at 6 months for ITM case.
+at 6 months for the OTM case and $$F/K = 1.2$$ at 6 months for the ITM case.
 
 ![n delta](/images/daily-options/n-delta.png)
 {: style="text-align: center"}
 
-The general shapes of _n_ curves is similar to fixed moneyness case, but
-here ATM and OTM curves are identical.
+The general shapes of the _n_ curves are similar to the fixed moneyness case, 
+but here ATM and OTM curves are identical.
 
 The error results when _n_ is fixed are similar to the fixed moneyness case
 (the errors are somewhat smaller, but not significantly), so we will not show them
@@ -215,7 +219,7 @@ values of _n_) we get a much better result:
 ![vol delta var](/images/daily-options/vol-delta-var.png)
 {: style="text-align: center"}
 
-Not how the relative error is now within 0.4% for the full range of _T_.
+Note how the relative error is now within 0.4% for the full range of _T_.
 
 ### Case: Spot and Forward Volatilities are Close
 
@@ -223,14 +227,14 @@ In previous sections we considered the case when the spot volatility is much
 larger than the forward volatility (80% vs 30%). But what happens when they
 are close to each other? (In reality it almost never happens due to the
 Samuelson Effect.) We ran the above analysis for the case when the spot 
-volatility is just slightly larger than the forward (31% spot vs 30% forward).
+volatility is just slightly larger than the forward volatility (31% spot vs 30% 
+forward).
 
 ![n small spot vol](/images/daily-options/n-spot.png)
 {: style="text-align: center"}
 
-Note that function _n_ of _T_ to render the approximation (\ref{eq:simplified})
-exact has a similar shape as in the large spot volatility case. However all 
-moneyness cases now collapsed into a single curve.
+Note that the shape of the _n_ curves is similar to the large spot volatility 
+case. However all moneyness cases are now collapsed into a single curve.
 
 Using _n_ = 14.5, to which it converges for large _T_, we get the following
 errors for premium and implied volatility:
@@ -240,7 +244,7 @@ errors for premium and implied volatility:
 {: style="text-align: center"}
 
 The errors are very small (within 0.2% for the full range, for both premium and
-volatility). If we use 13.9 or variables values for _n_ the errors become even 
+volatility). If we use 13.9 or variable values for _n_ the errors become even 
 smaller.
 
 ## Conclusion
@@ -248,12 +252,12 @@ smaller.
 Approximating a strip of dailies with the value of a single daily option is an
 efficient technique for significantly increasing the speed of calculation. 
 However, the time of expiration of the single option needs to be selected
-carefully. The usual selection in the middle of the month is never optimal and 
-can produce up to 4% errors in premium or implied volatity. It is much better to
-use an option that expires 13.9 days from the beginning of the month, however 
-the errors in this case are still significant - 2%. The best method is to use an
-expiration date that changes depending on the time to delivery month _T_. With
-this method the errors fall below 0.4%.
+carefully. The usual selection with expiration in the middle of the month is 
+never optimal and can produce up to 4% errors for the premium or implied 
+volatity. It is much better to use an option that expires 13.9 days from the 
+beginning of the month, however the errors in this case are still significant - 
+2%. The best method is to use an expiration date that changes depending on the 
+time to delivery month _T_. With this method the errors fall below 0.4%.
 
 However this approach does not work well for deep out of the money options.
 
