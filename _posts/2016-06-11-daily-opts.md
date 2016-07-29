@@ -15,7 +15,7 @@ Instead, it is better to take the daily option that expires after 13.9 days
 within a month (this halves the errors of the previous method). An even better 
 approach would be to take option that expires depending on how far is the 
 delivery month T - with this method the errors are reduced by a factor of 10 
-(0.4%). However this approximation does not work well for deep out of the money 
+(0.4%). However, this approximation does not work well for deep out of the money 
 options.
 
 ## Introduction
@@ -25,7 +25,7 @@ They are European options where underlyings are daily forward contracts for
 the next day after the exercise. In power markets the forward contract can be
 peak, off-peak or base load, however in the US only the peak load options are 
 usually liquid. Usually these options are sold in strips (monthly, quarterly, 
-annual).When quoting such a strip the price is given as an average option
+annual). When quoting such a strip the price is given as an average option
 premium per commodity unit (MWh or MMBtu).
 
 Traders judge if an option is too expensive or too cheap by considering its 
@@ -73,7 +73,7 @@ approximation is.
 
 Before investigating the approximation described in the
 Introduction we need to specify how $$\bar{\sigma}_i$$ are computed. Forward 
-price dynamics  exhibit a term structure of volatility - the farther we are from 
+price dynamics exhibits a term structure of volatility - the farther we are from 
 the delivery period, the lower the volatility ("Samuelson effect"). Therefore 
 the volatility of daily prices should be the highest within the delivery month.
 
@@ -212,7 +212,7 @@ but here ATM and OTM curves are identical.
 
 The error results when _n_ is fixed are similar to the fixed moneyness case
 (the errors are somewhat smaller, but not significantly), so we will not show them
-here. However when we vary _n_ with _T_ (_n_ = average of _ATM_ and _OTM_ exact
+here. However, when we vary _n_ with _T_ (_n_ = average of _ATM_ and _OTM_ exact
 values of _n_) we get a much better result:
 
 ![v delta var](/images/daily-options/v-delta-var.png)\\
@@ -234,7 +234,7 @@ forward).
 {: style="text-align: center"}
 
 Note that the shape of the _n_ curves is similar to the large spot volatility 
-case. However all moneyness cases are now collapsed into a single curve.
+case. However, all moneyness cases are now collapsed into a single curve.
 
 Using _n_ = 14.5, to which it converges for large _T_, we get the following
 errors for premium and implied volatility:
@@ -254,12 +254,12 @@ efficient technique for significantly increasing the speed of calculation.
 However, the time of expiration of the single option needs to be selected
 carefully. The usual selection with expiration in the middle of the month is 
 never optimal and can produce up to 4% errors for the premium or implied 
-volatity. It is much better to use an option that expires 13.9 days from the 
+volatility. It is much better to use an option that expires 13.9 days from the 
 beginning of the month, however the errors in this case are still significant - 
 2%. The best method is to use an expiration date that changes depending on the 
 time to delivery month _T_. With this method the errors fall below 0.4%.
 
-However this approach does not work well for deep out of the money options.
+However, this approach does not work well for deep out of the money options.
 
 You can download the [Mathematica notebook](/downloads/daily-option.nb) that
 was used to obtain the results for this blog post. With this notebook you can
