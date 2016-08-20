@@ -1,0 +1,553 @@
+Adjust for vs2013
+
+========== Section 1. Project setup =============================
+
+Using VS6 (note - some changes in debug configuration due to the fact that xlw generates not valid addin in default debug setting):
+1. Create new workspace: File->New->Project->Other Project Types->Visual Studio Solutions->Blank Solution. Select location, type name, hit OK
+
+2. Create new project: 
+- Right click on the workspace in Solution Explorer, select Add->New Project->Projects->Visual C++->Win32->Win32 Console Application
+- Project name->xlladdin, OK
+- On the Overview page of the Win32 Application Wizard dialog box, choose the Next button.
+- On the Application Settings page, under Application type, select DLL and check Empty project.
+
+3. Create thirdparty folder in solution and Copy xlw folder to thirdparty folder.
+
+4. Configuration (All Configurations): Right click on "xlladdin" in Solution Explorer, select Properties -> Configuration: All Configurations. Configuration Properties ->
+  i. General:
+    - Target Extension: .xll
+  ii. Debugging:
+    - Command: path\excel.exe (C:\Program Files (x86)\Microsoft Office\Office15\EXCEL.EXE)
+    - Command Arguments: $(TargetPath)
+  iii. C/C++:
+    - Additional Include Directories: $(SolutionDir)thirdparty\xlw\include;%(AdditionalIncludeDirectories)
+  iv. Linker->Additional Library Directories: $(SolutionDir)thirdparty\xlw\lib\;%(AdditionalLibraryDirectories)
+    
+5. Configuration (Debug):
+  - Linker->Input->Additional Dependencies: xlw-vc120-mt-gd-5_0_1f0.lib
+
+6. Configuration (Release):
+  - Linker->Input->Additional Dependencies: xlw-vc120-mt-5_0_1f0.lib
+  
+7. Add initial contents: 
+	i. Create three empty files in project folder: projectname.h, projectname.cpp and xlwprojectname.cpp (i.e. test.h, test.cpp and xlwtest.cpp). Add files to the project (right click on project in FileView and select Add Files to Project).
+	ii. Add the following contents to test.h:
+--------- BEGIN test.h ----------
+#ifndef _test_h_
+#define _test_h_
+
+#include <xlw/xlw.h>
+
+//<xlw:libraryname=TestLibrary
+
+double //Square root of an argument
+MySqrt(double x //argument
+       );
+
+#endif
+-------- END test.h ------------
+	iii. Add the following contents to test.cpp:
+-------- Begin test.cpp --------
+#include "test.h"
+#include <math.h>
+
+double MySqrt(double x)
+{
+  if( x < 0. )
+  {
+    throw("#Negative argument");
+  }
+  return sqrt(x);
+}
+------- End test.cpp ----------
+
+8. Set up custom build step to generate interface:
+	i. In Solution Explorer right click on test.h and select Properties
+	ii. Configuration -> All Configurations
+	iii. Configuration Properties -> General -> Item Type: Custom Build Tool, press Apply
+	iv.  Configuration Properties -> Custom Build Tool:
+	  - Command Line: $(SolutionDir)thirdparty\xlw\InterfaceGenerator.exe %(FullPath)
+	  - Description: Generating xlw%(Filename).cpp
+	  - Outputs: $(ProjectDir)xlw%(Filename).cpp;%(Outputs)
+	  - Execute Before: PreBuildEvent
+	  
+9. Test addin creation and create example.xls (Select configuration Win32 Debug):
+  i. Set to reload files in VC automatically: Tools->Options->Environment->Document - check "Auto-load changes, if saved"
+	ii. Hit F5: Excel should start and load debug version of addin (ignore VS6 warning and select Enable macros in Excel).
+	iii. Go to function wizard, TestLibrary, and select function MySqrt.
+	iv. Save spreadsheet and exit Excel.
+
+10. Debugging:
+	i. Hit F5: Excel should start and load debug version of addin.
+	ii. Put breakpoint on if(x < 0. ) line in test.cpp.
+	iii. Run MySqrt function in addin -> get into debugger in VS.
+
+
+
+========== Section 2. Creating Functions =====================
+In this section I continue assumption that project's source code files are: test.h and test.cpp as described in previous section.
+File test.h contains line: //<xlw:libraryname=TestLibrary
+TestLibrary is a function category in Excel's function wizard where functions from this addin will go.
+
+----- 2.1 Basic function
+Consider function definition, which should be placed in test.h file:
+
+1	double //Sum of square roots of two numbers
+2	SumSqrt(double x, //argument1
+3         double y //argument2
+4         );
+
+Line 1 contains type of results the function returns and comment with function description as it will appear in Excell's function wizard.
+Line 2 contains name of the function (Function in Excel will have same name), and definition of the first argument. The comment is a description of the argument as it will appear in Excel's function wizard. Note: if you need to include quotes in description string escape them with backslash: // argument \"1\"
+Line 3 contains the second argument with its description.
+Line 4 ends function definition.
+
+
+----- 2.2 Handling errors
+It is possible to return error test from a function if there is an error (say wrong user input). Consider the example with SubSqrt function. The following code should be placed in test.cpp:
+
+1	double SumSqrt(double x, double y)
+2	{
+3		if( x < 0 || y < 0 )
+4		{
+5			throw("#Negative argument");
+6		}
+7		return sqrt(x) + sqrt(y);
+8	}
+
+On line 3 the code checks if any of the arguments is negative and if yes, the code throws error with message "#Negative argument". As a result Excel function displays string #Negative argument if any of the argument is negative or numeric result if both numbers are nonegative.
+
+----- 2.3 Basic input/output data-types
+double
+bool
+std::string
+
+int - although type int can be used as an input type it cannot be output type. Convert it to double for output.
+
+See the code in test.h and test.cpp for the examples.
+
+
+----- 2.4 Numeric Array input/output data-types
+The basic types for input or output of arrays and matrices of numbers are:
+MyMatrix
+MyArray
+
+The difference is that while MyMatrix is two dimensional, MyArray is necessary one dimensional (represented by one column or row) - i.e. if you try to supply two dimensional cell range for MyArray argument, the call to the function will fail. Values for both MyArray and MyMatrix should be ranges with numerical values, otherwise the call to the function will fail.
+
+Although both horizontal and verticall cell ranges can be supplied as values for MyArray, the output MyArray is always a column, so if you need to output horizontal one-dimensional array use MyMatrix with one row.
+
+If user tries to supply a range with data incompatible with MyMatrix or MyArray, the function does not run and returns with the message that it failed to convert input range.
+
+The input array types should be defined const and passed by referenced (i.e. const MyArray&).
+
+Here is an example function that takes an array and produces the matrix equal to outer product of the array with itself:
+
+test.h:
+MyMatrix // Outer product of array with itself
+Outer1(const MyArray& a //array a
+       );
+
+test.cpp:
+MyMatrix Outer1(const MyArray& a)
+{
+  MyMatrix res(a.size(),a.size());
+  for(size_t i = 0; i < a.size(); ++i)
+  {
+    for(size_t j = 0; j < a.size(); ++j)
+    {
+      res[i][j] = a[i]*a[j];
+    }
+  }
+
+  return res;
+}
+
+Debug note: If during debug of your code the debugger breaks with a message:
+User breakpoint called from code at ...
+and Disassembly is shown, it means that somewhere in the code the MyMatrix or MyArray was written beyond defined bounds. I.e. the following code would produce such an error:
+
+1	MyArray f()
+2	{
+3	  MyArray a(5);
+4	  a[5] = 1.; //maximum index for a is 4
+5	  return a;
+6	}
+
+The error is signaled at line 5 (when function returns), rather than at line 4 (when out of range assignment takes place) - this makes finding this bug tricky.
+
+----- 2.5 Input/output matrix of mixed types
+This is done using CellMatrix or XlfOper
+Prefer to use XlfOper, since it has much lower overhead.
+
+CellMatrix abstracts the idea of a table of cell values in EXCEL. Thus each entry in the matrix can have a value that is a string, number, bool, error value or empty. This facilitates the passing of tables of mixed numbers and strings. Conversion to a CellMatrix should virtually never fail since it allows error codes.
+
+See CombinedPayoff function for an example showing how to use CellMatrix as input and output.
+
+When CellMatrix is an argument the following methods can be used in the code (suppose x is a CellMatrix)
+	- x.ColumnsInStructure() - return number of columns in x
+	- x.RowsInStructure() - returns number of rows in x
+	- x(i,j).IsAString() - tests if cell (i,j) is a string
+	- x(i,j).IsANumber() - tests if cell (i,j) is a number
+	- x(i,j).IsBoolean() - tests if cell (i,j) is a boolean
+	- x(i,j).IsError() - tests if cell (i,j) contains Excel error
+	- x(i,j).IsEmpty() - tests if cell (i,j) has no content
+	- x(i,j).StringValue() - returns string value of cell (i,j)
+	- x(i,j).NumericValue() - returns numerica value of cell (i,j)
+	- x(i,j).BooleanValue() - returns boolean alue of cell (i,j)
+	- x(i,j).ErrorValue() - returns error value of cell (i,j) (See Section ?? about working with errors)
+
+Once CellMatrix is constructed by calling:
+	CellMatrix res(n,m);
+Its elements can be assigned double, std::string, boolean and error values:
+res(0,0) = 5.;
+res(0,1) = "This is a string";
+res(0,2) = true;
+
+XlfOper note: that CellMatrix copies data from excel to internal storage, so it is not very efficient when
+you need to query big ranges. In this case use XlfOper type. It has the following methods which
+allow querying data directly from excel:
+  -- Inspectors:
+  - IsMissing() - used by Excel to flag a paramter that hasn't been supplied
+  - IsError() - Is the data an error?
+  - IsRef() - Is the data a reference?
+  - IsSRef() - Is the data a sheet reference?
+  - IsMulti() - Is the data an array?
+  - IsNumber()
+  - IsString()
+  - IsNil()
+  - IsBool()
+  - IsInt()
+  -- If XlfOper is multi, then can access elements and inspect them:
+  - rows() - number of rows in matrix
+  - columns() - number of cols in matrix
+  - (i, j) - can use bracket notation to set/retrieve values from matrix
+  -- Convertions:
+  - double AsDouble()
+  - XlfRef AsRef()
+  - short AsShort()
+  - bool AsBool()
+  - int AsInt()
+  - unsigned long AsULong()
+  - char* AsString()
+  - std::wstring AsWstring()
+  - std::vector<double> AsDoubleVector()
+  - MyArray AsArray()
+  - MyMatrix AsMatrix()
+  - CellMatrix AsCellMatrix()
+ 
+ XlfOper can also be used for output:
+         Here is an example of how this interface can be used to populate an array
+        to be returned to Excel from an addin function.
+        \code
+        XlfOper ret(3, 2);
+        ret(0, 0) = "abc";
+        ret(0, 1) = (short)42;
+        ret(1, 0) = 1.23;
+        ret(1, 1) = XlfOper::Error(xlerrValue);
+        ret(2, 0) = true;
+        \endcode
+
+ Note: If in the above example some elements of ret are not assigned, then the results in Excel will be #NUM!
+ even for elements that are assigned to.
+
+----- 2.6 Size of calling range
+If we want the output size depend on size of calling range we can use the following code:
+
+#include <xlw/XlfSerices>
+...
+
+// inside function:
+const size_t nrows = XlfServices.Information.GetCallingCell().rows();
+
+----- 2.7 Timing functions
+It is trivial to add timing to a function. Consider the following code.
+test.h:
+
+1	double //Sums integers less than the argument
+2	//<xlw:time
+3	SumNums(int n //sum up to this number (not inclusive)
+4	        );
+
+The comment "//<xlw:time" on line 2 (the line before function name) instructs InterfaceGenerator to produce timing code. If the function is called with a scalar output it produces just the original result. However if the function is called with 2x2 array as a requested output (see array formulas in excel), the bottom right cell of the array will contain number of seconds it took to compute the function.
+
+The rest of the code for the function is:
+test.cpp:
+
+double SumNums(int n)
+{
+  double sum = 0.; // use double, since int is easy to overflow
+  for( int i = 1; i < n; ++i )
+  {
+    sum += i;
+  }
+  return sum;
+}
+
+When timing functions returning MyArray, MyMatrix or CellMatrix timing information is appended to the output from below (see SumNumsRange function in the example project).
+
+----- 2.8 Volatile functions
+A volatile function is a function whose value can change even if the arguments have not – typically random numbers or time.
+To specify that a function is volatile add //<xlw:volatile before function name:
+
+double //System time
+//<xlw:volatile
+SysTime();
+
+It is also possible to time the volatile function (the order of <xlw:time and <xlw:volatile commands is not important):
+double //Sums integers to value produced by function returning system time^2
+//<xlw:volatile
+//<xlw:time
+SumToTime2();
+
+
+----- 2.9 Using addin functions in VBA
+A function defined in addin can be called from VBA using Application.Run function:
+	<Output Value> = Application.Run("<function name>", <input 1>, <input 2>, ... <input N>)
+
+Example:
+
+Add a module to an excel file with the following code:
+
+Function vbaOuter1(v As Variant)
+    vbaOuter1 = Application.Run("Outer1", v)
+End Function
+
+This will create a vba function that will behave in a similar way as addin defined Outer1 function (aside from the fact that it will lack descriptions in function wizard. 
+
+========== Section 3. Advanced Function Tricks ================
+----- 3.1 Extended input data-types (TODO)
+- NEMatrix - If you declare an argument to be of this type then the function will not be called unless
+the argument is a non-empty matrix of numbers. (Otherwise, you get #VALUE.) If you are working with very large matrices it should be more stable.
+- DoubleOrNothing - allows one to distinguish between a number passed in or an empty argument. One can therefore choose between a number passed in, and a default value if the argument is empty.
+- ArgumentList - takes in a table of cells and turns it into a collection of arguments. This allows the passing of a variable number of arguments within one function argument. The top left of the table must be the name of the structure e.g. PayOff. Within the table, the types number, string, array, matrix, cells and list can be used. For each of these one gives a name and then the data below. For an array, the size of the array should be specified directly below the name. For a matrix, cells, and list the number of rows and columns should be given directly below. The type cells is simply a matrix of cell values. The type list is an ArgumentList. The use of ArgumentLists inside ArgumentLists is very useful for doing decoration and composite patterns. Note that everything passed in to an ArgumentList is put into lower case.
+- PayOff
+
+
+----- 3.2 Customizing input data-types
+It is possible to add other input types to InterfaceGenerator - see xlwplus2 section 5 on how to do that. This customization requires recompilation of InterfaceGenerator.
+
+----- 3.3 Aborting function when Esc is pressed.
+- use XlfExcel.IsEscPressed() to check inside a function if escape has been pressed:
+i.e.
+if( XlfExcel::Instance().IsEscPressed() )
+{
+  throw("#Aborted");
+}
+
+========== Section 4. Additional Information ==================
+----- 4.1 QnA
+1. 
+Q: Is it possible to write from a function to excel's status bar?
+A: No. It is possible only from a macro.
+
+----- 4.2 Parallel Calculations
+Excel can compute functions in parallel if they are marked as threadsave. Put the following directive
+before function name in function declaration block:
+
+//<xlw:threadsafe
+
+========== Section 5. Other usefull utils ==================
+----- 5.1 Timestamp function
+It is usefull to have a function that displays last time the add-in was compiled.
+- Create a new file: xl_timestamp.cpp with the following content:
+-------------BEGIN xl_timestamp.cpp-------------
+#include "test.h"
+
+std::string TestTimeStamp()
+{
+  std::string date(__DATE__);
+  std::string time(__TIME__);
+  std::string res;
+  res = date + " | " + time;
+  return res;
+}
+-------------END xl_timestamp.cpp---------------
+
+- Add TestTimeStamp to test.h:
+-------------BEGIN test.h snippets --------------
+#include <string>
+....
+
+std::string //Time when the add-in was compiled
+TestTimeStamp();
+-------------END test.h snippets-----------------
+
+- Add custom build step to make sure xl_timestamp is compiled every time:
+  - Right click on the project in Solution Explorer and select Properties.
+  - Make sure Configuration: All Configurations
+  - Configuration Properties->Custom Build Step->General:
+    - Command Line: del $(ProjectDir)$(Configuration)\xl_timestamp.obj
+    - Description: Refresh timestamp.
+    - Outputs: fake.cpp
+    - Execute Before: PreBuildEvent
+    
+========== Section 6. Macros and Commands ====================
+
+Macros can reference in a read/write way any cell/sheet in an Excel file.
+Also they can see more properties of each cell/sheet.
+
+----- 6.1 Commands
+Commands are registered as a menu items on ribbon (ADD-INS/Library Name)
+To specify a command create a void function without arguments:
+
+-------------BEGIN test.h snippets -------------
+void // Test Menu Command
+testCommand();
+-------------END test.h snippets ----------------
+-------------BEGIN test.cpp snippets ------------
+#include <xlw/XlfRef.h>
+#include <xlw/XlfServices.h>
+
+using namespace xlw;
+
+void testCommand()
+{
+  XlfServices.Cell.SetContent(XlfRef(1,1), 10);
+}
+-------------END test.cpp snippets --------------
+
+This code will create a menu item "Test Menu Command" in ADD-INS/TestLibrary.
+When we click on the menu item, it will set cell B2 to 10.
+
+----- 6.2 Macros
+If we don't want to create a menu item, then create function that returns integer instead and
+specify that the function is a MacroSheet function:
+
+-------------BEGIN test.h snippets -------------
+int // Test Macro
+//<xlw:macrosheet
+testCommand();
+-------------END test.h snippets ----------------
+-------------BEGIN test.cpp snippets ------------
+#include <xlw/XlfRef.h>
+#include <xlw/XlfServices.h>
+
+using namespace xlw;
+
+int testCommand()
+{
+  XlfServices.Cell.SetContent(XlfRef(1,1), 10);
+  return 0;
+}
+-------------END test.cpp snippets --------------
+
+------ 6.3 Assigning to a button
+
+Once we created a button using DEVELOPER ribbon, we can assign a command or macro to the button.
+The commands and macros defined in a xll are on a hidden macro sheet, so they are hidden. To
+assign the macro/command to a button just type its name as it is defined in .h file.
+
+------ 6.4 Running from VBA
+
+To run the macro/command from VBA use Application.Run("testMacro") code. Or Application.Run("testMacro", arguments)
+
+------ 6.5 Running macro/command on open/close
+
+Add the following:
+-------------BEGIN test.h snippets -------------
+//<xlw:onopen(welcome)
+//<xlw:onclose(goodbye)
+-------------END test.h snippets ----------------
+-------------BEGIN test.cpp snippets ------------
+#include <xlw/XlOpenClose.h>
+#include <xlw/XlfServices.h>
+
+void welcome()
+{
+  xlw::XlfServices.StatusBar = "Hello world";
+}
+
+void goodbye()
+{
+  xlw::XlfServices.Commands.Alert("Bye.");
+}
+-------------END test.cpp snippets --------------
+
+------ 6.6 Ask for input range
+
+The command/macro can ask for input range (i.e. once it starts running it presents
+a dialog box asking to select an input range).
+
+Change the code from 6.1 as follows:
+
+-------------BEGIN test.cpp snippets ------------
+#include <xlw/XlfRef.h>
+#include <xlw/XlfServices.h>
+
+using namespace xlw;
+
+void testCommand()
+{
+  auto cellRef = XlfServices.Commands.InputReference(
+    "Give me cell where to write", "Test Command");
+  XlfServices.Cell.SetContent(cellRef, 10);
+}
+-------------END test.cpp snippets --------------
+
+------ 6.7 More XlfServices functions
+.......6.7.1 XlfServices.StatusBar
+  - Assign to status bar with: StatusBar = "Hello"
+  - Clean status bar with: StatusBar.clear()
+  
+.......6.7.2 XlfServices.Notes
+  - Notes.GetNote(cellRef, startChar = 0, numChar = 0) - gives note for the cell starting from particular character
+  - Notes.SetNote(cellRef, "set note for the cell")
+  - Notes.ClearNote(cellRef)
+  
+.......6.7.3 XlfServices.Information
+  - Information.GetCallingCell() - get the reference of the calling cell
+  - Information.GetActiveCell() - get the reference of the active cell
+  - Information.SetAcriveCell(cellRef) - set active cell
+  - Information.GetFormula(cellRef) - get formula as a string
+  - Information.ConvertA1FormulaToR1C1("=A1 + 5") - converts to "=R1C1 + 1"
+  - Information.ConvertR1C1FormulaToA1("=R1C1 + 1", fixRows=false, fixCols=false) = "=A1 + 5"
+  - Information.GetCellRefA1("A1") - returns cell reference to A1 cell
+  - Information.GetCellRefR1C1("R1C1") - returns cell reference to A1 cell
+  - Information.GetCellRefR1C1(Information.GetCellRefA1("B1"),"R[0]C[-1]") - reference to "A1"
+  - Information.GetRefTextA1(Information.GetCellRefA1("B1")) = "B1"
+  - Information.GetRefTextR1C1(Information.GetCellRefA1("B1")) = "R1C2"
+  - Information.GetSheetName(cellRef) - get sheet name for a reference
+  - Information.GetCurrentSheetId() - sheet id
+  - Information.GetActiveRange()
+  
+......6.7.4 XlfServices.Cell
+  - Cell.GetContents(ref)
+  - Cell.SetContents(ref, newValue)
+  - Cell.GetHeight(ref) - double
+  - Cell.SetHeight(ref, double newPoints)
+  - Cell.GetWidth(ref) - double
+  - Cell.SetWidth(ref, double newPoints)
+  - Cell.GetFont(ref) - string
+  - Cell.SetFont(ref, string newFont)
+  - Cell.GetFontSize(ref) - double
+  - Cell.SetFontSize(ref, double newFontSize)
+  
+......6.7.5 XlfServices.Commands
+  - void Commands.Alert("Bye")
+  - string Commands.InputFormula(message, title, defaultVal = "")
+  - double Command.InputNumber(message, title, defaultVal = 0)
+  - string Command.InputText(message, title, defVal = "")
+  - bool Command.InputBool(message, title)
+  - XlfOper Command.InputReference(message, title, defVal = "")
+  - Command.Select(ref)
+  - XlfOper Command.InputArray(msg, title)
+  - XlfOper Command.ShowDialogBox(dialogData) - Display a Dialog Box
+            Uses array in the format required for the Xlm DIALOG.BOX function.
+            For more details on this function see MacroFun.hlp 
+            http://support.microsoft.com/kb/128185
+            The value in the dialog items are returned in the 7th column
+  - Command.InsertWorksheet()
+  - Command.InsertMacroWorkSheet()
+  - Command.SelectPreviousSheet()
+  - Command.SelectNextSheet()
+  - Command.SetScreenUpdates(false)
+  
+------ 6.8 XlfExcel functions
+  - GetName() - getx XLL file name
+  - GetHelpName() - gets help file name or empty string
+  - GetXllDirectory() - gets xll directory
+  - IsEscPressed()
+  - IsCalledByFuncWiz()
+  - GetMainWindow() - gets the HWND of excel's main window
+  - int excelVersion()      
+ 
