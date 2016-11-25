@@ -1,7 +1,10 @@
 ---
-layout: post
-title: "Spot Price Dynamics in Power Markets"
-categories: "power spot"
+markup: mmark
+tags: ["power", "energy"]
+categories: ["energy"]
+date: 2016-07-28T00:00:00Z
+title: Spot Price Dynamics in Power Markets
+url: /power/spot/2016/07/28/power-spot.html
 ---
 
 ## Summary
@@ -51,8 +54,8 @@ Zone of ERCOT. We computed the average of hourly prices over the peak hours (the
 hour ending 7am through the hour ending 10pm) and skipped weekends and NERC 
 holidays. We also computed the monthly average of these prices:
 
+{style="text-align: center"}
 ![power prices](/images/power-spot/prices.png)
-{: style="text-align: center"}
 
 To find which model best describes the behavior of daily prices we ran the 
 auto-correlation test (

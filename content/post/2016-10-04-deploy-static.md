@@ -1,9 +1,10 @@
 ---
-layout: post
-title: "Deployment Blues"
-date: "2016-10-04 00:20"
-categories: "xll c++"
+tags: ["c++", "xll"]
+categories: ["xll"]
+date: 2016-10-04T00:00:00Z
 published: true
+title: Deployment Blues
+url: /xll/c++/2016/10/04/deploy-static.html
 ---
 
 # Introduction

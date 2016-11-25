@@ -1,9 +1,10 @@
 ---
-layout: post
-title: "Time Stamp Your Library"
-date: "2016-08-20 00:54"
-categories: "xll c++"
+tags: ["c++", "xll"]
+categories: ["xll"]
+date: 2016-08-20T00:00:00Z
 published: true
+title: Time Stamp Your Library
+url: /xll/c++/2016/08/20/timestamp.html
 ---
 
 When you distribute your program, library, or xll addin it is usefull to
@@ -13,14 +14,14 @@ a user's system. In this post I will describe how to set up such function in
 your Visual Studio C++ project.
 
 * Create `timestamp.h` with the following content:
-{% highlight c++ linenos=table %}
+{{< highlight c "linenos=table" >}}
 #include <string>
 
 std::string TestTimeStamp();
-{% endhighlight %}
+{{< / highlight >}}
 
 * Create `timestamp.cpp` with the following content:
-{% highlight c++ linenos=table %}
+{{< highlight c "linenos=table" >}}
 #include "timestamp.h"
 
 std::string TestTimeStamp()
@@ -31,7 +32,7 @@ std::string TestTimeStamp()
   res = date + " | " + time;
   return res;
 }
-{% endhighlight %}
+{{< / highlight >}}
 
 * Add custom build step to make sure that `timestamp.cpp` is compiled every
 time.

@@ -1,9 +1,11 @@
 ---
-layout: post
-title: "Daily Options"
-categories: "power volatility"
-date: "2016-06-11 00:17"
+markup: mmark
+tags: ["power", "volatility", "energy"]
+categories: ["energy"]
+date: 2016-06-11T00:00:00Z
 published: true
+title: Daily Options
+url: /power/volatility/2016/06/11/daily-opts.html
 ---
 
 ## Summary
@@ -128,8 +130,8 @@ We will consider only call options (put option results should be similar).
 We consider three cases: at the money $$K = F$$, out of the money
 $$K = 1.2\cdot F$$, and in the money $$K = 0.8\cdot F$$.
 
+{style="text-align: center"}
 ![n moneyness](/images/daily-options/n-moneyness.png)
-{: style="text-align: center"}
 
 We can see that when we are close to the delivery month (_T_ is small) the
 optimal value of _n_ decreases. As time to delivery increases _n_ converges to 14.5.
@@ -140,9 +142,10 @@ If we use the value of _n_ to which it converges when _T_ is large, the
 approximation (\ref{eq:simplified}) produces the following errors for value and 
 implied volatility:
 
+{style="text-align: center"}
 ![v moneyness 14.5](/images/daily-options/v-moneyness-15.png)\\
+{style="text-align: center"}
 ![vol moneyness 14.5](/images/daily-options/vol-moneyness-15.png)
-{: style="text-align: center"}
 
 Note that if _T_ is less than about half a year the premium and volatility
 errors become big and reach almost 4% at _T_ = 2 months.
@@ -152,9 +155,10 @@ errors become big and reach almost 4% at _T_ = 2 months.
 We can reduce errors observed in the previous section if we pick a smaller value 
 of _n_ = 13.9. 
 
+{style="text-align: center"}
 ![v moneyness 13.9](/images/daily-options/v-moneyness-14.png)\\
+{style="text-align: center"}
 ![vol moneyness 13.9](/images/daily-options/vol-moneyness-14.png)
-{: style="text-align: center"}
 
 Now both premium and volatility relative errors are within 3% for the full
 range.
@@ -164,14 +168,15 @@ range.
 We can get a better result if we vary _n_ with _T_. For this example we set
 _n_ to be equal to the average of _ATM_ and _OTM_ exact values of _n_:
 
+{style="text-align: center"}
 ![variable n](/images/daily-options/n-var-moneyness.png)
-{: style="text-align: center"}
 
 With this _n_ we get the following results:
 
+{style="text-align: center"}
 ![v moneyness var](/images/daily-options/v-moneyness-var.png)\\
+{style="text-align: center"}
 ![vol moneyness var](/images/daily-options/vol-moneyness-var.png)
-{: style="text-align: center"}
 
 Note that at _T_ > 1 the errors are essentially 0 and they do not increase 
 beyond 2% for small _T_.
@@ -204,8 +209,8 @@ $$
 where _d_ is some constant. We select this constant to ensure that $$K/F = 1.2$$
 at 6 months for the OTM case and $$F/K = 1.2$$ at 6 months for the ITM case.
 
+{style="text-align: center"}
 ![n delta](/images/daily-options/n-delta.png)
-{: style="text-align: center"}
 
 The general shapes of the _n_ curves are similar to the fixed moneyness case, 
 but here ATM and OTM curves are identical.
@@ -215,9 +220,10 @@ The error results when _n_ is fixed are similar to the fixed moneyness case
 here. However, when we vary _n_ with _T_ (_n_ = average of _ATM_ and _OTM_ exact
 values of _n_) we get a much better result:
 
+{style="text-align: center"}
 ![v delta var](/images/daily-options/v-delta-var.png)\\
+{style="text-align: center"}
 ![vol delta var](/images/daily-options/vol-delta-var.png)
-{: style="text-align: center"}
 
 Note how the relative error is now within 0.4% for the full range of _T_.
 
@@ -230,8 +236,8 @@ Samuelson Effect.) We ran the above analysis for the case when the spot
 volatility is just slightly larger than the forward volatility (31% spot vs 30% 
 forward).
 
+{style="text-align: center"}
 ![n small spot vol](/images/daily-options/n-spot.png)
-{: style="text-align: center"}
 
 Note that the shape of the _n_ curves is similar to the large spot volatility 
 case. However, all moneyness cases are now collapsed into a single curve.
@@ -239,9 +245,10 @@ case. However, all moneyness cases are now collapsed into a single curve.
 Using _n_ = 14.5, to which it converges for large _T_, we get the following
 errors for premium and implied volatility:
 
+{style="text-align: center"}
 ![v small spot](/images/daily-options/v-spot.png)\\
+{style="text-align: center"}
 ![vol small spot](/images/daily-options/vol-spot.png)
-{: style="text-align: center"}
 
 The errors are very small (within 0.2% for the full range, for both premium and
 volatility). If we use 13.9 or variable values for _n_ the errors become even 

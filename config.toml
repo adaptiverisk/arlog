@@ -1,0 +1,9 @@
+baseurl = "https://blog.adaptiverisk.com/"
+title = "The AdaptiveRisk Blog"
+languageCode = "en-us"
+pygmentsuseclasses = true
+googleAnalytics = "UA-XXXXXXXX-XX" # tracking through cloudflare
+disqusShortname = "adaptiverisk"
+
+[Params]
+  Author = "AdaptiveRisk"
