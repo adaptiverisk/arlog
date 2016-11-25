@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.17" />
+
+
+
+<link rel="canonical" href="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/08/20/timestamp.html">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <title>Time Stamp Your Library - The AdaptiveRisk Blog</title>
+    
+<meta name="description" content="When you distribute your program, library, or xll addin it is usefull to have a function that can tell you when your project was compiled. This way you can ensure that the new program, library, or xll addin is correctly installed on a user&amp;rsquo;s system. In this post I will describe how to set up such function in your Visual Studio C&#43;&#43; project. Create timestamp.h with the following content: 123#include &amp;lt;string&amp;gt;std::string TestTimeStamp();">
+
+<meta property="og:title" content="Time Stamp Your Library - The AdaptiveRisk Blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/08/20/timestamp.html">
+<meta property="og:image" content="https://blog.adaptiverisk.com/images/default.png">
+<meta property="og:site_name" content="The AdaptiveRisk Blog">
+<meta property="og:description" content="When you distribute your program, library, or xll addin it is usefull to have a function that can tell you when your project was compiled. This way you can ensure that the new program, library, or xll addin is correctly installed on a user&amp;rsquo;s system. In this post I will describe how to set up such function in your Visual Studio C&#43;&#43; project. Create timestamp.h with the following content: 123#include &amp;lt;string&amp;gt;std::string TestTimeStamp();">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="The AdaptiveRisk Blog">
+<meta name="twitter:url" content="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/08/20/timestamp.html">
+<meta name="twitter:title" content="Time Stamp Your Library - The AdaptiveRisk Blog">
+<meta name="twitter:description" content="When you distribute your program, library, or xll addin it is usefull to have a function that can tell you when your project was compiled. This way you can ensure that the new program, library, or xll addin is correctly installed on a user&amp;rsquo;s system. In this post I will describe how to set up such function in your Visual Studio C&#43;&#43; project. Create timestamp.h with the following content: 123#include &amp;lt;string&amp;gt;std::string TestTimeStamp();">
+<meta name="twitter:image" content="https://blog.adaptiverisk.com/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"https:\/\/blog.adaptiverisk.com\/"
+    },
+    "headline": "Time Stamp Your Library - The AdaptiveRisk Blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "https:\/\/blog.adaptiverisk.com\/images\/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2016-08-20T00:00:00JST",
+    "dateModified": "2016-08-20T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "The AdaptiveRisk Blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "The AdaptiveRisk Blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https:\/\/blog.adaptiverisk.com\/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "When you distribute your program, library, or xll addin it is usefull to have a function that can tell you when your project was compiled. This way you can ensure that the new program, library, or xll addin is correctly installed on a user\x26rsquo;s system. In this post I will describe how to set up such function in your Visual Studio C\x2b\x2b project.\n Create timestamp.h with the following content: 1\r2\r3#include \x26lt;string\x26gt;\rstd::string TestTimeStamp();"
+  }
+</script>
+
+
+    <link href="https://blog.adaptiverisk.com/css/styles.css" rel="stylesheet">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        jax: ["input/TeX","output/CommonHTML"],
+        extensions: ["tex2jax.js","AssistiveMML.js"],
+        TeX: {
+          extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"],
+          equationNumbers: { autoNumber: "AMS" }
+        }
+      });
+    </script>
+    <script type="text/javascript"
+      src="http://cdn.mathjax.org/mathjax/latest/MathJax.js">
+    </script>
+  </head>
+
+  <body>
+    
+    
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-XXXXXXXX-XX', 'auto');
+ga('send', 'pageview');
+</script>
+
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand arlogo" href="https://adaptiverisk.com">AR</a>
+            <a class="navbar-brand" href="https://blog.adaptiverisk.com/">The AdaptiveRisk Blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="https://blog.adaptiverisk.com/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="https://blog.adaptiverisk.com/post/" itemprop="url"><span itemprop="title">post</span></a></li>
+        
+        <li class="active">Time Stamp Your Library</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2016-08-20T00:00:00JST">Aug 20, 2016</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="https://blog.adaptiverisk.com/post/">post</a></li>
+      
+    </ul>
+
+    <h1 class="title">Time Stamp Your Library</h1>
+  </header>
+
+  
+
+  <div class="article-body"><p>When you distribute your program, library, or xll addin it is usefull to
+have a function that can tell you when your project was compiled. This way you
+can ensure that the new program, library, or xll addin is correctly installed on
+a user&rsquo;s system. In this post I will describe how to set up such function in
+your Visual Studio C++ project.</p>
+
+<ul>
+<li><p>Create <code>timestamp.h</code> with the following content:
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><code class="language-c" data-lang="c">1
+2
+3</code></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">TestTimeStamp</span><span class="p">();</span>
+</pre></div>
+</td></tr></table></p></li>
+
+<li><p>Create <code>timestamp.cpp</code> with the following content:
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><code class="language-c" data-lang="c"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</code></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;timestamp.h&quot;</span><span class="cp"></span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">TestTimeStamp</span><span class="p">()</span>
+<span class="p">{</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">date</span><span class="p">(</span><span class="n">__DATE__</span><span class="p">);</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">time</span><span class="p">(</span><span class="n">__TIME__</span><span class="p">);</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">res</span><span class="p">;</span>
+  <span class="n">res</span> <span class="o">=</span> <span class="n">date</span> <span class="o">+</span> <span class="s">&quot; | &quot;</span> <span class="o">+</span> <span class="n">time</span><span class="p">;</span>
+  <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></p></li>
+
+<li><p>Add custom build step to make sure that <code>timestamp.cpp</code> is compiled every
+time.</p>
+
+<ul>
+<li>Right click on the project in the <code>Solution Explorer</code> and select <code>Properties</code></li>
+<li>Make sure that <code>Configuration</code> is set to <code>All Configurations</code></li>
+
+<li><p>Go to <code>Configuration Properties</code> &gt; <code>Custom Build Step</code> &gt; <code>General</code> and
+fill out options as follows:</p>
+
+<ul>
+<li>Command Line: <code>del $(ProjectDir)$(Configuration)\timestamp.obj</code></li>
+<li>Description: <code>Refresh timestamp</code></li>
+<li>Outputs: <code>fake.cpp</code></li>
+<li>Execute Before: <code>PreBuildEvent</code>
+<br /></li>
+</ul></li>
+</ul></li>
+</ul>
+
+<p><img src="/images/timestamp_opts.png" alt="options" /></p>
+
+<ul>
+<li>Now every time you compile the project the timestamp string returned by
+<code>TestTimeStamp()</code> function is updated.
+
+<br />
+<br /></li>
+</ul>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    <section class="bordered">
+      <header>
+        <div class="panel-title">CATEGORIES</div>
+      </header>
+      <div>
+        <ul class="p-terms">
+          
+          <li><a href="https://blog.adaptiverisk.com/categories/xll/">xll</a></li>
+          
+        </ul>
+      </div>
+    </section>
+    
+    
+    
+    <section class="bordered">
+      <header>
+        <div class="panel-title">TAGS</div>
+      </header>
+      <div>
+        <ul class="p-terms">
+          
+          <li><a href="https://blog.adaptiverisk.com/tags/c&#43;&#43;/">c&#43;&#43;</a></li>
+          
+          <li><a href="https://blog.adaptiverisk.com/tags/xll/">xll</a></li>
+          
+        </ul>
+      </div>
+    </section>
+    
+    
+  </footer>
+
+</article>
+
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'adaptiverisk';
+    var disqus_identifier = 'https:\/\/blog.adaptiverisk.com\/xll\/c\x2b\x2b\/2016\/08\/20\/timestamp.html';
+    var disqus_title = 'Time Stamp Your Library';
+    var disqus_url = 'https:\/\/blog.adaptiverisk.com\/xll\/c\x2b\x2b\/2016\/08\/20\/timestamp.html';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/10/04/deploy-static.html" class="list-group-item">Deployment Blues</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/08/20/timestamp.html" class="list-group-item">Time Stamp Your Library</a>
+      
+      <a href="https://blog.adaptiverisk.com/power/spot/2016/07/28/power-spot.html" class="list-group-item">Spot Price Dynamics in Power Markets</a>
+      
+      <a href="https://blog.adaptiverisk.com/power/volatility/2016/06/11/daily-opts.html" class="list-group-item">Daily Options</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2015/01/21/xlw-part5.html" class="list-group-item">UDF Services (XLW Part 5)</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part4.html" class="list-group-item">Input/output arrays, vectors, matrices or ranges (XLW Part 4)</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part3.html" class="list-group-item">Writing Simple Excel Functions (XLW Part 3)</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/15/xlw-part2.html" class="list-group-item">Setting up a Project in Visual Studio 2013 and 2015 (XLW Part 2)</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/08/xlw-part1.html" class="list-group-item">Building Excel Add-ins (XLW Part 1)</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="https://blog.adaptiverisk.com/categories/xlw" class="list-group-item">xlw</a>
+      
+      <a href="https://blog.adaptiverisk.com/categories/energy" class="list-group-item">energy</a>
+      
+      <a href="https://blog.adaptiverisk.com/categories/xll" class="list-group-item">xll</a>
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="https://blog.adaptiverisk.com/tags/xll" class="list-group-item">xll</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/excel" class="list-group-item">excel</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/xlw" class="list-group-item">xlw</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/c&#43;&#43;" class="list-group-item">c&#43;&#43;</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/energy" class="list-group-item">energy</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/power" class="list-group-item">power</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/volatility" class="list-group-item">volatility</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3">
+            <p>
+              <span class="h-logo">&copy; AdaptiveRisk</span></p>
+            <p><a href="mailto:info@adaptiverisk.com">info@adaptiverisk.com</a></p>
+          </div>
+          <div class="col-md-3">
+            <a href="https://twitter.com/AdaptiveRisk">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+                </svg>
+              </span>
+              <span class="username">AdaptiveRisk</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </body>
+</html>
+

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.17" />
+
+
+
+<link rel="canonical" href="https://blog.adaptiverisk.com/xll/excel/2014/12/08/xlw-part1.html">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <title>Building Excel Add-ins (XLW Part 1) - The AdaptiveRisk Blog</title>
+    
+<meta name="description" content="This is a first post from a series devoted to building xll add-ins for Excel.Add-ins are used to extend Excel functionality. It is possible to extend Excel using VBA in the same spreadsheet. However this way VBA code is tightly coupled with the spreadsheet, which makes it difficult to keep track of code versions or update code for all copies of a spreadsheet.Users often make copies of spreadsheets because they want to modify something but want to keep original around.">
+
+<meta property="og:title" content="Building Excel Add-ins (XLW Part 1) - The AdaptiveRisk Blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://blog.adaptiverisk.com/xll/excel/2014/12/08/xlw-part1.html">
+<meta property="og:image" content="https://blog.adaptiverisk.com/images/default.png">
+<meta property="og:site_name" content="The AdaptiveRisk Blog">
+<meta property="og:description" content="This is a first post from a series devoted to building xll add-ins for Excel.Add-ins are used to extend Excel functionality. It is possible to extend Excel using VBA in the same spreadsheet. However this way VBA code is tightly coupled with the spreadsheet, which makes it difficult to keep track of code versions or update code for all copies of a spreadsheet.Users often make copies of spreadsheets because they want to modify something but want to keep original around.">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="The AdaptiveRisk Blog">
+<meta name="twitter:url" content="https://blog.adaptiverisk.com/xll/excel/2014/12/08/xlw-part1.html">
+<meta name="twitter:title" content="Building Excel Add-ins (XLW Part 1) - The AdaptiveRisk Blog">
+<meta name="twitter:description" content="This is a first post from a series devoted to building xll add-ins for Excel.Add-ins are used to extend Excel functionality. It is possible to extend Excel using VBA in the same spreadsheet. However this way VBA code is tightly coupled with the spreadsheet, which makes it difficult to keep track of code versions or update code for all copies of a spreadsheet.Users often make copies of spreadsheets because they want to modify something but want to keep original around.">
+<meta name="twitter:image" content="https://blog.adaptiverisk.com/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"https:\/\/blog.adaptiverisk.com\/"
+    },
+    "headline": "Building Excel Add-ins (XLW Part 1) - The AdaptiveRisk Blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "https:\/\/blog.adaptiverisk.com\/images\/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2014-12-08T00:00:00JST",
+    "dateModified": "2014-12-08T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "The AdaptiveRisk Blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "The AdaptiveRisk Blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https:\/\/blog.adaptiverisk.com\/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "This is a first post from a series devoted to building xll add-ins for Excel.\nAdd-ins are used to extend Excel functionality. It is possible to extend Excel using VBA in the same spreadsheet. However this way VBA code is tightly coupled with the spreadsheet, which makes it difficult to keep track of code versions or update code for all copies of a spreadsheet.\nUsers often make copies of spreadsheets because they want to modify something but want to keep original around."
+  }
+</script>
+
+
+    <link href="https://blog.adaptiverisk.com/css/styles.css" rel="stylesheet">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        jax: ["input/TeX","output/CommonHTML"],
+        extensions: ["tex2jax.js","AssistiveMML.js"],
+        TeX: {
+          extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"],
+          equationNumbers: { autoNumber: "AMS" }
+        }
+      });
+    </script>
+    <script type="text/javascript"
+      src="http://cdn.mathjax.org/mathjax/latest/MathJax.js">
+    </script>
+  </head>
+
+  <body>
+    
+    
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-XXXXXXXX-XX', 'auto');
+ga('send', 'pageview');
+</script>
+
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand arlogo" href="https://adaptiverisk.com">AR</a>
+            <a class="navbar-brand" href="https://blog.adaptiverisk.com/">The AdaptiveRisk Blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="https://blog.adaptiverisk.com/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="https://blog.adaptiverisk.com/post/" itemprop="url"><span itemprop="title">post</span></a></li>
+        
+        <li class="active">Building Excel Add-ins (XLW Part 1)</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-12-08T00:00:00JST">Dec 8, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="https://blog.adaptiverisk.com/post/">post</a></li>
+      
+    </ul>
+
+    <h1 class="title">Building Excel Add-ins (XLW Part 1)</h1>
+  </header>
+
+  
+
+  <div class="article-body">
+
+<p>This is a first post from a series devoted to building xll add-ins for Excel.</p>
+
+<p>Add-ins are used to extend Excel functionality. It is possible to extend Excel
+using VBA in the same spreadsheet. However this way VBA code is tightly coupled
+with the spreadsheet, which makes it difficult to keep track of code
+versions or update code for all copies of a spreadsheet.</p>
+
+<p>Users often make copies of spreadsheets because they want to modify something
+but want to keep original around. Unfortunately it is never clear what they
+modify - it can be data, code or both. As a result often there are many slightly
+different spreadsheets floating around. In this scenario updating your code
+to fix a bug or add an enhancement if almost impossible.</p>
+
+<p>Add-ins let us separate code from spreadsheet data. This allows us to resolve
+all problems that we encounter when using spreadsheets with embedded code.</p>
+
+<h2 id="ways-to-build-an-add-in-for-excel">Ways to build an add-in for Excel</h2>
+
+<p>There are many ways to build add-ins. Here is a list of of the ways that I
+have tried (I prefer open source or at least free tools):</p>
+
+<ul>
+<li><strong>VBA</strong>
+
+<ul>
+<li><strong>Pros</strong>: You just need Excel and don&rsquo;t need to install any other tool - it
+includes VBE (Visual Basic Editor).
+VBE is a decent development environment with integrated debugger.</li>
+<li><strong>Cons</strong>: VBA is often quite slow. VBE is not very customizable. The code
+lives inside add-in, which prevents regular use of source control with it.
+Source code is available to any user (it is trivial to remove password
+protection if you set up one).</li>
+</ul></li>
+<li><strong><a href="http://exceldna.codeplex.com">Excel-DNA</a></strong>
+
+<ul>
+<li><strong>Pros</strong>: Mature and free environment to develop add-ins using C#. It has
+very good documentation and active support forum.</li>
+<li><strong>Cons</strong>: C# is not available on all platforms (so if your code needs to run
+from Excel as well as on a server this might be an obstacle). Even though
+it is possible to call unmanaged dll&rsquo;s from C# setting up development and
+debugging process is challenging.</li>
+</ul></li>
+<li><strong><a href="http://xlw.sourceforge.net">XLW</a></strong>
+
+<ul>
+<li><strong>Pros</strong>: Thin wrapper for Excel C API - easy to setup, use, debug. Very
+fast. Can be used with C++, C# or VB.NET</li>
+<li><strong>Cons</strong>: The documentation is not well maintained and not very detailed.</li>
+</ul></li>
+</ul>
+
+<p>If you are a fan of C# take a close look at Excel-DNA. If you prefer using C/C++
+XLW is a better alternative. For my projects I prefer to use C/C++. I create
+simple C-type dll or static library with core functions. The library can be used
+in any other environment (Matlab, Mathematica, VBA, etc.). Then I use XLW
+wrapper to interface the functions with Excel.</p>
+
+<h2 id="topics">Topics</h2>
+
+<p>In this series of posts I plan to cover the following topics:</p>
+
+<ul>
+<li><a href="https://blog.adaptiverisk.com/xll/excel/2014/12/15/xlw-part2.html">Setting up a project with XLW</a></li>
+<li><a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part3.html">Writing simple functions callable from Excel</a></li>
+<li><a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part3.html#3-handling-errors">Handling and reporting errors</a></li>
+<li><a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part4.html">Input/output arrays, vectors, matrices or ranges</a></li>
+<li><a href="https://blog.adaptiverisk.com/xll/excel/2015/01/21/xlw-part5.html#2-abort-function-when-a-user-presses-esc">Let user interrupt long calculations</a></li>
+<li><a href="https://blog.adaptiverisk.com/xll/excel/2015/01/21/xlw-part5.html#4-timing-functions">Timing functions</a></li>
+<li>Logging.</li>
+<li>Adding help to your add-in.</li>
+<li><a href="https://blog.adaptiverisk.com/xll/c++/2016/10/04/deploy-static.html">Deployment tips</a></li>
+<li>Writing macros.</li>
+</ul>
+
+<p>As I go over these topics I will share the best practices that I converged to
+over the years of using XLW to write add-ins.</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    <section class="bordered">
+      <header>
+        <div class="panel-title">CATEGORIES</div>
+      </header>
+      <div>
+        <ul class="p-terms">
+          
+          <li><a href="https://blog.adaptiverisk.com/categories/xlw/">xlw</a></li>
+          
+        </ul>
+      </div>
+    </section>
+    
+    
+    
+    <section class="bordered">
+      <header>
+        <div class="panel-title">TAGS</div>
+      </header>
+      <div>
+        <ul class="p-terms">
+          
+          <li><a href="https://blog.adaptiverisk.com/tags/xll/">xll</a></li>
+          
+          <li><a href="https://blog.adaptiverisk.com/tags/excel/">Excel</a></li>
+          
+          <li><a href="https://blog.adaptiverisk.com/tags/xlw/">xlw</a></li>
+          
+        </ul>
+      </div>
+    </section>
+    
+    
+  </footer>
+
+</article>
+
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'adaptiverisk';
+    var disqus_identifier = 'https:\/\/blog.adaptiverisk.com\/xll\/excel\/2014\/12\/08\/xlw-part1.html';
+    var disqus_title = 'Building Excel Add-ins (XLW Part 1)';
+    var disqus_url = 'https:\/\/blog.adaptiverisk.com\/xll\/excel\/2014\/12\/08\/xlw-part1.html';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/10/04/deploy-static.html" class="list-group-item">Deployment Blues</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/08/20/timestamp.html" class="list-group-item">Time Stamp Your Library</a>
+      
+      <a href="https://blog.adaptiverisk.com/power/spot/2016/07/28/power-spot.html" class="list-group-item">Spot Price Dynamics in Power Markets</a>
+      
+      <a href="https://blog.adaptiverisk.com/power/volatility/2016/06/11/daily-opts.html" class="list-group-item">Daily Options</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2015/01/21/xlw-part5.html" class="list-group-item">UDF Services (XLW Part 5)</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part4.html" class="list-group-item">Input/output arrays, vectors, matrices or ranges (XLW Part 4)</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part3.html" class="list-group-item">Writing Simple Excel Functions (XLW Part 3)</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/15/xlw-part2.html" class="list-group-item">Setting up a Project in Visual Studio 2013 and 2015 (XLW Part 2)</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/08/xlw-part1.html" class="list-group-item">Building Excel Add-ins (XLW Part 1)</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="https://blog.adaptiverisk.com/categories/xlw" class="list-group-item">xlw</a>
+      
+      <a href="https://blog.adaptiverisk.com/categories/energy" class="list-group-item">energy</a>
+      
+      <a href="https://blog.adaptiverisk.com/categories/xll" class="list-group-item">xll</a>
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="https://blog.adaptiverisk.com/tags/xll" class="list-group-item">xll</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/excel" class="list-group-item">excel</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/xlw" class="list-group-item">xlw</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/c&#43;&#43;" class="list-group-item">c&#43;&#43;</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/energy" class="list-group-item">energy</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/power" class="list-group-item">power</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/volatility" class="list-group-item">volatility</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3">
+            <p>
+              <span class="h-logo">&copy; AdaptiveRisk</span></p>
+            <p><a href="mailto:info@adaptiverisk.com">info@adaptiverisk.com</a></p>
+          </div>
+          <div class="col-md-3">
+            <a href="https://twitter.com/AdaptiveRisk">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+                </svg>
+              </span>
+              <span class="username">AdaptiveRisk</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </body>
+</html>
+

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.17" />
+
+
+
+<link rel="canonical" href="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/10/04/deploy-static.html">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <title>Deployment Blues - The AdaptiveRisk Blog</title>
+    
+<meta name="description" content="Introduction It happens often: you compile your xll addin and give it to yor client just to hear them complaining that they cannot load the xll into Excel. The error that they see is: &amp;ldquo;The file you are trying to open, &amp;lsquo;MyAddin.xll&amp;rsquo;, is in a different format than specified by the file extension. Verify that the file is not corrupted and is in from a trusted source before opening the file.">
+
+<meta property="og:title" content="Deployment Blues - The AdaptiveRisk Blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/10/04/deploy-static.html">
+<meta property="og:image" content="https://blog.adaptiverisk.com/images/default.png">
+<meta property="og:site_name" content="The AdaptiveRisk Blog">
+<meta property="og:description" content="Introduction It happens often: you compile your xll addin and give it to yor client just to hear them complaining that they cannot load the xll into Excel. The error that they see is: &amp;ldquo;The file you are trying to open, &amp;lsquo;MyAddin.xll&amp;rsquo;, is in a different format than specified by the file extension. Verify that the file is not corrupted and is in from a trusted source before opening the file.">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="The AdaptiveRisk Blog">
+<meta name="twitter:url" content="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/10/04/deploy-static.html">
+<meta name="twitter:title" content="Deployment Blues - The AdaptiveRisk Blog">
+<meta name="twitter:description" content="Introduction It happens often: you compile your xll addin and give it to yor client just to hear them complaining that they cannot load the xll into Excel. The error that they see is: &amp;ldquo;The file you are trying to open, &amp;lsquo;MyAddin.xll&amp;rsquo;, is in a different format than specified by the file extension. Verify that the file is not corrupted and is in from a trusted source before opening the file.">
+<meta name="twitter:image" content="https://blog.adaptiverisk.com/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"https:\/\/blog.adaptiverisk.com\/"
+    },
+    "headline": "Deployment Blues - The AdaptiveRisk Blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "https:\/\/blog.adaptiverisk.com\/images\/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2016-10-04T00:00:00JST",
+    "dateModified": "2016-10-04T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "The AdaptiveRisk Blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "The AdaptiveRisk Blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https:\/\/blog.adaptiverisk.com\/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "Introduction It happens often: you compile your xll addin and give it to yor client just to hear them complaining that they cannot load the xll into Excel. The error that they see is: \x26ldquo;The file you are trying to open, \x26lsquo;MyAddin.xll\x26rsquo;, is in a different format than specified by the file extension. Verify that the file is not corrupted and is in from a trusted source before opening the file."
+  }
+</script>
+
+
+    <link href="https://blog.adaptiverisk.com/css/styles.css" rel="stylesheet">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        jax: ["input/TeX","output/CommonHTML"],
+        extensions: ["tex2jax.js","AssistiveMML.js"],
+        TeX: {
+          extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"],
+          equationNumbers: { autoNumber: "AMS" }
+        }
+      });
+    </script>
+    <script type="text/javascript"
+      src="http://cdn.mathjax.org/mathjax/latest/MathJax.js">
+    </script>
+  </head>
+
+  <body>
+    
+    
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-XXXXXXXX-XX', 'auto');
+ga('send', 'pageview');
+</script>
+
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand arlogo" href="https://adaptiverisk.com">AR</a>
+            <a class="navbar-brand" href="https://blog.adaptiverisk.com/">The AdaptiveRisk Blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="https://blog.adaptiverisk.com/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="https://blog.adaptiverisk.com/post/" itemprop="url"><span itemprop="title">post</span></a></li>
+        
+        <li class="active">Deployment Blues</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2016-10-04T00:00:00JST">Oct 4, 2016</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="https://blog.adaptiverisk.com/post/">post</a></li>
+      
+    </ul>
+
+    <h1 class="title">Deployment Blues</h1>
+  </header>
+
+  
+
+  <div class="article-body">
+
+<h1 id="introduction">Introduction</h1>
+
+<p>It happens often: you compile your xll addin and give it to yor client just to
+hear them complaining that they cannot load the xll into Excel. The error that
+they see is: <em>&ldquo;The file you are trying to open, &lsquo;MyAddin.xll&rsquo;, is in a different
+format than specified by the file extension. Verify that the file is not
+corrupted and is in from a trusted source before opening the file. Do you want
+to open the file now?&rdquo;</em></p>
+
+<p>There are two reasons for this error:</p>
+
+<ul>
+<li><p>The client uses 32bit Excel while the addin is a 64bit xll or vise versa. The
+fix for this case is obvious - make sure that you send matching xll to the
+client.</p></li>
+
+<li><p>Your addin depends on some dll&rsquo;s that are not available on the client&rsquo;s
+computer. To fix this problem you need to add all necessary dll&rsquo;s into
+the same folder as the addin. Although there are other locations where you can
+put dll&rsquo;s to fix th problem, from our experience puting them into the same
+folder as xll is the most robust and straightforward way.</p></li>
+</ul>
+
+<p>How do you know which dll&rsquo;s are missing? You need to open xll in the
+<a href="http://www.dependencywalker.com/">Dependency Walker</a> on your client&rsquo;s computer.
+The Dependency Walker will show which dll&rsquo;s could not be located.</p>
+
+<h1 id="c-runtime-library">C++ Runtime Library</h1>
+
+<p>One of the more common cases is missing C++ runtime library. When you
+set up an addin project in Visual Studio it by default sets option for created
+code to use runtime dlls. The compiled addin xll will run on development
+computer without any issues, since runtime dll&rsquo;s are properly installed. But
+these dll&rsquo;s are often not installed on client computers and Excel will produce
+error while loading the addin.</p>
+
+<p>You can resolve this issue using one of the three methods:</p>
+
+<ol>
+<li><p>Use the above approach by adding runtime dll&rsquo;s to the same folder where xll
+is located on the client&rsquo;s computer.</p></li>
+
+<li><p>Installing runtime dll&rsquo;s using installer provided by Microsoft.</p></li>
+
+<li><p>Build you xll by using static linking to runtime library.</p></li>
+</ol>
+
+<p>The third method is our prefered way to solve this issue. We&rsquo;ll discuss how it
+works in the next section and then we&rsquo;ll discuss what are its benefits and
+downsides.</p>
+
+<h1 id="static-linking">Static Linking</h1>
+
+<p>To ensure that your xll is statically linked to runtime library you need to
+set Runtime Library option to <code>Multi-threaded (/MT)</code> (by default it is set to
+<code>Multi-threaded DLL</code> <br />
+<img src="/images/runtime.png" alt="Runtime Library Option" /></p>
+
+<p>Benefit - you can just deploy single xll file and not worry if the client
+has appropriate runtime dll installed.</p>
+
+<p>Downside - any library that your project links to should be compiled with same
+value for Runtime Library option. Sometimes this is outside of your control.</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    <section class="bordered">
+      <header>
+        <div class="panel-title">CATEGORIES</div>
+      </header>
+      <div>
+        <ul class="p-terms">
+          
+          <li><a href="https://blog.adaptiverisk.com/categories/xll/">xll</a></li>
+          
+        </ul>
+      </div>
+    </section>
+    
+    
+    
+    <section class="bordered">
+      <header>
+        <div class="panel-title">TAGS</div>
+      </header>
+      <div>
+        <ul class="p-terms">
+          
+          <li><a href="https://blog.adaptiverisk.com/tags/c&#43;&#43;/">c&#43;&#43;</a></li>
+          
+          <li><a href="https://blog.adaptiverisk.com/tags/xll/">xll</a></li>
+          
+        </ul>
+      </div>
+    </section>
+    
+    
+  </footer>
+
+</article>
+
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'adaptiverisk';
+    var disqus_identifier = 'https:\/\/blog.adaptiverisk.com\/xll\/c\x2b\x2b\/2016\/10\/04\/deploy-static.html';
+    var disqus_title = 'Deployment Blues';
+    var disqus_url = 'https:\/\/blog.adaptiverisk.com\/xll\/c\x2b\x2b\/2016\/10\/04\/deploy-static.html';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/10/04/deploy-static.html" class="list-group-item">Deployment Blues</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/08/20/timestamp.html" class="list-group-item">Time Stamp Your Library</a>
+      
+      <a href="https://blog.adaptiverisk.com/power/spot/2016/07/28/power-spot.html" class="list-group-item">Spot Price Dynamics in Power Markets</a>
+      
+      <a href="https://blog.adaptiverisk.com/power/volatility/2016/06/11/daily-opts.html" class="list-group-item">Daily Options</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2015/01/21/xlw-part5.html" class="list-group-item">UDF Services (XLW Part 5)</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part4.html" class="list-group-item">Input/output arrays, vectors, matrices or ranges (XLW Part 4)</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part3.html" class="list-group-item">Writing Simple Excel Functions (XLW Part 3)</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/15/xlw-part2.html" class="list-group-item">Setting up a Project in Visual Studio 2013 and 2015 (XLW Part 2)</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/08/xlw-part1.html" class="list-group-item">Building Excel Add-ins (XLW Part 1)</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="https://blog.adaptiverisk.com/categories/xlw" class="list-group-item">xlw</a>
+      
+      <a href="https://blog.adaptiverisk.com/categories/energy" class="list-group-item">energy</a>
+      
+      <a href="https://blog.adaptiverisk.com/categories/xll" class="list-group-item">xll</a>
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="https://blog.adaptiverisk.com/tags/xll" class="list-group-item">xll</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/excel" class="list-group-item">excel</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/xlw" class="list-group-item">xlw</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/c&#43;&#43;" class="list-group-item">c&#43;&#43;</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/energy" class="list-group-item">energy</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/power" class="list-group-item">power</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/volatility" class="list-group-item">volatility</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3">
+            <p>
+              <span class="h-logo">&copy; AdaptiveRisk</span></p>
+            <p><a href="mailto:info@adaptiverisk.com">info@adaptiverisk.com</a></p>
+          </div>
+          <div class="col-md-3">
+            <a href="https://twitter.com/AdaptiveRisk">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+                </svg>
+              </span>
+              <span class="username">AdaptiveRisk</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </body>
+</html>
+

@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.17" />
+
+
+
+<link rel="canonical" href="https://blog.adaptiverisk.com/power/volatility/2016/06/11/daily-opts.html">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <title>Daily Options - The AdaptiveRisk Blog</title>
+    
+<meta name="description" content="Summary When computing a monthly strip of daily options it is never a good idea to approximate it with a daily option expiring in in the middle of the month (15&#39;th day) as errors in value or implied volatility can be as high as 4%. Instead, it is better to take the daily option that expires after 13.9 days within a month (this halves the errors of the previous method). An even better approach would be to take option that expires depending on how far is the delivery month T - with this method the errors are reduced by a factor of 10 (0.">
+
+<meta property="og:title" content="Daily Options - The AdaptiveRisk Blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://blog.adaptiverisk.com/power/volatility/2016/06/11/daily-opts.html">
+<meta property="og:image" content="https://blog.adaptiverisk.com/images/default.png">
+<meta property="og:site_name" content="The AdaptiveRisk Blog">
+<meta property="og:description" content="Summary When computing a monthly strip of daily options it is never a good idea to approximate it with a daily option expiring in in the middle of the month (15&#39;th day) as errors in value or implied volatility can be as high as 4%. Instead, it is better to take the daily option that expires after 13.9 days within a month (this halves the errors of the previous method). An even better approach would be to take option that expires depending on how far is the delivery month T - with this method the errors are reduced by a factor of 10 (0.">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="The AdaptiveRisk Blog">
+<meta name="twitter:url" content="https://blog.adaptiverisk.com/power/volatility/2016/06/11/daily-opts.html">
+<meta name="twitter:title" content="Daily Options - The AdaptiveRisk Blog">
+<meta name="twitter:description" content="Summary When computing a monthly strip of daily options it is never a good idea to approximate it with a daily option expiring in in the middle of the month (15&#39;th day) as errors in value or implied volatility can be as high as 4%. Instead, it is better to take the daily option that expires after 13.9 days within a month (this halves the errors of the previous method). An even better approach would be to take option that expires depending on how far is the delivery month T - with this method the errors are reduced by a factor of 10 (0.">
+<meta name="twitter:image" content="https://blog.adaptiverisk.com/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"https:\/\/blog.adaptiverisk.com\/"
+    },
+    "headline": "Daily Options - The AdaptiveRisk Blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "https:\/\/blog.adaptiverisk.com\/images\/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2016-06-11T00:00:00JST",
+    "dateModified": "2016-06-11T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "The AdaptiveRisk Blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "The AdaptiveRisk Blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https:\/\/blog.adaptiverisk.com\/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "Summary When computing a monthly strip of daily options it is never a good idea to approximate it with a daily option expiring in in the middle of the month (15\x27th day) as errors in value or implied volatility can be as high as 4%. Instead, it is better to take the daily option that expires after 13.9 days within a month (this halves the errors of the previous method). An even better approach would be to take option that expires depending on how far is the delivery month T - with this method the errors are reduced by a factor of 10 (0."
+  }
+</script>
+
+
+    <link href="https://blog.adaptiverisk.com/css/styles.css" rel="stylesheet">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        jax: ["input/TeX","output/CommonHTML"],
+        extensions: ["tex2jax.js","AssistiveMML.js"],
+        TeX: {
+          extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"],
+          equationNumbers: { autoNumber: "AMS" }
+        }
+      });
+    </script>
+    <script type="text/javascript"
+      src="http://cdn.mathjax.org/mathjax/latest/MathJax.js">
+    </script>
+  </head>
+
+  <body>
+    
+    
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-XXXXXXXX-XX', 'auto');
+ga('send', 'pageview');
+</script>
+
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand arlogo" href="https://adaptiverisk.com">AR</a>
+            <a class="navbar-brand" href="https://blog.adaptiverisk.com/">The AdaptiveRisk Blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="https://blog.adaptiverisk.com/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="https://blog.adaptiverisk.com/post/" itemprop="url"><span itemprop="title">post</span></a></li>
+        
+        <li class="active">Daily Options</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2016-06-11T00:00:00JST">Jun 11, 2016</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="https://blog.adaptiverisk.com/post/">post</a></li>
+      
+    </ul>
+
+    <h1 class="title">Daily Options</h1>
+  </header>
+
+  
+
+  <div class="article-body"><h2 id="summary">Summary</h2>
+
+<p>When computing a monthly strip of daily options it is never a good idea to
+approximate it with a daily option expiring in in the middle of the month
+(15'th day) as errors in value or implied volatility can be as high as 4%.
+Instead, it is better to take the daily option that expires after 13.9 days
+within a month (this halves the errors of the previous method). An even better
+approach would be to take option that expires depending on how far is the
+delivery month T - with this method the errors are reduced by a factor of 10
+(0.4%). However, this approximation does not work well for deep out of the money
+options.</p>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Daily options are popular contracts in power and natural gas markets.
+They are European options where underlyings are daily forward contracts for
+the next day after the exercise. In power markets the forward contract can be
+peak, off-peak or base load, however in the US only the peak load options are
+usually liquid. Usually these options are sold in strips (monthly, quarterly,
+annual). When quoting such a strip the price is given as an average option
+premium per commodity unit (MWh or MMBtu).</p>
+
+<p>Traders judge if an option is too expensive or too cheap by considering its
+implied volatility, which is computed using the
+<a href="https://en.wikipedia.org/wiki/Black_model">Black model</a> with a given option
+premium and price of the underlying. To find the implied volatility, one has to
+solve the following equation for <span  class="math">\(\sigma \)</span>:</p>
+
+<p><span  class="math">\[ v_{opt}=B\left(T,F,\sigma\right) \]</span></p>
+
+<p>where <span  class="math">\(v_{opt}\)</span> - option premium,
+<em>B</em> - <a href="https://en.wikipedia.org/wiki/Black_model">Black model</a>,
+<em>F</em> - price of underlying forward. Similarly, in the case of a monthly strip of
+daily options one has to solve</p>
+
+<p><span  class="math">\[
+\begin{equation}
+  \bar{v}_{opt}=\frac{1}{N}\sum_{i=0}^{N-1}B\left(T + i\Delta t,F,\sigma_i\right)
+  \label{eq:strip}
+\end{equation}
+\]</span></p>
+
+<p>where <span  class="math">\(\bar{v}_{opt}\)</span> - average premium of options in the strip,
+<em>N</em> - number of options in the strip, <em>T</em> - time to the start of the strip
+(start of the month), <span  class="math">\(\Delta t\)</span> - length of one day measured in years,
+<span  class="math">\(\sigma_i\)</span> - daily volatility for the <em>i</em>-th option in the strip.</p>
+
+<p>In practice, to speed up calculations, instead of formula (\ref{eq:strip}) one
+uses</p>
+
+<p><span  class="math">\[
+\begin{equation}
+  \bar{v}_{opt}\thickapprox B\left(T + n\Delta t,F,\sigma_n\right)
+  \label{eq:simplified}
+\end{equation}  
+\]</span></p>
+
+<p>where <em>n</em> - some (fixed) day within a strip (say 15'th day if monthly strip is
+considered). This approximation speeds up calculations quite significantly
+(factor of 30 for a monthly strip). In this blog post we want to investigate
+what the best value for <em>n</em> is and what the error introduced by this
+approximation is.</p>
+
+<h2 id="blended-volatility">&quot;Blended&quot; Volatility</h2>
+
+<p>Before investigating the approximation described in the
+Introduction we need to specify how <span  class="math">\(\bar{\sigma}_i\)</span> are computed. Forward
+price dynamics exhibits a term structure of volatility - the farther we are from
+the delivery period, the lower the volatility (&quot;Samuelson effect&quot;). Therefore
+the volatility of daily prices should be the highest within the delivery month.</p>
+
+<p>Traders in power markets think about price volatility of daily options in terms
+of two periods - before the month starts and inside the month. The volatility
+before the month is described by a monthly option (forward volatility), the
+market of which is usually more liquid than for daily options. The volatility
+inside the month is called spot volatility and describes how daily prices behave
+once we are inside the month. Forward volatilities are usually much lower than
+spot volatilities. The daily volatilities are then computed by a process that is
+called &quot;blending&quot;:</p>
+
+<p><span  class="math">\[
+\begin{equation}
+  \bar{\sigma}_{d}=\sqrt{\frac{\sigma_{F}^{2}T+\sigma_{S}^{2}d\Delta t}{T+d\Delta t}}
+  \label{eq:blending}
+\end{equation}
+\]</span></p>
+
+<p>where <span  class="math">\(\bar{\sigma}_{d}\)</span> - daily volatility for day <em>d</em>,
+<span  class="math">\(\sigma_{F}\)</span> - volatility of forward contract that expires at time <em>T</em>,
+<span  class="math">\(\sigma_{S}\)</span> - spot volatility, <span  class="math">\(\Delta t\)</span> - time period spanning one day.
+Traders usually assume that the spot volatility is constant throughout the month.</p>
+
+<h2 id="examples">Examples</h2>
+
+<p>For our investigation we will make the following assumptions:</p>
+
+<ul>
+<li><span  class="math">\(\sigma_F\)</span> is constant and equals 30%</li>
+<li><span  class="math">\(\sigma_S\)</span> is constant and equals 80%</li>
+<li><span  class="math">\(\Delta t\)</span> is one day expressed in years (i.e. 1/365.25)</li>
+<li>a month has 30 days</li>
+<li>we set the interest rate to 0</li>
+<li>we set the forward price of commodity to $50 (per unit)</li>
+</ul>
+
+<p>We are interested in how the approximation (\ref{eq:simplified}) behaves
+for strikes of different moneyness and different times to the delivery month
+<em>T</em>. For each case we will present three graphs:</p>
+
+<ol>
+<li>First we are going to compute at which value of <em>n</em> approximation
+(\ref{eq:simplified}) yields equality (i.e. at what value of <em>n</em> the option's
+premium equals the average premium of the strip of daily options.)</li>
+<li>Then we compute by how much the approximation is different from the
+exact average premium of daily options for a given <em>n</em>.</li>
+<li>Finally we compute the spot volatility implied by the approximation and
+compare it to the actual spot volatility <span  class="math">\(\sigma_S\)</span>.</li>
+</ol>
+
+<p>We will consider only call options (put option results should be similar).</p>
+
+<h3 id="fixed-moneyness">Fixed Moneyness</h3>
+
+<p>We consider three cases: at the money <span  class="math">\(K = F\)</span>, out of the money
+<span  class="math">\(K = 1.2\cdot F\)</span>, and in the money <span  class="math">\(K = 0.8\cdot F\)</span>.</p>
+
+<p><figure style="text-align: center"><img src="/images/daily-options/n-moneyness.png" alt="n moneyness"></figure></p>
+
+<p>We can see that when we are close to the delivery month (<em>T</em> is small) the
+optimal value of <em>n</em> decreases. As time to delivery increases <em>n</em> converges to 14.5.</p>
+
+<h4 id="n--145"><em>n</em> = 14.5</h4>
+
+<p>If we use the value of <em>n</em> to which it converges when <em>T</em> is large, the
+approximation (\ref{eq:simplified}) produces the following errors for value and
+implied volatility:</p>
+
+<p><figure style="text-align: center"><img src="/images/daily-options/v-moneyness-15.png" alt="v moneyness 14.5"></figure><br>
+
+<figure style="text-align: center"><img src="/images/daily-options/vol-moneyness-15.png" alt="vol moneyness 14.5"></figure></p>
+
+<p>Note that if <em>T</em> is less than about half a year the premium and volatility
+errors become big and reach almost 4% at <em>T</em> = 2 months.</p>
+
+<h4 id="n--139"><em>n</em> = 13.9</h4>
+
+<p>We can reduce errors observed in the previous section if we pick a smaller value
+of <em>n</em> = 13.9.</p>
+
+<p><figure style="text-align: center"><img src="/images/daily-options/v-moneyness-14.png" alt="v moneyness 13.9"></figure><br>
+
+<figure style="text-align: center"><img src="/images/daily-options/vol-moneyness-14.png" alt="vol moneyness 13.9"></figure></p>
+
+<p>Now both premium and volatility relative errors are within 3% for the full
+range.</p>
+
+<h4 id="variable-n">Variable <em>n</em></h4>
+
+<p>We can get a better result if we vary <em>n</em> with <em>T</em>. For this example we set
+<em>n</em> to be equal to the average of <em>ATM</em> and <em>OTM</em> exact values of <em>n</em>:</p>
+
+<p><figure style="text-align: center"><img src="/images/daily-options/n-var-moneyness.png" alt="variable n"></figure></p>
+
+<p>With this <em>n</em> we get the following results:</p>
+
+<p><figure style="text-align: center"><img src="/images/daily-options/v-moneyness-var.png" alt="v moneyness var"></figure><br>
+
+<figure style="text-align: center"><img src="/images/daily-options/vol-moneyness-var.png" alt="vol moneyness var"></figure></p>
+
+<p>Note that at <em>T</em> &gt; 1 the errors are essentially 0 and they do not increase
+beyond 2% for small <em>T</em>.</p>
+
+<h3 id="fixed-reduced-delta">Fixed Reduced Delta</h3>
+
+<p>The results in the previous section show how the error becomes very large
+when <em>T</em> is small. One reason this happens is that when moneyness is fixed,
+delta becomes very small as <em>T</em> goes to zero. The intuition here is that
+the underlying distribution width is described by variance <span  class="math">\(\sigma^2 T\)</span>.
+When the variance is large even large strikes will fall in a very probable
+region of the distribution. On the other hand when <em>T</em> is small the variance is
+small, and even a modest strike can be in a very improbable region of the
+distribution.</p>
+
+<p>One way to describe moneyness while taking into account the above fact is to
+use &quot;reduced delta&quot; which is defined as:</p>
+
+<p><span  class="math">\[
+  D=N\left(\frac{\log\frac{F}{K}}{\sigma\sqrt{T}}\right)
+\]</span></p>
+
+<p>To ensure that this &quot;reduced delta&quot; is constant for all <em>T</em> we need to adjust
+<em>K</em> as follows:</p>
+
+<p><span  class="math">\[
+  K=Fe^{-d\sqrt{T}}
+\]</span></p>
+
+<p>where <em>d</em> is some constant. We select this constant to ensure that <span  class="math">\(K/F = 1.2\)</span>
+at 6 months for the OTM case and <span  class="math">\(F/K = 1.2\)</span> at 6 months for the ITM case.</p>
+
+<p><figure style="text-align: center"><img src="/images/daily-options/n-delta.png" alt="n delta"></figure></p>
+
+<p>The general shapes of the <em>n</em> curves are similar to the fixed moneyness case,
+but here ATM and OTM curves are identical.</p>
+
+<p>The error results when <em>n</em> is fixed are similar to the fixed moneyness case
+(the errors are somewhat smaller, but not significantly), so we will not show them
+here. However, when we vary <em>n</em> with <em>T</em> (<em>n</em> = average of <em>ATM</em> and <em>OTM</em> exact
+values of <em>n</em>) we get a much better result:</p>
+
+<p><figure style="text-align: center"><img src="/images/daily-options/v-delta-var.png" alt="v delta var"></figure><br>
+
+<figure style="text-align: center"><img src="/images/daily-options/vol-delta-var.png" alt="vol delta var"></figure></p>
+
+<p>Note how the relative error is now within 0.4% for the full range of <em>T</em>.</p>
+
+<h3 id="case-spot-and-forward-volatilities-are-close">Case: Spot and Forward Volatilities are Close</h3>
+
+<p>In previous sections we considered the case when the spot volatility is much
+larger than the forward volatility (80% vs 30%). But what happens when they
+are close to each other? (In reality it almost never happens due to the
+Samuelson Effect.) We ran the above analysis for the case when the spot
+volatility is just slightly larger than the forward volatility (31% spot vs 30%
+forward).</p>
+
+<p><figure style="text-align: center"><img src="/images/daily-options/n-spot.png" alt="n small spot vol"></figure></p>
+
+<p>Note that the shape of the <em>n</em> curves is similar to the large spot volatility
+case. However, all moneyness cases are now collapsed into a single curve.</p>
+
+<p>Using <em>n</em> = 14.5, to which it converges for large <em>T</em>, we get the following
+errors for premium and implied volatility:</p>
+
+<p><figure style="text-align: center"><img src="/images/daily-options/v-spot.png" alt="v small spot"></figure><br>
+
+<figure style="text-align: center"><img src="/images/daily-options/vol-spot.png" alt="vol small spot"></figure></p>
+
+<p>The errors are very small (within 0.2% for the full range, for both premium and
+volatility). If we use 13.9 or variable values for <em>n</em> the errors become even
+smaller.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Approximating a strip of dailies with the value of a single daily option is an
+efficient technique for significantly increasing the speed of calculation.
+However, the time of expiration of the single option needs to be selected
+carefully. The usual selection with expiration in the middle of the month is
+never optimal and can produce up to 4% errors for the premium or implied
+volatility. It is much better to use an option that expires 13.9 days from the
+beginning of the month, however the errors in this case are still significant -
+2%. The best method is to use an expiration date that changes depending on the
+time to delivery month <em>T</em>. With this method the errors fall below 0.4%.</p>
+
+<p>However, this approach does not work well for deep out of the money options.</p>
+
+<p>You can download the <a href="/downloads/daily-option.nb">Mathematica notebook</a> that
+was used to obtain the results for this blog post. With this notebook you can
+replicate our calculations or play with a different set of parameters.</p>
+
+<p>Feel free to leave questions or comments below.</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    <section class="bordered">
+      <header>
+        <div class="panel-title">CATEGORIES</div>
+      </header>
+      <div>
+        <ul class="p-terms">
+          
+          <li><a href="https://blog.adaptiverisk.com/categories/energy/">energy</a></li>
+          
+        </ul>
+      </div>
+    </section>
+    
+    
+    
+    <section class="bordered">
+      <header>
+        <div class="panel-title">TAGS</div>
+      </header>
+      <div>
+        <ul class="p-terms">
+          
+          <li><a href="https://blog.adaptiverisk.com/tags/power/">power</a></li>
+          
+          <li><a href="https://blog.adaptiverisk.com/tags/volatility/">volatility</a></li>
+          
+          <li><a href="https://blog.adaptiverisk.com/tags/energy/">energy</a></li>
+          
+        </ul>
+      </div>
+    </section>
+    
+    
+  </footer>
+
+</article>
+
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'adaptiverisk';
+    var disqus_identifier = 'https:\/\/blog.adaptiverisk.com\/power\/volatility\/2016\/06\/11\/daily-opts.html';
+    var disqus_title = 'Daily Options';
+    var disqus_url = 'https:\/\/blog.adaptiverisk.com\/power\/volatility\/2016\/06\/11\/daily-opts.html';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/10/04/deploy-static.html" class="list-group-item">Deployment Blues</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/08/20/timestamp.html" class="list-group-item">Time Stamp Your Library</a>
+      
+      <a href="https://blog.adaptiverisk.com/power/spot/2016/07/28/power-spot.html" class="list-group-item">Spot Price Dynamics in Power Markets</a>
+      
+      <a href="https://blog.adaptiverisk.com/power/volatility/2016/06/11/daily-opts.html" class="list-group-item">Daily Options</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2015/01/21/xlw-part5.html" class="list-group-item">UDF Services (XLW Part 5)</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part4.html" class="list-group-item">Input/output arrays, vectors, matrices or ranges (XLW Part 4)</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part3.html" class="list-group-item">Writing Simple Excel Functions (XLW Part 3)</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/15/xlw-part2.html" class="list-group-item">Setting up a Project in Visual Studio 2013 and 2015 (XLW Part 2)</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/08/xlw-part1.html" class="list-group-item">Building Excel Add-ins (XLW Part 1)</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="https://blog.adaptiverisk.com/categories/xlw" class="list-group-item">xlw</a>
+      
+      <a href="https://blog.adaptiverisk.com/categories/energy" class="list-group-item">energy</a>
+      
+      <a href="https://blog.adaptiverisk.com/categories/xll" class="list-group-item">xll</a>
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="https://blog.adaptiverisk.com/tags/xll" class="list-group-item">xll</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/excel" class="list-group-item">excel</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/xlw" class="list-group-item">xlw</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/c&#43;&#43;" class="list-group-item">c&#43;&#43;</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/energy" class="list-group-item">energy</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/power" class="list-group-item">power</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/volatility" class="list-group-item">volatility</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3">
+            <p>
+              <span class="h-logo">&copy; AdaptiveRisk</span></p>
+            <p><a href="mailto:info@adaptiverisk.com">info@adaptiverisk.com</a></p>
+          </div>
+          <div class="col-md-3">
+            <a href="https://twitter.com/AdaptiveRisk">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+                </svg>
+              </span>
+              <span class="username">AdaptiveRisk</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </body>
+</html>
+

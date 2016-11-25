@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.17" />
+
+
+
+<link rel="canonical" href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part3.html">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <title>Writing Simple Excel Functions (XLW Part 3) - The AdaptiveRisk Blog</title>
+    
+<meta name="description" content="In the last post I described how to set up a Visual Studio solution to build xll addins using XLW. For the introduction to XLW series take a look at the first post. Today I am going to show how easy it is to create user defined functions (UDF) for Excel using XLW.The starting point will be the solution we set up in the previous post. If you don&amp;rsquo;t have set it up you can download it.">
+
+<meta property="og:title" content="Writing Simple Excel Functions (XLW Part 3) - The AdaptiveRisk Blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part3.html">
+<meta property="og:image" content="https://blog.adaptiverisk.com/images/default.png">
+<meta property="og:site_name" content="The AdaptiveRisk Blog">
+<meta property="og:description" content="In the last post I described how to set up a Visual Studio solution to build xll addins using XLW. For the introduction to XLW series take a look at the first post. Today I am going to show how easy it is to create user defined functions (UDF) for Excel using XLW.The starting point will be the solution we set up in the previous post. If you don&amp;rsquo;t have set it up you can download it.">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="The AdaptiveRisk Blog">
+<meta name="twitter:url" content="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part3.html">
+<meta name="twitter:title" content="Writing Simple Excel Functions (XLW Part 3) - The AdaptiveRisk Blog">
+<meta name="twitter:description" content="In the last post I described how to set up a Visual Studio solution to build xll addins using XLW. For the introduction to XLW series take a look at the first post. Today I am going to show how easy it is to create user defined functions (UDF) for Excel using XLW.The starting point will be the solution we set up in the previous post. If you don&amp;rsquo;t have set it up you can download it.">
+<meta name="twitter:image" content="https://blog.adaptiverisk.com/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"https:\/\/blog.adaptiverisk.com\/"
+    },
+    "headline": "Writing Simple Excel Functions (XLW Part 3) - The AdaptiveRisk Blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "https:\/\/blog.adaptiverisk.com\/images\/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2014-12-19T00:00:00JST",
+    "dateModified": "2014-12-19T00:00:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "The AdaptiveRisk Blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "The AdaptiveRisk Blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https:\/\/blog.adaptiverisk.com\/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "In the last post I described how to set up a Visual Studio solution to build xll addins using XLW. For the introduction to XLW series take a look at the first post. Today I am going to show how easy it is to create user defined functions (UDF) for Excel using XLW.\nThe starting point will be the solution we set up in the previous post. If you don\x26rsquo;t have set it up you can download it."
+  }
+</script>
+
+
+    <link href="https://blog.adaptiverisk.com/css/styles.css" rel="stylesheet">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        jax: ["input/TeX","output/CommonHTML"],
+        extensions: ["tex2jax.js","AssistiveMML.js"],
+        TeX: {
+          extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"],
+          equationNumbers: { autoNumber: "AMS" }
+        }
+      });
+    </script>
+    <script type="text/javascript"
+      src="http://cdn.mathjax.org/mathjax/latest/MathJax.js">
+    </script>
+  </head>
+
+  <body>
+    
+    
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-XXXXXXXX-XX', 'auto');
+ga('send', 'pageview');
+</script>
+
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand arlogo" href="https://adaptiverisk.com">AR</a>
+            <a class="navbar-brand" href="https://blog.adaptiverisk.com/">The AdaptiveRisk Blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="https://blog.adaptiverisk.com/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="https://blog.adaptiverisk.com/post/" itemprop="url"><span itemprop="title">post</span></a></li>
+        
+        <li class="active">Writing Simple Excel Functions (XLW Part 3)</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2014-12-19T00:00:00JST">Dec 19, 2014</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="https://blog.adaptiverisk.com/post/">post</a></li>
+      
+    </ul>
+
+    <h1 class="title">Writing Simple Excel Functions (XLW Part 3)</h1>
+  </header>
+
+  
+
+  <div class="article-body">
+
+<p>In the <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/15/xlw-part2.html">last post</a> I described how to set
+up a Visual Studio solution to build xll addins using XLW.
+For the introduction to XLW series take a look at the
+<a href="https://blog.adaptiverisk.com/xll/excel/2014/12/08/xlw-part1.html">first post</a>. Today I am going to show
+how easy it is to create user defined functions (UDF) for Excel using XLW.</p>
+
+<p>The starting point will be the solution we set up in the
+<a href="https://blog.adaptiverisk.com/xll/excel/2014/12/15/xlw-part2.html">previous post</a>. If you don&rsquo;t have set it
+up you can <a href="/downloads/xlw-part2.zip">download it</a>.</p>
+
+<p>The project contains two files that we are going to modify to add new functions:</p>
+
+<ul>
+<li><p><code>mylib.h</code>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><code class="language-c" data-lang="c"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</code></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#ifndef _mylib_h_</span>
+<span class="cp">#define _mylib_h_</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;xlw/xlw.h&gt;</span><span class="cp"></span>
+
+<span class="c1">//&lt;xlw:libraryname=MyLibrary</span>
+
+<span class="kt">double</span> <span class="c1">//Square root of an argument</span>
+<span class="n">MySqrt</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span> <span class="c1">//argument</span>
+       <span class="p">);</span>
+
+<span class="cp">#endif</span>
+</pre></div>
+</td></tr></table></p></li>
+
+<li><p><code>mylib.cpp</code>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><code class="language-c" data-lang="c"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</code></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;mylib.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;math.h&gt;</span><span class="cp"></span>
+
+<span class="kt">double</span> <span class="nf">MySqrt</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mf">0.</span> <span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">throw</span><span class="p">(</span><span class="s">&quot;#Negative argument&quot;</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></p></li>
+</ul>
+
+<p>The third file (<code>xlwmylib.cpp</code>) is autogenerated by the build process.</p>
+
+<h2 id="1-library-name">1. Library Name</h2>
+
+<p><em>Library Name</em> is a term XLW uses to tell in which <em>category</em> you can find your
+functions in the <em>Function Wizard</em>: <br />
+<img src="/images/xlw2/my-lib-in-wiz.png" alt="my library in wiz" /><br />
+The name of the library is specified in the file <code>mylib.h</code> on the line 6:
+<div class="highlight"><pre><code class="language-c" data-lang="c"><span></span><span class="c1">//&lt;xlw:libraryname=MyLibrary</span>
+</code></pre></div>
+</p>
+
+<h2 id="2-basic-function">2. Basic Function</h2>
+
+<p>Consider a function definition, which should be placed in <code>mylib.h</code> file:</p>
+
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><code class="language-c" data-lang="c">1
+2
+3
+4</code></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kt">double</span> <span class="c1">//Sum of square roots of two numbers</span>
+<span class="n">SumSqrt</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="c1">//argument 1</span>
+  <span class="kt">double</span> <span class="n">y</span> <span class="c1">//argument 2</span>
+  <span class="p">);</span>
+</pre></div>
+</td></tr></table>
+
+<dl>
+<dt>Line 1</dt>
+<dd>contains type of results the function returns and comment with function
+description as it will appear in Excel&rsquo;s function wizard</dd>
+<dt>Line 2</dt>
+<dd>contains the name of the function (Function in Excel will have same name),
+and definition of the first argument. The comment is a description of the
+argument as it will appear in Excel&rsquo;s function wizard.
+<strong>Note:</strong> if you need to include quotes in description string escape them with
+backslash, e.g.: <code>// argument \&quot;1\&quot;</code></dd>
+<dt>Line 3</dt>
+<dd>contains the second argument with its description</dd>
+<dt>Line 4</dt>
+<dd>ends function definition</dd>
+</dl>
+
+<p>definition</p>
+
+<h2 id="3-handling-errors">3. Handling Errors</h2>
+
+<p>It is possible to return an error message to Excel from a function. Consider
+the example with <code>SumSqrt</code> function. Put the following code in <code>mylib.cpp</code>:</p>
+
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><code class="language-c" data-lang="c"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</code></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;mylib.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;math.h&gt;</span><span class="cp"></span>
+
+<span class="kt">double</span> <span class="nf">SumSqrt</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">throw</span><span class="p">(</span><span class="s">&quot;#Negative argument&quot;</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table>
+
+<dl>
+<dt>Line 6</dt>
+<dd>check if any of the arguments is negative</dd>
+<dt>Line 8</dt>
+<dd>if we have a negative argument we throw an error with message
+<code>#Negative argument</code></dd>
+</dl>
+
+<p>e argument`</p>
+
+<p>As a result, the Excel function displays string <code>#Negative argument</code> if any of
+the arguments is negative or numeric result if both numbers are non-negative.</p>
+
+<h2 id="4-basic-input-output-data-types">4. Basic input/output data types</h2>
+
+<ul>
+<li><code>double</code></li>
+<li><code>bool</code></li>
+<li><code>std::string</code></li>
+<li><code>int</code> - although it can be used as an input type it cannot be an output type.
+Convert it to <code>double</code> for output.</li>
+</ul>
+
+<h2 id="5-happy-coding">5. Happy Coding!</h2>
+
+<p>If you want to see the code described in this post in action you can
+<a href="/downloads/xlw-part3-4.zip">download updated <code>mylib</code> library</a>. It also
+contains changes introduced in the next post.</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    <section class="bordered">
+      <header>
+        <div class="panel-title">CATEGORIES</div>
+      </header>
+      <div>
+        <ul class="p-terms">
+          
+          <li><a href="https://blog.adaptiverisk.com/categories/xlw/">xlw</a></li>
+          
+        </ul>
+      </div>
+    </section>
+    
+    
+    
+    <section class="bordered">
+      <header>
+        <div class="panel-title">TAGS</div>
+      </header>
+      <div>
+        <ul class="p-terms">
+          
+          <li><a href="https://blog.adaptiverisk.com/tags/xll/">xll</a></li>
+          
+          <li><a href="https://blog.adaptiverisk.com/tags/excel/">Excel</a></li>
+          
+          <li><a href="https://blog.adaptiverisk.com/tags/xlw/">xlw</a></li>
+          
+        </ul>
+      </div>
+    </section>
+    
+    
+  </footer>
+
+</article>
+
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'adaptiverisk';
+    var disqus_identifier = 'https:\/\/blog.adaptiverisk.com\/xll\/excel\/2014\/12\/19\/xlw-part3.html';
+    var disqus_title = 'Writing Simple Excel Functions (XLW Part 3)';
+    var disqus_url = 'https:\/\/blog.adaptiverisk.com\/xll\/excel\/2014\/12\/19\/xlw-part3.html';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/10/04/deploy-static.html" class="list-group-item">Deployment Blues</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/08/20/timestamp.html" class="list-group-item">Time Stamp Your Library</a>
+      
+      <a href="https://blog.adaptiverisk.com/power/spot/2016/07/28/power-spot.html" class="list-group-item">Spot Price Dynamics in Power Markets</a>
+      
+      <a href="https://blog.adaptiverisk.com/power/volatility/2016/06/11/daily-opts.html" class="list-group-item">Daily Options</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2015/01/21/xlw-part5.html" class="list-group-item">UDF Services (XLW Part 5)</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part4.html" class="list-group-item">Input/output arrays, vectors, matrices or ranges (XLW Part 4)</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part3.html" class="list-group-item">Writing Simple Excel Functions (XLW Part 3)</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/15/xlw-part2.html" class="list-group-item">Setting up a Project in Visual Studio 2013 and 2015 (XLW Part 2)</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/08/xlw-part1.html" class="list-group-item">Building Excel Add-ins (XLW Part 1)</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="https://blog.adaptiverisk.com/categories/xlw" class="list-group-item">xlw</a>
+      
+      <a href="https://blog.adaptiverisk.com/categories/energy" class="list-group-item">energy</a>
+      
+      <a href="https://blog.adaptiverisk.com/categories/xll" class="list-group-item">xll</a>
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="https://blog.adaptiverisk.com/tags/xll" class="list-group-item">xll</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/excel" class="list-group-item">excel</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/xlw" class="list-group-item">xlw</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/c&#43;&#43;" class="list-group-item">c&#43;&#43;</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/energy" class="list-group-item">energy</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/power" class="list-group-item">power</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/volatility" class="list-group-item">volatility</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3">
+            <p>
+              <span class="h-logo">&copy; AdaptiveRisk</span></p>
+            <p><a href="mailto:info@adaptiverisk.com">info@adaptiverisk.com</a></p>
+          </div>
+          <div class="col-md-3">
+            <a href="https://twitter.com/AdaptiveRisk">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+                </svg>
+              </span>
+              <span class="username">AdaptiveRisk</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </body>
+</html>
+
