@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="pinterest" content="nopin">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.17" />
+
+
+
+<link rel="canonical" href="https://blog.adaptiverisk.com/post/2016-11-26-intrinsic/">
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <title>Intrinsic - The AdaptiveRisk Blog</title>
+    
+<meta name="description" content="Introduction Intrinsic value is a well defined and often used concept of option pricing theory. It is usually defined as the maximum of zero and the value the option would have if it were exercised immediately. This definition is straightforward to apply to vanilla option with single exercise decision, but its application to more complex options traded in energy markets (e.g. natural gas storage or power tolling) might be confusing. In this blog post we will develop intuition behind the definition of intrinsic value that will help us understand its importance and application to complex options.">
+
+<meta property="og:title" content="Intrinsic - The AdaptiveRisk Blog">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://blog.adaptiverisk.com/post/2016-11-26-intrinsic/">
+<meta property="og:image" content="https://blog.adaptiverisk.com/images/default.png">
+<meta property="og:site_name" content="The AdaptiveRisk Blog">
+<meta property="og:description" content="Introduction Intrinsic value is a well defined and often used concept of option pricing theory. It is usually defined as the maximum of zero and the value the option would have if it were exercised immediately. This definition is straightforward to apply to vanilla option with single exercise decision, but its application to more complex options traded in energy markets (e.g. natural gas storage or power tolling) might be confusing. In this blog post we will develop intuition behind the definition of intrinsic value that will help us understand its importance and application to complex options.">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="The AdaptiveRisk Blog">
+<meta name="twitter:url" content="https://blog.adaptiverisk.com/post/2016-11-26-intrinsic/">
+<meta name="twitter:title" content="Intrinsic - The AdaptiveRisk Blog">
+<meta name="twitter:description" content="Introduction Intrinsic value is a well defined and often used concept of option pricing theory. It is usually defined as the maximum of zero and the value the option would have if it were exercised immediately. This definition is straightforward to apply to vanilla option with single exercise decision, but its application to more complex options traded in energy markets (e.g. natural gas storage or power tolling) might be confusing. In this blog post we will develop intuition behind the definition of intrinsic value that will help us understand its importance and application to complex options.">
+<meta name="twitter:image" content="https://blog.adaptiverisk.com/images/default.png">
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id":"https:\/\/blog.adaptiverisk.com\/"
+    },
+    "headline": "Intrinsic - The AdaptiveRisk Blog",
+    "image": {
+      "@type": "ImageObject",
+      "url": "https:\/\/blog.adaptiverisk.com\/images\/default.png",
+      "height": 800,
+      "width": 800
+    },
+    "datePublished": "2016-11-26T00:20:00JST",
+    "dateModified": "2016-11-26T00:20:00JST",
+    "author": {
+      "@type": "Person",
+      "name": "The AdaptiveRisk Blog"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "The AdaptiveRisk Blog",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https:\/\/blog.adaptiverisk.com\/images/logo.png",
+        "width": 600,
+        "height": 60
+      }
+    },
+    "description": "Introduction Intrinsic value is a well defined and often used concept of option pricing theory. It is usually defined as the maximum of zero and the value the option would have if it were exercised immediately. This definition is straightforward to apply to vanilla option with single exercise decision, but its application to more complex options traded in energy markets (e.g. natural gas storage or power tolling) might be confusing. In this blog post we will develop intuition behind the definition of intrinsic value that will help us understand its importance and application to complex options."
+  }
+</script>
+
+
+    <link href="https://blog.adaptiverisk.com/css/styles.css" rel="stylesheet">
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        jax: ["input/TeX","output/CommonHTML"],
+        extensions: ["tex2jax.js","AssistiveMML.js"],
+        TeX: {
+          extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"],
+          equationNumbers: { autoNumber: "AMS" }
+        }
+      });
+    </script>
+    <script type="text/javascript"
+      src="http://cdn.mathjax.org/mathjax/latest/MathJax.js">
+    </script>
+  </head>
+
+  <body>
+    
+    
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-XXXXXXXX-XX', 'auto');
+ga('send', 'pageview');
+</script>
+
+    
+
+    <header class="l-header">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand arlogo" href="https://adaptiverisk.com">AR</a>
+            <a class="navbar-brand" href="https://blog.adaptiverisk.com/">The AdaptiveRisk Blog</a>
+          </div>
+
+          
+
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<div class="row">
+  <div class="col-md-8">
+
+    <nav class="p-crumb">
+      <ol class="breadcrumb">
+        <li><a href="https://blog.adaptiverisk.com/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+        
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="https://blog.adaptiverisk.com/post/" itemprop="url"><span itemprop="title">post</span></a></li>
+        
+        <li class="active">Intrinsic</li>
+      </ol>
+    </nav>
+
+    <article class="single">
+  <header>
+    <ul class="p-facts">
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2016-11-26T00:20:00JST">Nov 26, 2016</time></li>
+      <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="https://blog.adaptiverisk.com/post/">post</a></li>
+      
+    </ul>
+
+    <h1 class="title">Intrinsic</h1>
+  </header>
+
+  
+
+  <div class="article-body"><h1 id="introduction">Introduction</h1>
+
+<p>Intrinsic value is a well defined and often used concept of option pricing
+theory. It is usually defined as the maximum of zero and the value the option
+would have if it were exercised immediately. This definition is straightforward
+to apply to vanilla option with single exercise decision, but its application to
+more complex options traded in energy markets (e.g. natural gas storage or power
+tolling) might be confusing. In this blog post we will develop intuition behind
+the definition of intrinsic value that will help us understand its importance
+and application to complex options.</p>
+
+<h1 id="vanilla-options">Vanilla Options</h1>
+
+<p>We start with discussion of vanilla European call option that expires at time
+<em>T</em> with forward delivering at <em>T</em> as underlying. I.e. the option gives the
+right to option holder to obtain a unit of commodity at time <em>T</em> for exchange of
+fixed amount equal to strike <em>K</em>. It is obvious that the option holder would
+require to pay some money (option premium) to acquire such an option (the
+payout at time <em>T</em> for the option holder is always bigger than 0). The option
+pricing theory tries to deduce what price option buyer should pay for this kind
+of option. Usually the option price depends on time to expiration and properties
+of the process by which the underlying prices change. However it is possible to
+find a value that does not depend on the dynamics of prices that bounds option
+premium from below. One such value we already discussed - it is 0: since the
+option payout cannot be negative the price of the option should be positive.
+Can we do better than that?</p>
+
+<p>The more optionality an option provides the more valuable the option is. If we
+reduce optionality, the value of the option is reduced. So to find lower bound
+of the option we can consider constraining its optionality. We might require the
+exercise decision to be made at time <span  class="math">\(t = 0\)</span>. I.e. at <span  class="math">\(t = 0\)</span> the option
+buyer needs to commit if they receive the unit of commodity at time <em>T</em> for
+price <em>K</em>. This certainty allows us (the seller) to setup static hedge that
+replicates payoff at <em>T</em> perfectly:</p>
+
+<ul>
+<li><p>If the buyer decides to exercise we can enter a forward contract that delivers
+one unit of the commodity at time <em>T</em> for the fixed price (today's forward rate)
+<span  class="math">\(F_{0}\)</span> (entering such a contract cost nothing at <span  class="math">\(t=0\)</span>). At time <em>T</em> we
+will pay <span  class="math">\(F_{0}\)</span> for the commodity and get <em>K</em> from the buyer. Our total PnL
+is <span  class="math">\(K-F_{0}\)</span>. Assuming that the interest rate is 0 we would not sell this
+contract for less than <span  class="math">\(F_{0}-K\)</span>, otherwise we would incur losses.</p></li>
+
+<li><p>If the buyer does not exercise we have nothing to do and we can give away such
+contract for price 0.</p></li>
+
+<li><p>So the option is exercised when <span  class="math">\(F_{0}-K>0\)</span>. Then the price is
+<span  class="math">\(\left(F_{0}-K\right)_{+}\)</span> which equals to the intrinsic under standard
+definition.</p></li>
+</ul>
+
+<p>We see that by restricting an option to the immediate exercise we can create a
+perfect static hedge that does not depend on the dynamics of the underlying.
+The value of the restricted option is the intrinsic value of the original
+option. The intrinsic value is always smaller than the value of the original
+option.</p>
+
+<h1 id="hedging-and-rolling-intrinsic">Hedging and Rolling Intrinsic</h1>
+
+<p>By exercising right away and putting static hedge, the option buyer can
+eliminate risk at the cost of difference between intrinsic value and full price
+paid for the option. So if <span  class="math">\(F_{0}>K\)</span>, the buyer will enter short futures
+position (to sell a unit of the commodity for <span  class="math">\(F_{0}\)</span> at time <em>T</em>). At time
+<em>T</em> the buyer will exercise the option and will pay <em>K</em> for the unit of
+commodity which s/he then sells for <span  class="math">\(F_{0}\)</span>, which in total will produce PnL
+equal <span  class="math">\(F_{0}-K\)</span>.</p>
+
+<p>Is it possible to improve on this strategy? The simple improvement is called
+rolling intrinsic strategy:</p>
+
+<ul>
+<li><p>At time <span  class="math">\(t=0\)</span> set up intrinsic strategy (if <span  class="math">\(F_{0}>K\)</span> short futures, do
+nothing otherwise)</p></li>
+
+<li><p>If at some future time step <span  class="math">\(0 < t < T\)</span> the buyer still doesn't hold short
+futures position, look at the futures prices. If <span  class="math">\(F_{t}>F_{t-1}\)</span> and
+<span  class="math">\(F_{t}>K\)</span> enter short futures position and expect to exercise at expiration.</p></li>
+
+<li><p>If have short position (say <span  class="math">\(F_{s}\)</span>, with <span  class="math">\(s < t\)</span> ) and <span  class="math">\(F_{t} < F_{s}\)</span>
+and <span  class="math">\(F_{t} < K\)</span> enter long position in <span  class="math">\(F_{t}\)</span> to clear <span  class="math">\(F_{s}-F_{t}\)</span> and
+do not exercise at <em>T</em>.</p></li>
+
+<li><p>Once at exercise time get <span  class="math">\(F_{s}-K\)</span> if still hold short futures position.</p></li>
+</ul>
+
+<p>In general the rolling intrinsic can be described as follows: we enter each time
+step <em>t</em> with a possible hedge which is a set of futures that imply exercise
+decision(s). We check if adjusting the hedge to another exercise decision is
+profitable - if yes, do that. Notice that this strategy will produce PnL
+increasing with time. On different price paths PnL paths will be different.
+Also notice that the rolling intrinsic hedge does not work for American type
+option, since we used forward contracts with specific delivery time, but
+American option does not have one.</p>
+
+<p>What about total expected (in risk neutral measure) PnL - how is it related to
+total option value? As it turns out the expected PnL for rolling intrinsic
+strategy is a lower bound for the full value of the option. To see this first
+note that in the risk neutral expectation of any portfolio that trades in
+forward contracts is equal to 0 (since in risk neutral measure forward rate
+equals to expected spot.) So the only way why expected PnL for rolling intrinsic
+can be different than the full value of the option if the rolling intrinsic
+exercise strategy is different from the optimal exercise strategy. For some
+options this is true (for example natural gas storage contract - as discussed in
+the next section), however for vanilla option the rolling intrinsic strategy
+matches optimal exercise.</p>
+
+<p>Note that even though exercise policy for rolling intrinsic of vanilla option
+matches optimal exercise on each possible path, the PnL will usually be smaller.
+Since PnL of vanilla option is always positive we expect that distribution of
+PnL of rolling intrinsic of vanilla option will be more narrow than PnL produced
+by exercise at expiration. We show this with an example of option with
+<span  class="math">\(F_{0}=3\)</span>, <span  class="math">\(\sigma=0.3\)</span>, <span  class="math">\(T=0.25\)</span>, <span  class="math">\(K=3.1\)</span> and zero interest rate. We
+ran the rolling intrinsic policy with 90 steps and ran 100k simulation paths to
+obtain the following results:</p>
+
+<ul>
+<li><p>Using Black's formula the value of the option is 0.1366. MC calculated
+expectation of payoff is 0.1351. MC calculated expectation of PnL of rolling
+intrinsic is 0.1366. We can see that rolling intrinsic produces value that
+matches Black's formula. It actually produces better result than regular MC
+since its distribution is quite more narrow (as we show below).</p></li>
+
+<li><p>Examples of cumulative PnL produced by rolling intrinsic hedge is presented on
+the following figure. Notice how the cumulative PnL is always increasing and
+changes step-wise when exercise strategy changes:</p></li>
+</ul>
+
+<p><figure style="text-align: center"><img src="/images/intrinsic/pnl-paths.png" alt="rolling intrinsic cumulative PnL"></figure></p>
+
+<ul>
+<li>The standard deviation of unhedged payoff of the option is 0.25. The standard
+deviation of rolling intrinsic PnL is 0.14, which is quite significantly smaller
+than unhedged case. The hedging effect of the rolling intrinsic can also be
+observed on the figure below were we plotted histograms of distributions
+ungedged and rolling intrinsic PnLs minus value of the option:</li>
+</ul>
+
+<p><figure style="text-align: center"><img src="/images/intrinsic/pnl-distribution.png" alt="PnL distributions"></figure></p>
+
+<p>We see that rolling intrinsic hedge has some nice properties: it does work as a
+hedge, PnL path is always increasing, hedging ratios do not depend on
+assumptions about dynamics of the process (so the hedge is very robust). However
+the hedge is not perfect and it does have significant downside.</p>
+</div>
+
+  <footer class="article-footer">
+    
+    
+    
+    <section class="bordered">
+      <header>
+        <div class="panel-title">CATEGORIES</div>
+      </header>
+      <div>
+        <ul class="p-terms">
+          
+          <li><a href="https://blog.adaptiverisk.com/categories/energy/">energy</a></li>
+          
+        </ul>
+      </div>
+    </section>
+    
+    
+    
+    <section class="bordered">
+      <header>
+        <div class="panel-title">TAGS</div>
+      </header>
+      <div>
+        <ul class="p-terms">
+          
+          <li><a href="https://blog.adaptiverisk.com/tags/derivatives/">derivatives</a></li>
+          
+          <li><a href="https://blog.adaptiverisk.com/tags/energy/">energy</a></li>
+          
+        </ul>
+      </div>
+    </section>
+    
+    
+  </footer>
+
+</article>
+
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'adaptiverisk';
+    var disqus_identifier = 'https:\/\/blog.adaptiverisk.com\/post\/2016-11-26-intrinsic\/';
+    var disqus_title = 'Intrinsic';
+    var disqus_url = 'https:\/\/blog.adaptiverisk.com\/post\/2016-11-26-intrinsic\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+
+  <div class="col-md-4">
+    
+<aside class="l-sidebar">
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">LATESTS</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="https://blog.adaptiverisk.com/post/2016-11-26-intrinsic/" class="list-group-item">Intrinsic</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/10/04/deploy-static.html" class="list-group-item">Deployment Blues</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/08/20/timestamp.html" class="list-group-item">Time Stamp Your Library</a>
+      
+      <a href="https://blog.adaptiverisk.com/power/spot/2016/07/28/power-spot.html" class="list-group-item">Spot Price Dynamics in Power Markets</a>
+      
+      <a href="https://blog.adaptiverisk.com/power/volatility/2016/06/11/daily-opts.html" class="list-group-item">Daily Options</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2015/01/21/xlw-part5.html" class="list-group-item">UDF Services (XLW Part 5)</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part4.html" class="list-group-item">Input/output arrays, vectors, matrices or ranges (XLW Part 4)</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part3.html" class="list-group-item">Writing Simple Excel Functions (XLW Part 3)</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/15/xlw-part2.html" class="list-group-item">Setting up a Project in Visual Studio 2013 and 2015 (XLW Part 2)</a>
+      
+      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/08/xlw-part1.html" class="list-group-item">Building Excel Add-ins (XLW Part 1)</a>
+      
+    </div>
+  </section>
+
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">CATEGORY</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="https://blog.adaptiverisk.com/categories/xlw" class="list-group-item">xlw</a>
+      
+      <a href="https://blog.adaptiverisk.com/categories/energy" class="list-group-item">energy</a>
+      
+      <a href="https://blog.adaptiverisk.com/categories/xll" class="list-group-item">xll</a>
+      
+    </div>
+  </section>
+  
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">TAG</div>
+    </div>
+    <div class="list-group">
+      
+      <a href="https://blog.adaptiverisk.com/tags/xll" class="list-group-item">xll</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/excel" class="list-group-item">excel</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/xlw" class="list-group-item">xlw</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/energy" class="list-group-item">energy</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/c&#43;&#43;" class="list-group-item">c&#43;&#43;</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/power" class="list-group-item">power</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/derivatives" class="list-group-item">derivatives</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/volatility" class="list-group-item">volatility</a>
+      
+    </div>
+  </section>
+  
+
+</aside>
+
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="l-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3">
+            <p>
+              <span class="h-logo">&copy; AdaptiveRisk</span></p>
+            <p><a href="mailto:info@adaptiverisk.com">info@adaptiverisk.com</a></p>
+          </div>
+          <div class="col-md-3">
+            <a href="https://twitter.com/AdaptiveRisk">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+                </svg>
+              </span>
+              <span class="username">AdaptiveRisk</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </body>
+</html>
+

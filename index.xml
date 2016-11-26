@@ -6,8 +6,160 @@
     <description>Recent content on The AdaptiveRisk Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 04 Oct 2016 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 26 Nov 2016 00:20:00 +0000</lastBuildDate>
     <atom:link href="https://blog.adaptiverisk.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Intrinsic</title>
+      <link>https://blog.adaptiverisk.com/post/2016-11-26-intrinsic/</link>
+      <pubDate>Sat, 26 Nov 2016 00:20:00 +0000</pubDate>
+      
+      <guid>https://blog.adaptiverisk.com/post/2016-11-26-intrinsic/</guid>
+      <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+
+&lt;p&gt;Intrinsic value is a well defined and often used concept of option pricing
+theory. It is usually defined as the maximum of zero and the value the option
+would have if it were exercised immediately. This definition is straightforward
+to apply to vanilla option with single exercise decision, but its application to
+more complex options traded in energy markets (e.g. natural gas storage or power
+tolling) might be confusing. In this blog post we will develop intuition behind
+the definition of intrinsic value that will help us understand its importance
+and application to complex options.&lt;/p&gt;
+
+&lt;h1 id=&#34;vanilla-options&#34;&gt;Vanilla Options&lt;/h1&gt;
+
+&lt;p&gt;We start with discussion of vanilla European call option that expires at time
+&lt;em&gt;T&lt;/em&gt; with forward delivering at &lt;em&gt;T&lt;/em&gt; as underlying. I.e. the option gives the
+right to option holder to obtain a unit of commodity at time &lt;em&gt;T&lt;/em&gt; for exchange of
+fixed amount equal to strike &lt;em&gt;K&lt;/em&gt;. It is obvious that the option holder would
+require to pay some money (option premium) to acquire such an option (the
+payout at time &lt;em&gt;T&lt;/em&gt; for the option holder is always bigger than 0). The option
+pricing theory tries to deduce what price option buyer should pay for this kind
+of option. Usually the option price depends on time to expiration and properties
+of the process by which the underlying prices change. However it is possible to
+find a value that does not depend on the dynamics of prices that bounds option
+premium from below. One such value we already discussed - it is 0: since the
+option payout cannot be negative the price of the option should be positive.
+Can we do better than that?&lt;/p&gt;
+
+&lt;p&gt;The more optionality an option provides the more valuable the option is. If we
+reduce optionality, the value of the option is reduced. So to find lower bound
+of the option we can consider constraining its optionality. We might require the
+exercise decision to be made at time &lt;span  class=&#34;math&#34;&gt;\(t = 0\)&lt;/span&gt;. I.e. at &lt;span  class=&#34;math&#34;&gt;\(t = 0\)&lt;/span&gt; the option
+buyer needs to commit if they receive the unit of commodity at time &lt;em&gt;T&lt;/em&gt; for
+price &lt;em&gt;K&lt;/em&gt;. This certainty allows us (the seller) to setup static hedge that
+replicates payoff at &lt;em&gt;T&lt;/em&gt; perfectly:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;If the buyer decides to exercise we can enter a forward contract that delivers
+one unit of the commodity at time &lt;em&gt;T&lt;/em&gt; for the fixed price (today&#39;s forward rate)
+&lt;span  class=&#34;math&#34;&gt;\(F_{0}\)&lt;/span&gt; (entering such a contract cost nothing at &lt;span  class=&#34;math&#34;&gt;\(t=0\)&lt;/span&gt;). At time &lt;em&gt;T&lt;/em&gt; we
+will pay &lt;span  class=&#34;math&#34;&gt;\(F_{0}\)&lt;/span&gt; for the commodity and get &lt;em&gt;K&lt;/em&gt; from the buyer. Our total PnL
+is &lt;span  class=&#34;math&#34;&gt;\(K-F_{0}\)&lt;/span&gt;. Assuming that the interest rate is 0 we would not sell this
+contract for less than &lt;span  class=&#34;math&#34;&gt;\(F_{0}-K\)&lt;/span&gt;, otherwise we would incur losses.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;If the buyer does not exercise we have nothing to do and we can give away such
+contract for price 0.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;So the option is exercised when &lt;span  class=&#34;math&#34;&gt;\(F_{0}-K&gt;0\)&lt;/span&gt;. Then the price is
+&lt;span  class=&#34;math&#34;&gt;\(\left(F_{0}-K\right)_{+}\)&lt;/span&gt; which equals to the intrinsic under standard
+definition.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;We see that by restricting an option to the immediate exercise we can create a
+perfect static hedge that does not depend on the dynamics of the underlying.
+The value of the restricted option is the intrinsic value of the original
+option. The intrinsic value is always smaller than the value of the original
+option.&lt;/p&gt;
+
+&lt;h1 id=&#34;hedging-and-rolling-intrinsic&#34;&gt;Hedging and Rolling Intrinsic&lt;/h1&gt;
+
+&lt;p&gt;By exercising right away and putting static hedge, the option buyer can
+eliminate risk at the cost of difference between intrinsic value and full price
+paid for the option. So if &lt;span  class=&#34;math&#34;&gt;\(F_{0}&gt;K\)&lt;/span&gt;, the buyer will enter short futures
+position (to sell a unit of the commodity for &lt;span  class=&#34;math&#34;&gt;\(F_{0}\)&lt;/span&gt; at time &lt;em&gt;T&lt;/em&gt;). At time
+&lt;em&gt;T&lt;/em&gt; the buyer will exercise the option and will pay &lt;em&gt;K&lt;/em&gt; for the unit of
+commodity which s/he then sells for &lt;span  class=&#34;math&#34;&gt;\(F_{0}\)&lt;/span&gt;, which in total will produce PnL
+equal &lt;span  class=&#34;math&#34;&gt;\(F_{0}-K\)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;Is it possible to improve on this strategy? The simple improvement is called
+rolling intrinsic strategy:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;At time &lt;span  class=&#34;math&#34;&gt;\(t=0\)&lt;/span&gt; set up intrinsic strategy (if &lt;span  class=&#34;math&#34;&gt;\(F_{0}&gt;K\)&lt;/span&gt; short futures, do
+nothing otherwise)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;If at some future time step &lt;span  class=&#34;math&#34;&gt;\(0 &lt; t &lt; T\)&lt;/span&gt; the buyer still doesn&#39;t hold short
+futures position, look at the futures prices. If &lt;span  class=&#34;math&#34;&gt;\(F_{t}&gt;F_{t-1}\)&lt;/span&gt; and
+&lt;span  class=&#34;math&#34;&gt;\(F_{t}&gt;K\)&lt;/span&gt; enter short futures position and expect to exercise at expiration.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;If have short position (say &lt;span  class=&#34;math&#34;&gt;\(F_{s}\)&lt;/span&gt;, with &lt;span  class=&#34;math&#34;&gt;\(s &lt; t\)&lt;/span&gt; ) and &lt;span  class=&#34;math&#34;&gt;\(F_{t} &lt; F_{s}\)&lt;/span&gt;
+and &lt;span  class=&#34;math&#34;&gt;\(F_{t} &lt; K\)&lt;/span&gt; enter long position in &lt;span  class=&#34;math&#34;&gt;\(F_{t}\)&lt;/span&gt; to clear &lt;span  class=&#34;math&#34;&gt;\(F_{s}-F_{t}\)&lt;/span&gt; and
+do not exercise at &lt;em&gt;T&lt;/em&gt;.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Once at exercise time get &lt;span  class=&#34;math&#34;&gt;\(F_{s}-K\)&lt;/span&gt; if still hold short futures position.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In general the rolling intrinsic can be described as follows: we enter each time
+step &lt;em&gt;t&lt;/em&gt; with a possible hedge which is a set of futures that imply exercise
+decision(s). We check if adjusting the hedge to another exercise decision is
+profitable - if yes, do that. Notice that this strategy will produce PnL
+increasing with time. On different price paths PnL paths will be different.
+Also notice that the rolling intrinsic hedge does not work for American type
+option, since we used forward contracts with specific delivery time, but
+American option does not have one.&lt;/p&gt;
+
+&lt;p&gt;What about total expected (in risk neutral measure) PnL - how is it related to
+total option value? As it turns out the expected PnL for rolling intrinsic
+strategy is a lower bound for the full value of the option. To see this first
+note that in the risk neutral expectation of any portfolio that trades in
+forward contracts is equal to 0 (since in risk neutral measure forward rate
+equals to expected spot.) So the only way why expected PnL for rolling intrinsic
+can be different than the full value of the option if the rolling intrinsic
+exercise strategy is different from the optimal exercise strategy. For some
+options this is true (for example natural gas storage contract - as discussed in
+the next section), however for vanilla option the rolling intrinsic strategy
+matches optimal exercise.&lt;/p&gt;
+
+&lt;p&gt;Note that even though exercise policy for rolling intrinsic of vanilla option
+matches optimal exercise on each possible path, the PnL will usually be smaller.
+Since PnL of vanilla option is always positive we expect that distribution of
+PnL of rolling intrinsic of vanilla option will be more narrow than PnL produced
+by exercise at expiration. We show this with an example of option with
+&lt;span  class=&#34;math&#34;&gt;\(F_{0}=3\)&lt;/span&gt;, &lt;span  class=&#34;math&#34;&gt;\(\sigma=0.3\)&lt;/span&gt;, &lt;span  class=&#34;math&#34;&gt;\(T=0.25\)&lt;/span&gt;, &lt;span  class=&#34;math&#34;&gt;\(K=3.1\)&lt;/span&gt; and zero interest rate. We
+ran the rolling intrinsic policy with 90 steps and ran 100k simulation paths to
+obtain the following results:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Using Black&#39;s formula the value of the option is 0.1366. MC calculated
+expectation of payoff is 0.1351. MC calculated expectation of PnL of rolling
+intrinsic is 0.1366. We can see that rolling intrinsic produces value that
+matches Black&#39;s formula. It actually produces better result than regular MC
+since its distribution is quite more narrow (as we show below).&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Examples of cumulative PnL produced by rolling intrinsic hedge is presented on
+the following figure. Notice how the cumulative PnL is always increasing and
+changes step-wise when exercise strategy changes:&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;figure style=&#34;text-align: center&#34;&gt;&lt;img src=&#34;https://blog.adaptiverisk.com/images/intrinsic/pnl-paths.png&#34; alt=&#34;rolling intrinsic cumulative PnL&#34;&gt;&lt;/figure&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The standard deviation of unhedged payoff of the option is 0.25. The standard
+deviation of rolling intrinsic PnL is 0.14, which is quite significantly smaller
+than unhedged case. The hedging effect of the rolling intrinsic can also be
+observed on the figure below were we plotted histograms of distributions
+ungedged and rolling intrinsic PnLs minus value of the option:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;figure style=&#34;text-align: center&#34;&gt;&lt;img src=&#34;https://blog.adaptiverisk.com/images/intrinsic/pnl-distribution.png&#34; alt=&#34;PnL distributions&#34;&gt;&lt;/figure&gt;&lt;/p&gt;
+
+&lt;p&gt;We see that rolling intrinsic hedge has some nice properties: it does work as a
+hedge, PnL path is always increasing, hedging ratios do not depend on
+assumptions about dynamics of the process (so the hedge is very robust). However
+the hedge is not perfect and it does have significant downside.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Deployment Blues</title>
