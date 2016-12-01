@@ -8,28 +8,28 @@
 
 
 
-<link rel="canonical" href="https://blog.adaptiverisk.com/power/spot/2016/07/28/power-spot.html">
+<link rel="canonical" href="https://blog.adaptiverisk.com/post/2016-12-01-64bit/">
 
 
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <title>Spot Price Dynamics in Power Markets - The AdaptiveRisk Blog</title>
+    <title>64bit - The AdaptiveRisk Blog</title>
     
-<meta name="description" content="Summary The modelling of spot (daily) prices in commodities usually starts with modelling monthly average (forward) prices and then selecting some simple model to describe daily prices within the month relative to the monthly average. The most common model is a simple Geometric Brownian Motion with constant (spot) volatility. In this blog post we show that this approach results in wrong interdependencies (autocorrelation) in spot prices.We tested two other popular approaches:">
+<meta name="description" content="Introduction In this post we describe a technique that allows your Excel addin to be loadable by 32 bit Excel, but lets you run calculations that require more than 2GB of RAM.Most people in financial industry use 32 bit Excel even though they are running it on 64 bit Windows. The main reason for this is backward compatibility - if you have a set of 32 bit addins that you used with previous version of Excel you&amp;rsquo;ll stick to 32 bit Excel when upgrading.">
 
-<meta property="og:title" content="Spot Price Dynamics in Power Markets - The AdaptiveRisk Blog">
+<meta property="og:title" content="64bit - The AdaptiveRisk Blog">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://blog.adaptiverisk.com/power/spot/2016/07/28/power-spot.html">
+<meta property="og:url" content="https://blog.adaptiverisk.com/post/2016-12-01-64bit/">
 <meta property="og:image" content="https://blog.adaptiverisk.com/images/default.png">
 <meta property="og:site_name" content="The AdaptiveRisk Blog">
-<meta property="og:description" content="Summary The modelling of spot (daily) prices in commodities usually starts with modelling monthly average (forward) prices and then selecting some simple model to describe daily prices within the month relative to the monthly average. The most common model is a simple Geometric Brownian Motion with constant (spot) volatility. In this blog post we show that this approach results in wrong interdependencies (autocorrelation) in spot prices.We tested two other popular approaches:">
+<meta property="og:description" content="Introduction In this post we describe a technique that allows your Excel addin to be loadable by 32 bit Excel, but lets you run calculations that require more than 2GB of RAM.Most people in financial industry use 32 bit Excel even though they are running it on 64 bit Windows. The main reason for this is backward compatibility - if you have a set of 32 bit addins that you used with previous version of Excel you&amp;rsquo;ll stick to 32 bit Excel when upgrading.">
 <meta property="og:locale" content="ja_JP">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="The AdaptiveRisk Blog">
-<meta name="twitter:url" content="https://blog.adaptiverisk.com/power/spot/2016/07/28/power-spot.html">
-<meta name="twitter:title" content="Spot Price Dynamics in Power Markets - The AdaptiveRisk Blog">
-<meta name="twitter:description" content="Summary The modelling of spot (daily) prices in commodities usually starts with modelling monthly average (forward) prices and then selecting some simple model to describe daily prices within the month relative to the monthly average. The most common model is a simple Geometric Brownian Motion with constant (spot) volatility. In this blog post we show that this approach results in wrong interdependencies (autocorrelation) in spot prices.We tested two other popular approaches:">
+<meta name="twitter:url" content="https://blog.adaptiverisk.com/post/2016-12-01-64bit/">
+<meta name="twitter:title" content="64bit - The AdaptiveRisk Blog">
+<meta name="twitter:description" content="Introduction In this post we describe a technique that allows your Excel addin to be loadable by 32 bit Excel, but lets you run calculations that require more than 2GB of RAM.Most people in financial industry use 32 bit Excel even though they are running it on 64 bit Windows. The main reason for this is backward compatibility - if you have a set of 32 bit addins that you used with previous version of Excel you&amp;rsquo;ll stick to 32 bit Excel when upgrading.">
 <meta name="twitter:image" content="https://blog.adaptiverisk.com/images/default.png">
 
 
@@ -41,15 +41,15 @@
       "@type": "WebPage",
       "@id":"https:\/\/blog.adaptiverisk.com\/"
     },
-    "headline": "Spot Price Dynamics in Power Markets - The AdaptiveRisk Blog",
+    "headline": "64bit - The AdaptiveRisk Blog",
     "image": {
       "@type": "ImageObject",
       "url": "https:\/\/blog.adaptiverisk.com\/images\/default.png",
       "height": 800,
       "width": 800
     },
-    "datePublished": "2016-07-28T00:00:00JST",
-    "dateModified": "2016-07-28T00:00:00JST",
+    "datePublished": "2016-12-01T00:20:00JST",
+    "dateModified": "2016-12-01T00:20:00JST",
     "author": {
       "@type": "Person",
       "name": "The AdaptiveRisk Blog"
@@ -64,7 +64,7 @@
         "height": 60
       }
     },
-    "description": "Summary The modelling of spot (daily) prices in commodities usually starts with modelling monthly average (forward) prices and then selecting some simple model to describe daily prices within the month relative to the monthly average. The most common model is a simple Geometric Brownian Motion with constant (spot) volatility. In this blog post we show that this approach results in wrong interdependencies (autocorrelation) in spot prices.\nWe tested two other popular approaches:"
+    "description": "Introduction In this post we describe a technique that allows your Excel addin to be loadable by 32 bit Excel, but lets you run calculations that require more than 2GB of RAM.\nMost people in financial industry use 32 bit Excel even though they are running it on 64 bit Windows. The main reason for this is backward compatibility - if you have a set of 32 bit addins that you used with previous version of Excel you\x26rsquo;ll stick to 32 bit Excel when upgrading."
   }
 </script>
 
@@ -133,126 +133,136 @@ ga('send', 'pageview');
         
         <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="https://blog.adaptiverisk.com/post/" itemprop="url"><span itemprop="title">post</span></a></li>
         
-        <li class="active">Spot Price Dynamics in Power Markets</li>
+        <li class="active">64bit</li>
       </ol>
     </nav>
 
     <article class="single">
   <header>
     <ul class="p-facts">
-      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2016-07-28T00:00:00JST">Jul 28, 2016</time></li>
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2016-12-01T00:20:00JST">Dec 1, 2016</time></li>
       <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="https://blog.adaptiverisk.com/post/">post</a></li>
       
     </ul>
 
-    <h1 class="title">Spot Price Dynamics in Power Markets</h1>
+    <h1 class="title">64bit</h1>
   </header>
 
   
 
-  <div class="article-body"><h2 id="summary">Summary</h2>
+  <div class="article-body">
 
-<p>The modelling of spot (daily) prices in commodities usually starts with
-modelling monthly average (forward) prices and then selecting some simple
-model to describe daily prices within the month relative to the monthly average.
-The most common model is a simple Geometric Brownian Motion with constant (spot)
-volatility. In this blog post we show that this approach results in wrong
-interdependencies (autocorrelation) in spot prices.</p>
+<h1 id="introduction">Introduction</h1>
 
-<p>We tested two other popular approaches:</p>
+<p>In this post we describe a technique that allows your Excel addin to
+be loadable by 32 bit Excel, but lets you run calculations that require
+more than 2GB of RAM.</p>
+
+<p>Most people in financial industry use 32 bit Excel even though they are running
+it on 64 bit Windows. The main reason for this is backward compatibility - if
+you have a set of 32 bit addins that you used with previous version of Excel
+you&rsquo;ll stick to 32 bit Excel when upgrading. If you want to upgrade to 64 bit
+Excel you also need to upgrade all your addins. 32 bit Excel is also
+<a href="https://technet.microsoft.com/en-us/library/ee681792.aspx#Anchor_0">recomended by Microsoft.</a></p>
+
+<p>Why would you want 64 bit Excel? The main reason is when your spreadsheets
+are massive and require more than 2GB memory when loaded into Excel. It is
+also possible to have small spreadsheets but have addins that require
+large ammount of memory to accomplish calculations. Remember that the memory that
+addins use are in Excels address space which cannot exceed 2GB in 32 bit Excel.</p>
+
+<p>What do you do if your clients use 32 bit Excel but your addin requires
+a lot of memory for calculations? Read further to learn about our approach.</p>
+
+<h1 id="calling-64-bit-calculations-from-32-bit-excel">Calling 64 bit Calculations from 32 bit Excel</h1>
+
+<p>We use the following workflow:</p>
 
 <ul>
-<li>treat daily prices as independent random variables (no autocorrelation)</li>
-<li>assume that the spot prices can be described as a mean-reverting process</li>
+<li><p>We create a 64 bit executable that takes two arguments as inputs. The arguments
+are input and output files. The input file contains data for calculations.
+The output file contains result of the calculations. This way our calculations
+are performed by 64 bit executable that has access to all available memory.</p></li>
+
+<li><p>Create a 32 bit xll with a function that saves input data from a spreadsheet
+into temporary input file, calls 64 bit executable to do calculations and then
+load output file to display result in the spreadsheet.</p></li>
 </ul>
 
-<p>We show that we should use the
-mean reverting process to realistically describe interdependencies of daily
-prices.</p>
+<p><a href="/downloads/bits.zip">Download</a> an example solution that implements this
+approach. The rest of the post will describe details of the code in the
+solution.</p>
 
-<h2 id="introduction">Introduction</h2>
+<h1 id="example-problem">Example Problem</h1>
 
-<p>The standard approach to modeling daily (spot) prices in commodity markets is to
-first model the dynamics of the monthly average (forward) and then generate
-daily prices as offsets from this average. Usually monthly forward contracts and
-their options have the highest market liquidity so their dynamics can be deduced
-quite reliably. Since the forward price is equal to the expected average daily
-price, the expectation for the daily offset should be zero. There are two main
-approaches to modeling daily prices:</p>
+<p>For an example we consider a useless function that allocates huge vector puts
+random numbers into it and then computes mean value.</p>
 
-<ol>
-<li><p>GBM (Geometric Brownian Motion) starting at the level of forward prices.</p></li>
+<h2 id="static-library">Static Library</h2>
 
-<li><p>Independent random log-normal variables with means equal to forward prices.</p></li>
-</ol>
+<p>We put the calculation into static library in project <code>bits</code>. The function that
+does the calculations is <code>double func(double x, void(*progress)(double))</code>.
+Notice that to make things more interesting the function accepts callback
+pointer to that allows to track function progress. This is usefull when your
+function takes long time to compute.</p>
 
-<p>These approaches ignore spikes, which are usually accounted by the skew in
-volatility constructions. The main difference between these two approaches is
-the fact that in the first case the auto-correlation of the daily prices is very
-high (since each next step is completely defined by the previous). In the second
-approach the auto-correlation is very low, since every day price is completely
-independent of previous day prices. This leads to the question we are addressing
-with this post: Which model better describes the dynamics of daily prices? We
-will consider the case of power prices and will look into data from ERCOT.</p>
+<p>The library also includes one possible implementation of the progress callback
+that displays progress bar in a console.</p>
 
-<h2 id="daily-dynamics-in-ercot">Daily Dynamics in ERCOT</h2>
+<p>Since we are going to save/load data to/from files using json format we
+included the header file of an excelent C++
+<a href="https://github.com/nlohmann/js">json library</a> by Niels Lohmann.</p>
 
-<p>For the analysis we used hourly day-ahead LMP prices from a node in the North
-Zone of ERCOT. We computed the average of hourly prices over the peak hours (the
-hour ending 7am through the hour ending 10pm) and skipped weekends and NERC
-holidays. We also computed the monthly average of these prices:</p>
+<p>Also we created a project <code>bitstest</code> to unit test implementation of <code>func</code>.
+We used <a href="https://github.com/philsquared/Catch">Catch testing framework for C++</a>
+to write our test cases.</p>
 
-<p><figure style="text-align: center"><img src="/images/power-spot/prices.png" alt="power prices"></figure></p>
+<h2 id="64-bit-executable">64 Bit Executable</h2>
 
-<p>To find which model best describes the behavior of daily prices we ran the
-auto-correlation test (
-<a href="https://reference.wolfram.com/language/ref/AutocorrelationTest.html"><code>AutocorrelationTest</code></a>
-in Mathematica) on daily prices within each month. Then we found frequency with
-which this test declared prices to be autocorrelated. For the peak ERCOT prices
-it was 33%. It is a much bigger number than 5%, which we would get if the prices
-were independent (we ran the autocorrelation test with 5% significance level)
-and it is much smaller than 95%, which we would get if the prices evolve as GBM.</p>
+<p>Next we created project <code>bitsexe</code> to build a 64 bit executable that will
+run out calculations. The project has just a single file (<code>main.cpp</code>) that
+only has <code>main</code> function to read data from input file, call <code>func</code> and save
+data to output file.</p>
 
-<p>With this analysis we conclude that neither GBM nor independent variables can
-realistically describe the interdependence of daily prices. In the next section
-we will discuss a model that produces more realistic results.</p>
+<p>Build this project in <code>Release/x64</code> configuration. The resulting executable
+will be located in <code>Release\x64</code> folder and later you will need to move it
+to same folder where <code>.xll</code> is located.</p>
 
-<h2 id="mean-reverting-daily-prices">Mean Reverting Daily Prices</h2>
+<h2 id="xll">XLL</h2>
 
-<p>Many studies used the mean reverting process to describe the dynamics of spot
-electricity prices. With discrete time steps the mean reverting process becomes
-an AR(1) process with an auto-regression coefficient related to the mean
-reversion:</p>
+<p>Finally we created project <code>xbits</code> to build <code>.xll</code> addin using
+<a href="http://xlw.sourceforge.net/">XLW</a> framework.</p>
 
-<p><span  class="math">\[
-\begin{align*}
-d\log p_{t} & =\theta\left(\mu-\log p_{t}\right)dt+\sigma dW_{t}\\
-\log p_{d+1}-\log p_{d} & =\theta\mu \Delta t-\theta \Delta t\log p_{d}+\sigma\sqrt{\Delta t}\epsilon_{d}\\
-\log p_{d+1} & =\left(1-\theta \Delta t\right)\log p_{d}+\theta\mu \Delta t+\sigma\sqrt{\Delta t}\epsilon_{d}
-\end{align*}
-\]</span></p>
+<p>The projects exports single function to Excel: <code>double myfunc(double x)</code>.
+Remember that when <code>x</code> is small enough our calculations will fit memory
+available in 32 bit Excel. In this case we can call <code>func()</code> right away
+and return the result to Excel.</p>
 
-<p>We ran the numerical experiment that showed that if we set the auto-regression
-coefficient <span  class="math">\(\theta \Delta t\)</span> to 0.33 the frequency with which the
-autocorrelation test declared the prices to be autocorrelated was about 33%,
-i.e. matched the result for ERCOT daily prices. This suggests that we should use
-an AR(1) process to model daily prices.</p>
+<p>If <code>x</code> is large we will be calling 64 bit executable. First we save the
+parameter in a temporary file. Next we find directory in which <code>xll</code> file is
+located (using <code>GetXllDirectory()</code> helper function provided by XLW framework.
+We assume that 64 bit executable is located in the same folder. Then we call
+<code>system()</code> function that creates a process for our 64 bit executable. The
+executable will read data from temporary input file and will write results to
+temporary output file. In our case it will also show progress bar while it does
+calculations. Finally we read output file, delete temporary files and return the
+results to Excel.</p>
 
-<h2 id="conclusion">Conclusion</h2>
+<h2 id="instructions">Instructions</h2>
 
-<p>The analysis in this blog post shows that two basic models describing daily
-prices have very different autocorrelation properties - Geometric Brownian
-Motion produces price sequences that are perfectly autocorrelated, while
-treating prices as independent random variables creates price sequences that are
-not autocorrelated. Usually the actual market prices will fall somewhere in
-between of these two extremes. The mean reverting model is the simplest model to
-accommodate this effect.</p>
+<p>To run the example solution you need to do the following steps:</p>
 
-<p>Please download the <a href="/downloads/power-spot.zip">Mathematica notebook and data</a>
-that were used to obtain the results for this blog post. With this notebook you
-can replicate our calculations or play with a different set of parameters.</p>
+<ul>
+<li><p>Build <code>xbits</code> in <code>x86</code> configuration (Release or Debug).</p></li>
 
-<p>Feel free to leave questions or comments below.</p>
+<li><p>Build <code>bitsexe</code> in <code>Release/x64</code> configuration and copy resulting <code>.exe</code> file
+to <code>Release</code> or <code>Debug</code> folder where <code>.xll</code> is located.</p></li>
+
+<li><p>Make <code>xbits</code> an active projects and run it with <code>Ctrl+F5</code> or <code>F5</code> (note that
+you need to make sure that command for debuging property is set to <code>Excel.exe</code>
+on your computer: i.e. xbits Properties &gt; Configuration Properties &gt; Debugging
+&gt; Command should be set to full path of <code>Excel.exe</code>).</p></li>
+</ul>
 </div>
 
   <footer class="article-footer">
@@ -266,7 +276,9 @@ can replicate our calculations or play with a different set of parameters.</p>
       <div>
         <ul class="p-terms">
           
-          <li><a href="https://blog.adaptiverisk.com/categories/energy/">energy</a></li>
+          <li><a href="https://blog.adaptiverisk.com/categories/xlw/">xlw</a></li>
+          
+          <li><a href="https://blog.adaptiverisk.com/categories/xll/">xll</a></li>
           
         </ul>
       </div>
@@ -281,9 +293,11 @@ can replicate our calculations or play with a different set of parameters.</p>
       <div>
         <ul class="p-terms">
           
-          <li><a href="https://blog.adaptiverisk.com/tags/power/">power</a></li>
+          <li><a href="https://blog.adaptiverisk.com/tags/xlw/">xlw</a></li>
           
-          <li><a href="https://blog.adaptiverisk.com/tags/energy/">energy</a></li>
+          <li><a href="https://blog.adaptiverisk.com/tags/xll/">xll</a></li>
+          
+          <li><a href="https://blog.adaptiverisk.com/tags/c&#43;&#43;/">c&#43;&#43;</a></li>
           
         </ul>
       </div>
@@ -298,9 +312,9 @@ can replicate our calculations or play with a different set of parameters.</p>
     <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'adaptiverisk';
-    var disqus_identifier = 'https:\/\/blog.adaptiverisk.com\/power\/spot\/2016\/07\/28\/power-spot.html';
-    var disqus_title = 'Spot Price Dynamics in Power Markets';
-    var disqus_url = 'https:\/\/blog.adaptiverisk.com\/power\/spot\/2016\/07\/28\/power-spot.html';
+    var disqus_identifier = 'https:\/\/blog.adaptiverisk.com\/post\/2016-12-01-64bit\/';
+    var disqus_title = '64bit';
+    var disqus_url = 'https:\/\/blog.adaptiverisk.com\/post\/2016-12-01-64bit\/';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

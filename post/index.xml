@@ -6,8 +6,130 @@
     <description>Recent content in Post-rsses on The AdaptiveRisk Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 26 Nov 2016 00:20:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 01 Dec 2016 00:20:00 +0000</lastBuildDate>
     <atom:link href="https://blog.adaptiverisk.com/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>64bit</title>
+      <link>https://blog.adaptiverisk.com/post/2016-12-01-64bit/</link>
+      <pubDate>Thu, 01 Dec 2016 00:20:00 +0000</pubDate>
+      
+      <guid>https://blog.adaptiverisk.com/post/2016-12-01-64bit/</guid>
+      <description>
+
+&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+
+&lt;p&gt;In this post we describe a technique that allows your Excel addin to
+be loadable by 32 bit Excel, but lets you run calculations that require
+more than 2GB of RAM.&lt;/p&gt;
+
+&lt;p&gt;Most people in financial industry use 32 bit Excel even though they are running
+it on 64 bit Windows. The main reason for this is backward compatibility - if
+you have a set of 32 bit addins that you used with previous version of Excel
+you&amp;rsquo;ll stick to 32 bit Excel when upgrading. If you want to upgrade to 64 bit
+Excel you also need to upgrade all your addins. 32 bit Excel is also
+&lt;a href=&#34;https://technet.microsoft.com/en-us/library/ee681792.aspx#Anchor_0&#34;&gt;recomended by Microsoft.&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Why would you want 64 bit Excel? The main reason is when your spreadsheets
+are massive and require more than 2GB memory when loaded into Excel. It is
+also possible to have small spreadsheets but have addins that require
+large ammount of memory to accomplish calculations. Remember that the memory that
+addins use are in Excels address space which cannot exceed 2GB in 32 bit Excel.&lt;/p&gt;
+
+&lt;p&gt;What do you do if your clients use 32 bit Excel but your addin requires
+a lot of memory for calculations? Read further to learn about our approach.&lt;/p&gt;
+
+&lt;h1 id=&#34;calling-64-bit-calculations-from-32-bit-excel&#34;&gt;Calling 64 bit Calculations from 32 bit Excel&lt;/h1&gt;
+
+&lt;p&gt;We use the following workflow:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;We create a 64 bit executable that takes two arguments as inputs. The arguments
+are input and output files. The input file contains data for calculations.
+The output file contains result of the calculations. This way our calculations
+are performed by 64 bit executable that has access to all available memory.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Create a 32 bit xll with a function that saves input data from a spreadsheet
+into temporary input file, calls 64 bit executable to do calculations and then
+load output file to display result in the spreadsheet.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://blog.adaptiverisk.com/downloads/bits.zip&#34;&gt;Download&lt;/a&gt; an example solution that implements this
+approach. The rest of the post will describe details of the code in the
+solution.&lt;/p&gt;
+
+&lt;h1 id=&#34;example-problem&#34;&gt;Example Problem&lt;/h1&gt;
+
+&lt;p&gt;For an example we consider a useless function that allocates huge vector puts
+random numbers into it and then computes mean value.&lt;/p&gt;
+
+&lt;h2 id=&#34;static-library&#34;&gt;Static Library&lt;/h2&gt;
+
+&lt;p&gt;We put the calculation into static library in project &lt;code&gt;bits&lt;/code&gt;. The function that
+does the calculations is &lt;code&gt;double func(double x, void(*progress)(double))&lt;/code&gt;.
+Notice that to make things more interesting the function accepts callback
+pointer to that allows to track function progress. This is usefull when your
+function takes long time to compute.&lt;/p&gt;
+
+&lt;p&gt;The library also includes one possible implementation of the progress callback
+that displays progress bar in a console.&lt;/p&gt;
+
+&lt;p&gt;Since we are going to save/load data to/from files using json format we
+included the header file of an excelent C++
+&lt;a href=&#34;https://github.com/nlohmann/js&#34;&gt;json library&lt;/a&gt; by Niels Lohmann.&lt;/p&gt;
+
+&lt;p&gt;Also we created a project &lt;code&gt;bitstest&lt;/code&gt; to unit test implementation of &lt;code&gt;func&lt;/code&gt;.
+We used &lt;a href=&#34;https://github.com/philsquared/Catch&#34;&gt;Catch testing framework for C++&lt;/a&gt;
+to write our test cases.&lt;/p&gt;
+
+&lt;h2 id=&#34;64-bit-executable&#34;&gt;64 Bit Executable&lt;/h2&gt;
+
+&lt;p&gt;Next we created project &lt;code&gt;bitsexe&lt;/code&gt; to build a 64 bit executable that will
+run out calculations. The project has just a single file (&lt;code&gt;main.cpp&lt;/code&gt;) that
+only has &lt;code&gt;main&lt;/code&gt; function to read data from input file, call &lt;code&gt;func&lt;/code&gt; and save
+data to output file.&lt;/p&gt;
+
+&lt;p&gt;Build this project in &lt;code&gt;Release/x64&lt;/code&gt; configuration. The resulting executable
+will be located in &lt;code&gt;Release\x64&lt;/code&gt; folder and later you will need to move it
+to same folder where &lt;code&gt;.xll&lt;/code&gt; is located.&lt;/p&gt;
+
+&lt;h2 id=&#34;xll&#34;&gt;XLL&lt;/h2&gt;
+
+&lt;p&gt;Finally we created project &lt;code&gt;xbits&lt;/code&gt; to build &lt;code&gt;.xll&lt;/code&gt; addin using
+&lt;a href=&#34;http://xlw.sourceforge.net/&#34;&gt;XLW&lt;/a&gt; framework.&lt;/p&gt;
+
+&lt;p&gt;The projects exports single function to Excel: &lt;code&gt;double myfunc(double x)&lt;/code&gt;.
+Remember that when &lt;code&gt;x&lt;/code&gt; is small enough our calculations will fit memory
+available in 32 bit Excel. In this case we can call &lt;code&gt;func()&lt;/code&gt; right away
+and return the result to Excel.&lt;/p&gt;
+
+&lt;p&gt;If &lt;code&gt;x&lt;/code&gt; is large we will be calling 64 bit executable. First we save the
+parameter in a temporary file. Next we find directory in which &lt;code&gt;xll&lt;/code&gt; file is
+located (using &lt;code&gt;GetXllDirectory()&lt;/code&gt; helper function provided by XLW framework.
+We assume that 64 bit executable is located in the same folder. Then we call
+&lt;code&gt;system()&lt;/code&gt; function that creates a process for our 64 bit executable. The
+executable will read data from temporary input file and will write results to
+temporary output file. In our case it will also show progress bar while it does
+calculations. Finally we read output file, delete temporary files and return the
+results to Excel.&lt;/p&gt;
+
+&lt;h2 id=&#34;instructions&#34;&gt;Instructions&lt;/h2&gt;
+
+&lt;p&gt;To run the example solution you need to do the following steps:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Build &lt;code&gt;xbits&lt;/code&gt; in &lt;code&gt;x86&lt;/code&gt; configuration (Release or Debug).&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Build &lt;code&gt;bitsexe&lt;/code&gt; in &lt;code&gt;Release/x64&lt;/code&gt; configuration and copy resulting &lt;code&gt;.exe&lt;/code&gt; file
+to &lt;code&gt;Release&lt;/code&gt; or &lt;code&gt;Debug&lt;/code&gt; folder where &lt;code&gt;.xll&lt;/code&gt; is located.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Make &lt;code&gt;xbits&lt;/code&gt; an active projects and run it with &lt;code&gt;Ctrl+F5&lt;/code&gt; or &lt;code&gt;F5&lt;/code&gt; (note that
+you need to make sure that command for debuging property is set to &lt;code&gt;Excel.exe&lt;/code&gt;
+on your computer: i.e. xbits Properties &amp;gt; Configuration Properties &amp;gt; Debugging
+&amp;gt; Command should be set to full path of &lt;code&gt;Excel.exe&lt;/code&gt;).&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
     
     <item>
       <title>Intrinsic</title>
@@ -1384,65 +1506,77 @@ interfaces your functions with Excel.&lt;/li&gt;
 &lt;h3 id=&#34;1-create-a-new-workspace&#34;&gt;1. Create a new workspace&lt;/h3&gt;
 
 &lt;ul&gt;
-&lt;li&gt;Select menu: &lt;code&gt;File&lt;/code&gt; -&amp;gt; &lt;code&gt;New&lt;/code&gt; -&amp;gt; &lt;code&gt;Project...&lt;/code&gt; :&lt;br /&gt;
-&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/file_new_project.png&#34; alt=&#34;New Project menu&#34; /&gt;&lt;/li&gt;
-&lt;li&gt;Select &lt;code&gt;Other Project Types&lt;/code&gt; -&amp;gt; &lt;code&gt;Visual Studio Solutions&lt;/code&gt; -&amp;gt;
+&lt;li&gt;&lt;p&gt;Select menu: &lt;code&gt;File&lt;/code&gt; -&amp;gt; &lt;code&gt;New&lt;/code&gt; -&amp;gt; &lt;code&gt;Project...&lt;/code&gt; :&lt;br /&gt;
+&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/file_new_project.png&#34; alt=&#34;New Project menu&#34; /&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Select &lt;code&gt;Other Project Types&lt;/code&gt; -&amp;gt; &lt;code&gt;Visual Studio Solutions&lt;/code&gt; -&amp;gt;
 &lt;code&gt;Blank Solution&lt;/code&gt;. Set your workspace location, type name &lt;code&gt;mylib&lt;/code&gt; and click
 &lt;code&gt;OK&lt;/code&gt; button :&lt;br /&gt;
-&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/new_solution.png&#34; alt=&#34;New Solution&#34; /&gt;&lt;/li&gt;
+&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/new_solution.png&#34; alt=&#34;New Solution&#34; /&gt;&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&#34;2-create-a-new-project-in-the-workspace&#34;&gt;2. Create a new project in the workspace&lt;/h3&gt;
 
 &lt;ul&gt;
-&lt;li&gt;Right click on the &lt;code&gt;mylib&lt;/code&gt; workspace in the &lt;em&gt;Solution Explorer&lt;/em&gt; and select
+&lt;li&gt;&lt;p&gt;Right click on the &lt;code&gt;mylib&lt;/code&gt; workspace in the &lt;em&gt;Solution Explorer&lt;/em&gt; and select
 &lt;code&gt;Add&lt;/code&gt; -&amp;gt; &lt;code&gt;New Project...&lt;/code&gt; :&lt;br /&gt;
-&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/mylib_new_project.png&#34; alt=&#34;New Project&#34; /&gt;&lt;/li&gt;
-&lt;li&gt;Select &lt;code&gt;Visual C++&lt;/code&gt; -&amp;gt; &lt;code&gt;Win32&lt;/code&gt; -&amp;gt; &lt;code&gt;Win32 Console Application&lt;/code&gt;, set project
+&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/mylib_new_project.png&#34; alt=&#34;New Project&#34; /&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Select &lt;code&gt;Visual C++&lt;/code&gt; -&amp;gt; &lt;code&gt;Win32&lt;/code&gt; -&amp;gt; &lt;code&gt;Win32 Console Application&lt;/code&gt;, set project
 name to &lt;code&gt;xlladdin&lt;/code&gt; and click &lt;code&gt;OK&lt;/code&gt; :&lt;br /&gt;
-&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/xlladdin_project.png&#34; alt=&#34;xlladdin project&#34; /&gt;&lt;/li&gt;
-&lt;li&gt;On the &lt;em&gt;Overview&lt;/em&gt; page of the &lt;em&gt;Win32 Application Wizard&lt;/em&gt; dialog box choose
-the &lt;code&gt;Next&lt;/code&gt; button.&lt;/li&gt;
-&lt;li&gt;On the &lt;em&gt;Application Settings&lt;/em&gt;, under &lt;em&gt;Application type&lt;/em&gt;, select &lt;code&gt;DLL&lt;/code&gt; and
+&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/xlladdin_project.png&#34; alt=&#34;xlladdin project&#34; /&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;On the &lt;em&gt;Overview&lt;/em&gt; page of the &lt;em&gt;Win32 Application Wizard&lt;/em&gt; dialog box choose
+the &lt;code&gt;Next&lt;/code&gt; button.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;On the &lt;em&gt;Application Settings&lt;/em&gt;, under &lt;em&gt;Application type&lt;/em&gt;, select &lt;code&gt;DLL&lt;/code&gt; and
 check &lt;code&gt;Empty project&lt;/code&gt; and press &lt;code&gt;Finish&lt;/code&gt; button:&lt;br /&gt;
-&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/application_wizard.png&#34; alt=&#34;Application Wizard&#34; /&gt;&lt;/li&gt;
+&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/application_wizard.png&#34; alt=&#34;Application Wizard&#34; /&gt;&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&#34;3-download-most-recent-version-of-xlw-and-add-it-to-the-project&#34;&gt;3. Download most recent version of XLW and add it to the project&lt;/h3&gt;
 
 &lt;ul&gt;
-&lt;li&gt;Right click on the solution in the &lt;em&gt;Solution Explorer&lt;/em&gt; and select
+&lt;li&gt;&lt;p&gt;Right click on the solution in the &lt;em&gt;Solution Explorer&lt;/em&gt; and select
 &lt;code&gt;Open Folder in File Explorer&lt;/code&gt;:&lt;br /&gt;
-&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/open-in-explorer.png&#34; alt=&#34;Open the solution in Explorer&#34; /&gt;&lt;/li&gt;
-&lt;li&gt;Create &lt;code&gt;thirdparty&lt;/code&gt; folder in the &lt;code&gt;mylib&lt;/code&gt; solution folder. Then create
+&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/open-in-explorer.png&#34; alt=&#34;Open the solution in Explorer&#34; /&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Create &lt;code&gt;thirdparty&lt;/code&gt; folder in the &lt;code&gt;mylib&lt;/code&gt; solution folder. Then create
 &lt;code&gt;xlw&lt;/code&gt; folder in &lt;code&gt;mylib\thirdparty&lt;/code&gt;. Create &lt;code&gt;include&lt;/code&gt; and &lt;code&gt;lib&lt;/code&gt;
 folders in &lt;code&gt;mylib\thirdparty\xlw&lt;/code&gt;. Finally create &lt;code&gt;xlw&lt;/code&gt; folder in
 &lt;code&gt;mylib\thirdparty\xlw\include\xlw&lt;/code&gt;:&lt;br /&gt;
-&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/dir-tree.png&#34; alt=&#34;dir tree&#34; /&gt;&lt;/li&gt;
-&lt;li&gt;Head to &lt;a href=&#34;http://sourceforge.net/projects/xlw/&#34;&gt;XLW download page&lt;/a&gt; and
-download the most recent version of XLW, but &lt;em&gt;do not install it&lt;/em&gt;.&lt;/li&gt;
-&lt;li&gt;Use &lt;a href=&#34;http://www.7-zip.org&#34;&gt;7z&lt;/a&gt; to open the downloaded file as an archive:&lt;br /&gt;
-&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/7z.png&#34; alt=&#34;7z&#34; /&gt;&lt;/li&gt;
-&lt;li&gt;Copy header files from the archive&amp;rsquo;s &lt;code&gt;$_OUTDIR\xlw&lt;/code&gt; folder to
-&lt;code&gt;mylib\thirdparty\xlw\include\xlw&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;Copy library files from the archive&amp;rsquo;s &lt;code&gt;xlw\lib&lt;/code&gt; folder to
+&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/dir-tree.png&#34; alt=&#34;dir tree&#34; /&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Head to &lt;a href=&#34;http://sourceforge.net/projects/xlw/&#34;&gt;XLW download page&lt;/a&gt; and
+download the most recent version of XLW, but &lt;em&gt;do not install it&lt;/em&gt;.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Use &lt;a href=&#34;http://www.7-zip.org&#34;&gt;7z&lt;/a&gt; to open the downloaded file as an archive:&lt;br /&gt;
+&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/7z.png&#34; alt=&#34;7z&#34; /&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Copy header files from the archive&amp;rsquo;s &lt;code&gt;$_OUTDIR\xlw&lt;/code&gt; folder to
+&lt;code&gt;mylib\thirdparty\xlw\include\xlw&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Copy library files from the archive&amp;rsquo;s &lt;code&gt;xlw\lib&lt;/code&gt; folder to
 &lt;code&gt;mylib\thirdparty\xlw\lib&lt;/code&gt;. Select library files that correspond to your
 environment. In the case of Visual Studio 2013 you need to choose files
 that start with &lt;code&gt;xlw-vc120-mt&lt;/code&gt;:
     * &lt;code&gt;xlw-vc120-mt-5_0_2f0.lib&lt;/code&gt;
     * &lt;code&gt;xlw-vc120-mt-gd-5_0_2f0.lib&lt;/code&gt;
-    * &lt;code&gt;xlw-vc120-mt-gd-5_0_2f0.pdb&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;At this moment the distribution does not contain libraries for
+    * &lt;code&gt;xlw-vc120-mt-gd-5_0_2f0.pdb&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;At this moment the distribution does not contain libraries for
 Visual Studio 2015. You can download 5.0.2 version from
 &lt;a href=&#34;https://blog.adaptiverisk.com/downloads/xlw.zip&#34;&gt;here&lt;/a&gt; (together with Visual Studio 2013 libraries
-and include files and &lt;code&gt;InterfaceGenerator.exe&lt;/code&gt;).&lt;/li&gt;
-&lt;li&gt;Rename these library files to remove version (&lt;code&gt;-5_0_2f0&lt;/code&gt;) from their names.
+and include files and &lt;code&gt;InterfaceGenerator.exe&lt;/code&gt;).&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Rename these library files to remove version (&lt;code&gt;-5_0_2f0&lt;/code&gt;) from their names.
 This will enable you to update to a new version by just replacing the files
 without modifying solution build settings. I also create file with name
 corresponding to library version, so it is easier to track versions. I.e.
-I put &lt;code&gt;5_0_2f0.txt&lt;/code&gt; in &lt;code&gt;lib&lt;/code&gt; folder.&lt;/li&gt;
-&lt;li&gt;Finally copy &lt;code&gt;InterfaceGenerator.exe&lt;/code&gt; from the archive&amp;rsquo;s
-&lt;code&gt;xlw\build\vc12\Release&lt;/code&gt; folder to &lt;code&gt;mylib\thirdparty\xlw&lt;/code&gt;.&lt;/li&gt;
+I put &lt;code&gt;5_0_2f0.txt&lt;/code&gt; in &lt;code&gt;lib&lt;/code&gt; folder.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Finally copy &lt;code&gt;InterfaceGenerator.exe&lt;/code&gt; from the archive&amp;rsquo;s
+&lt;code&gt;xlw\build\vc12\Release&lt;/code&gt; folder to &lt;code&gt;mylib\thirdparty\xlw&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&#34;4-configure-build-for-all-configurations&#34;&gt;4. Configure build for &lt;em&gt;All Configurations&lt;/em&gt;&lt;/h3&gt;
@@ -1453,24 +1587,29 @@ I put &lt;code&gt;5_0_2f0.txt&lt;/code&gt; in &lt;code&gt;lib&lt;/code&gt; folde
   &lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/all-config.png&#34; alt=&#34;set configuration -&amp;gt; all&#34; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;On the &lt;em&gt;Configuration Properties/General&lt;/em&gt; sheet set &lt;code&gt;Target Extension&lt;/code&gt; to
+&lt;li&gt;&lt;p&gt;On the &lt;em&gt;Configuration Properties/General&lt;/em&gt; sheet set &lt;code&gt;Target Extension&lt;/code&gt; to
 &lt;code&gt;.xll&lt;/code&gt;:&lt;br /&gt;
-&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/set-xll-ext.png&#34; alt=&#34;set extension to .xll&#34; /&gt;&lt;/li&gt;
-&lt;li&gt;On the &lt;em&gt;Configuration Properties/Debugging&lt;/em&gt; sheet set:&lt;br /&gt;
-&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/debug-config.png&#34; alt=&#34;set debugging options&#34; /&gt;
+&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/set-xll-ext.png&#34; alt=&#34;set extension to .xll&#34; /&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;On the &lt;em&gt;Configuration Properties/Debugging&lt;/em&gt; sheet set:&lt;br /&gt;
+&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/debug-config.png&#34; alt=&#34;set debugging options&#34; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;Command&lt;/code&gt; to &lt;code&gt;OFFICE_PATH\excel.exe&lt;/code&gt; (where &lt;code&gt;OFFICE_PATH&lt;/code&gt; is a path
+&lt;li&gt;&lt;p&gt;&lt;code&gt;Command&lt;/code&gt; to &lt;code&gt;OFFICE_PATH\excel.exe&lt;/code&gt; (where &lt;code&gt;OFFICE_PATH&lt;/code&gt; is a path
 to your installation of Microsoft Office (in my case it is
-&lt;code&gt;C:\Program Files (x86)\Microsoft Office\Office15\EXCEL.EXE&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Command Arguments&lt;/code&gt; to &lt;code&gt;$(TargetPath)&lt;/code&gt;&lt;/li&gt;
+&lt;code&gt;C:\Program Files (x86)\Microsoft Office\Office15\EXCEL.EXE&lt;/code&gt;)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;code&gt;Command Arguments&lt;/code&gt; to &lt;code&gt;$(TargetPath)&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;On the &lt;em&gt;C/C++&lt;/em&gt; sheet set &lt;code&gt;Additional Include Directories&lt;/code&gt; to
+
+&lt;li&gt;&lt;p&gt;On the &lt;em&gt;C/C++&lt;/em&gt; sheet (&lt;em&gt;Note&lt;/em&gt;: if you don&amp;rsquo;t have this sheet add an empty
+&lt;code&gt;mylib.cpp&lt;/code&gt; file to your project) set &lt;code&gt;Additional Include Directories&lt;/code&gt; to
 &lt;code&gt;$(SolutionDir)thirdparty\xlw\include;%(AdditionalIncludeDirectories)&lt;/code&gt;:&lt;br /&gt;
-&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/include-dirs.png&#34; alt=&#34;additional include dirs&#34; /&gt;&lt;/li&gt;
-&lt;li&gt;On the &lt;em&gt;Linker&lt;/em&gt; sheet set &lt;code&gt;Additional Library Directories&lt;/code&gt; to
+&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/include-dirs.png&#34; alt=&#34;additional include dirs&#34; /&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;On the &lt;em&gt;Linker&lt;/em&gt; sheet set &lt;code&gt;Additional Library Directories&lt;/code&gt; to
 &lt;code&gt;$(SolutionDir)thirdparty\xlw\lib\;%(AdditionalLibraryDirectories)&lt;/code&gt;:&lt;br /&gt;
-&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/lib-dirs.png&#34; alt=&#34;additional lib dirs&#34; /&gt;&lt;/li&gt;
+&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/lib-dirs.png&#34; alt=&#34;additional lib dirs&#34; /&gt;&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&#34;5-configure-build-for-debug&#34;&gt;5. Configure build for &lt;em&gt;Debug&lt;/em&gt;&lt;/h3&gt;
@@ -1536,60 +1675,76 @@ to your installation of Microsoft Office (in my case it is
 &lt;h3 id=&#34;8-set-up-custom-build-step-to-generate-xlwmylib-cpp&#34;&gt;8. Set up custom build step to generate &lt;code&gt;xlwmylib.cpp&lt;/code&gt;&lt;/h3&gt;
 
 &lt;ul&gt;
-&lt;li&gt;In the &lt;em&gt;Solution Explorer&lt;/em&gt; right click on &lt;code&gt;mylib.h&lt;/code&gt; and select &lt;code&gt;Properties&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;In the properties dialog box set configuration to &lt;code&gt;All Configurations&lt;/code&gt;:&lt;br /&gt;
-&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/all-config.png&#34; alt=&#34;set configuration -&amp;gt; all&#34; /&gt;&lt;/li&gt;
-&lt;li&gt;On &lt;em&gt;General&lt;/em&gt; sheet set &lt;code&gt;Item Type&lt;/code&gt; to &lt;code&gt;Custom Build Tool&lt;/code&gt; and hit &lt;code&gt;Apply&lt;/code&gt;:&lt;br /&gt;
-&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/custom-type.png&#34; alt=&#34;set custom build type&#34; /&gt;&lt;/li&gt;
-&lt;li&gt;On &lt;em&gt;Custom Build Tool&lt;/em&gt; sheet (which appears after you hit &lt;code&gt;Apply&lt;/code&gt; in the
+&lt;li&gt;&lt;p&gt;In the &lt;em&gt;Solution Explorer&lt;/em&gt; right click on &lt;code&gt;mylib.h&lt;/code&gt; and select &lt;code&gt;Properties&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;In the properties dialog box set configuration to &lt;code&gt;All Configurations&lt;/code&gt;:&lt;br /&gt;
+&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/all-config.png&#34; alt=&#34;set configuration -&amp;gt; all&#34; /&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;On &lt;em&gt;General&lt;/em&gt; sheet set &lt;code&gt;Item Type&lt;/code&gt; to &lt;code&gt;Custom Build Tool&lt;/code&gt; and hit &lt;code&gt;Apply&lt;/code&gt;:&lt;br /&gt;
+&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/custom-type.png&#34; alt=&#34;set custom build type&#34; /&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;On &lt;em&gt;Custom Build Tool&lt;/em&gt; sheet (which appears after you hit &lt;code&gt;Apply&lt;/code&gt; in the
 previous step) set the following (also make sure that the configuration is
 still set to &lt;code&gt;All Configurations&lt;/code&gt;):&lt;br /&gt;
-&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/custom-build-tool.png&#34; alt=&#34;custom build tool&#34; /&gt;
+&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/custom-build-tool.png&#34; alt=&#34;custom build tool&#34; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;Command Line&lt;/code&gt; to
-&lt;code&gt;$(SolutionDir)thirdparty\xlw\InterfaceGenerator.exe %(FullPath)&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Description&lt;/code&gt; to &lt;code&gt;Generating xlw%(Filename).cpp&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Outputs&lt;/code&gt; to &lt;code&gt;$(ProjectDir)xlw%(Filename).cpp;%(Outputs)&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Execute Before&lt;/code&gt; to &lt;code&gt;PreBuildEvent&lt;/code&gt; (this might be grayed out. Look at next
-step)&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;Command Line&lt;/code&gt; to
+&lt;code&gt;$(SolutionDir)thirdparty\xlw\InterfaceGenerator.exe %(FullPath)&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;code&gt;Description&lt;/code&gt; to &lt;code&gt;Generating xlw%(Filename).cpp&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;code&gt;Outputs&lt;/code&gt; to &lt;code&gt;$(ProjectDir)xlw%(Filename).cpp;%(Outputs)&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;code&gt;Execute Before&lt;/code&gt; to &lt;code&gt;PreBuildEvent&lt;/code&gt; (this might be grayed out. Look at next
+step)&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;If you were not able to set &lt;code&gt;Execute Before&lt;/code&gt; to &lt;code&gt;PreBuildEvent&lt;/code&gt; on
+
+&lt;li&gt;&lt;p&gt;If you were not able to set &lt;code&gt;Execute Before&lt;/code&gt; to &lt;code&gt;PreBuildEvent&lt;/code&gt; on
 the &lt;em&gt;Custom Build Tool&lt;/em&gt; page for the &lt;code&gt;mylib.h&lt;/code&gt; file open &lt;em&gt;Properties&lt;/em&gt; dialog
 for the &lt;code&gt;xlladdin&lt;/code&gt; project (right click on it and select &lt;code&gt;Properties&lt;/code&gt;), and
 then head to the &lt;em&gt;Custom Build Step&lt;/em&gt; sheet. Set &lt;code&gt;Execute Before&lt;/code&gt; to
 &lt;code&gt;PreBuildEvent&lt;/code&gt;:&lt;br /&gt;
-&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/custom-build-step.png&#34; alt=&#34;custom build step&#34; /&gt;&lt;/li&gt;
+&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/custom-build-step.png&#34; alt=&#34;custom build step&#34; /&gt;&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&#34;9-test-addin-creation&#34;&gt;9. Test addin creation&lt;/h3&gt;
 
 &lt;ul&gt;
-&lt;li&gt;Set to reload files in Visual Studio automatically. Click on main menu
+&lt;li&gt;&lt;p&gt;Set to reload files in Visual Studio automatically. Click on main menu
 &amp;lsquo;TOOLS&amp;rsquo; -&amp;gt; &amp;lsquo;Options&amp;hellip;&amp;rsquo; and check &lt;code&gt;Auto-load changes, if saved&lt;/code&gt; on the
 &lt;em&gt;Environment/Document&lt;/em&gt; sheet:&lt;br /&gt;
-&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/autoload.png&#34; alt=&#34;autoload&#34; /&gt;&lt;/li&gt;
-&lt;li&gt;Press &lt;code&gt;F5&lt;/code&gt; - the addin will be compiled and loaded in Excel (accept
+&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/autoload.png&#34; alt=&#34;autoload&#34; /&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Press &lt;code&gt;F5&lt;/code&gt; - the addin will be compiled and loaded in Excel (accept
 Excel&amp;rsquo;s security warnings by pressing
 &lt;code&gt;Enable the add-in for this session only&lt;/code&gt;). If you see an error that the
 file&amp;rsquo;s content is not recognized - you are trying to open your 32 bit addin in
-64 bit Excel.&lt;/li&gt;
-&lt;li&gt;Create a new spreadsheet and go to the &lt;em&gt;Funciton wizard&lt;/em&gt;:&lt;br /&gt;
-&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/start-func-wiz.png&#34; alt=&#34;start function wizart&#34; /&gt;&lt;/li&gt;
-&lt;li&gt;Find &lt;em&gt;MyLibrary&lt;/em&gt;:&lt;br /&gt;
-&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/my-lib-in-wiz.png&#34; alt=&#34;my library in wiz&#34; /&gt;&lt;/li&gt;
-&lt;li&gt;Select &lt;em&gt;MySqrt&lt;/em&gt; function and put &lt;code&gt;3&lt;/code&gt; as an argument.&lt;/li&gt;
-&lt;li&gt;Save spreadsheet and exit Excel.&lt;/li&gt;
+64 bit Excel.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Create a new spreadsheet and go to the &lt;em&gt;Funciton wizard&lt;/em&gt;:&lt;br /&gt;
+&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/start-func-wiz.png&#34; alt=&#34;start function wizart&#34; /&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Find &lt;em&gt;MyLibrary&lt;/em&gt;:&lt;br /&gt;
+&lt;img src=&#34;https://blog.adaptiverisk.com/images/xlw2/my-lib-in-wiz.png&#34; alt=&#34;my library in wiz&#34; /&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Select &lt;em&gt;MySqrt&lt;/em&gt; function and put &lt;code&gt;3&lt;/code&gt; as an argument.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Save spreadsheet and exit Excel.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&#34;10-debugging&#34;&gt;10. Debugging&lt;/h3&gt;
 
 &lt;ul&gt;
-&lt;li&gt;Press &lt;code&gt;F5&lt;/code&gt; - Excel will start and load the addin.&lt;/li&gt;
-&lt;li&gt;Open the spreadsheet saved in previous section.&lt;/li&gt;
-&lt;li&gt;Put a breakpoint on &lt;code&gt;if(x &amp;lt; 0.)&lt;/code&gt; line in &lt;code&gt;mylib.cpp&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Select a cell with &lt;code&gt;MySqrt&lt;/code&gt; function and press &lt;code&gt;Enter&lt;/code&gt; to run it.&lt;/li&gt;
-&lt;li&gt;The code will stop on the breakpoint.&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Press &lt;code&gt;F5&lt;/code&gt; - Excel will start and load the addin.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Open the spreadsheet saved in previous section.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Put a breakpoint on &lt;code&gt;if(x &amp;lt; 0.)&lt;/code&gt; line in &lt;code&gt;mylib.cpp&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Select a cell with &lt;code&gt;MySqrt&lt;/code&gt; function and press &lt;code&gt;Enter&lt;/code&gt; to run it.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;The code will stop on the breakpoint.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&#34;11-happy-coding&#34;&gt;11. Happy coding!&lt;/h3&gt;

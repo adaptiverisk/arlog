@@ -9,6 +9,128 @@
     <atom:link href="https://blog.adaptiverisk.com/categories/xll/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>64bit</title>
+      <link>https://blog.adaptiverisk.com/post/2016-12-01-64bit/</link>
+      <pubDate>Thu, 01 Dec 2016 00:20:00 +0000</pubDate>
+      
+      <guid>https://blog.adaptiverisk.com/post/2016-12-01-64bit/</guid>
+      <description>
+
+&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+
+&lt;p&gt;In this post we describe a technique that allows your Excel addin to
+be loadable by 32 bit Excel, but lets you run calculations that require
+more than 2GB of RAM.&lt;/p&gt;
+
+&lt;p&gt;Most people in financial industry use 32 bit Excel even though they are running
+it on 64 bit Windows. The main reason for this is backward compatibility - if
+you have a set of 32 bit addins that you used with previous version of Excel
+you&amp;rsquo;ll stick to 32 bit Excel when upgrading. If you want to upgrade to 64 bit
+Excel you also need to upgrade all your addins. 32 bit Excel is also
+&lt;a href=&#34;https://technet.microsoft.com/en-us/library/ee681792.aspx#Anchor_0&#34;&gt;recomended by Microsoft.&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Why would you want 64 bit Excel? The main reason is when your spreadsheets
+are massive and require more than 2GB memory when loaded into Excel. It is
+also possible to have small spreadsheets but have addins that require
+large ammount of memory to accomplish calculations. Remember that the memory that
+addins use are in Excels address space which cannot exceed 2GB in 32 bit Excel.&lt;/p&gt;
+
+&lt;p&gt;What do you do if your clients use 32 bit Excel but your addin requires
+a lot of memory for calculations? Read further to learn about our approach.&lt;/p&gt;
+
+&lt;h1 id=&#34;calling-64-bit-calculations-from-32-bit-excel&#34;&gt;Calling 64 bit Calculations from 32 bit Excel&lt;/h1&gt;
+
+&lt;p&gt;We use the following workflow:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;We create a 64 bit executable that takes two arguments as inputs. The arguments
+are input and output files. The input file contains data for calculations.
+The output file contains result of the calculations. This way our calculations
+are performed by 64 bit executable that has access to all available memory.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Create a 32 bit xll with a function that saves input data from a spreadsheet
+into temporary input file, calls 64 bit executable to do calculations and then
+load output file to display result in the spreadsheet.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://blog.adaptiverisk.com/downloads/bits.zip&#34;&gt;Download&lt;/a&gt; an example solution that implements this
+approach. The rest of the post will describe details of the code in the
+solution.&lt;/p&gt;
+
+&lt;h1 id=&#34;example-problem&#34;&gt;Example Problem&lt;/h1&gt;
+
+&lt;p&gt;For an example we consider a useless function that allocates huge vector puts
+random numbers into it and then computes mean value.&lt;/p&gt;
+
+&lt;h2 id=&#34;static-library&#34;&gt;Static Library&lt;/h2&gt;
+
+&lt;p&gt;We put the calculation into static library in project &lt;code&gt;bits&lt;/code&gt;. The function that
+does the calculations is &lt;code&gt;double func(double x, void(*progress)(double))&lt;/code&gt;.
+Notice that to make things more interesting the function accepts callback
+pointer to that allows to track function progress. This is usefull when your
+function takes long time to compute.&lt;/p&gt;
+
+&lt;p&gt;The library also includes one possible implementation of the progress callback
+that displays progress bar in a console.&lt;/p&gt;
+
+&lt;p&gt;Since we are going to save/load data to/from files using json format we
+included the header file of an excelent C++
+&lt;a href=&#34;https://github.com/nlohmann/js&#34;&gt;json library&lt;/a&gt; by Niels Lohmann.&lt;/p&gt;
+
+&lt;p&gt;Also we created a project &lt;code&gt;bitstest&lt;/code&gt; to unit test implementation of &lt;code&gt;func&lt;/code&gt;.
+We used &lt;a href=&#34;https://github.com/philsquared/Catch&#34;&gt;Catch testing framework for C++&lt;/a&gt;
+to write our test cases.&lt;/p&gt;
+
+&lt;h2 id=&#34;64-bit-executable&#34;&gt;64 Bit Executable&lt;/h2&gt;
+
+&lt;p&gt;Next we created project &lt;code&gt;bitsexe&lt;/code&gt; to build a 64 bit executable that will
+run out calculations. The project has just a single file (&lt;code&gt;main.cpp&lt;/code&gt;) that
+only has &lt;code&gt;main&lt;/code&gt; function to read data from input file, call &lt;code&gt;func&lt;/code&gt; and save
+data to output file.&lt;/p&gt;
+
+&lt;p&gt;Build this project in &lt;code&gt;Release/x64&lt;/code&gt; configuration. The resulting executable
+will be located in &lt;code&gt;Release\x64&lt;/code&gt; folder and later you will need to move it
+to same folder where &lt;code&gt;.xll&lt;/code&gt; is located.&lt;/p&gt;
+
+&lt;h2 id=&#34;xll&#34;&gt;XLL&lt;/h2&gt;
+
+&lt;p&gt;Finally we created project &lt;code&gt;xbits&lt;/code&gt; to build &lt;code&gt;.xll&lt;/code&gt; addin using
+&lt;a href=&#34;http://xlw.sourceforge.net/&#34;&gt;XLW&lt;/a&gt; framework.&lt;/p&gt;
+
+&lt;p&gt;The projects exports single function to Excel: &lt;code&gt;double myfunc(double x)&lt;/code&gt;.
+Remember that when &lt;code&gt;x&lt;/code&gt; is small enough our calculations will fit memory
+available in 32 bit Excel. In this case we can call &lt;code&gt;func()&lt;/code&gt; right away
+and return the result to Excel.&lt;/p&gt;
+
+&lt;p&gt;If &lt;code&gt;x&lt;/code&gt; is large we will be calling 64 bit executable. First we save the
+parameter in a temporary file. Next we find directory in which &lt;code&gt;xll&lt;/code&gt; file is
+located (using &lt;code&gt;GetXllDirectory()&lt;/code&gt; helper function provided by XLW framework.
+We assume that 64 bit executable is located in the same folder. Then we call
+&lt;code&gt;system()&lt;/code&gt; function that creates a process for our 64 bit executable. The
+executable will read data from temporary input file and will write results to
+temporary output file. In our case it will also show progress bar while it does
+calculations. Finally we read output file, delete temporary files and return the
+results to Excel.&lt;/p&gt;
+
+&lt;h2 id=&#34;instructions&#34;&gt;Instructions&lt;/h2&gt;
+
+&lt;p&gt;To run the example solution you need to do the following steps:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Build &lt;code&gt;xbits&lt;/code&gt; in &lt;code&gt;x86&lt;/code&gt; configuration (Release or Debug).&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Build &lt;code&gt;bitsexe&lt;/code&gt; in &lt;code&gt;Release/x64&lt;/code&gt; configuration and copy resulting &lt;code&gt;.exe&lt;/code&gt; file
+to &lt;code&gt;Release&lt;/code&gt; or &lt;code&gt;Debug&lt;/code&gt; folder where &lt;code&gt;.xll&lt;/code&gt; is located.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Make &lt;code&gt;xbits&lt;/code&gt; an active projects and run it with &lt;code&gt;Ctrl+F5&lt;/code&gt; or &lt;code&gt;F5&lt;/code&gt; (note that
+you need to make sure that command for debuging property is set to &lt;code&gt;Excel.exe&lt;/code&gt;
+on your computer: i.e. xbits Properties &amp;gt; Configuration Properties &amp;gt; Debugging
+&amp;gt; Command should be set to full path of &lt;code&gt;Excel.exe&lt;/code&gt;).&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Deployment Blues</title>
       <link>https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/10/04/deploy-static.html</link>
       <pubDate>Tue, 04 Oct 2016 00:00:00 +0000</pubDate>

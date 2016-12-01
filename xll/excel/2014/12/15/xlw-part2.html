@@ -179,65 +179,77 @@ interfaces your functions with Excel.</li>
 <h3 id="1-create-a-new-workspace">1. Create a new workspace</h3>
 
 <ul>
-<li>Select menu: <code>File</code> -&gt; <code>New</code> -&gt; <code>Project...</code> :<br />
-<img src="/images/xlw2/file_new_project.png" alt="New Project menu" /></li>
-<li>Select <code>Other Project Types</code> -&gt; <code>Visual Studio Solutions</code> -&gt;
+<li><p>Select menu: <code>File</code> -&gt; <code>New</code> -&gt; <code>Project...</code> :<br />
+<img src="/images/xlw2/file_new_project.png" alt="New Project menu" /></p></li>
+
+<li><p>Select <code>Other Project Types</code> -&gt; <code>Visual Studio Solutions</code> -&gt;
 <code>Blank Solution</code>. Set your workspace location, type name <code>mylib</code> and click
 <code>OK</code> button :<br />
-<img src="/images/xlw2/new_solution.png" alt="New Solution" /></li>
+<img src="/images/xlw2/new_solution.png" alt="New Solution" /></p></li>
 </ul>
 
 <h3 id="2-create-a-new-project-in-the-workspace">2. Create a new project in the workspace</h3>
 
 <ul>
-<li>Right click on the <code>mylib</code> workspace in the <em>Solution Explorer</em> and select
+<li><p>Right click on the <code>mylib</code> workspace in the <em>Solution Explorer</em> and select
 <code>Add</code> -&gt; <code>New Project...</code> :<br />
-<img src="/images/xlw2/mylib_new_project.png" alt="New Project" /></li>
-<li>Select <code>Visual C++</code> -&gt; <code>Win32</code> -&gt; <code>Win32 Console Application</code>, set project
+<img src="/images/xlw2/mylib_new_project.png" alt="New Project" /></p></li>
+
+<li><p>Select <code>Visual C++</code> -&gt; <code>Win32</code> -&gt; <code>Win32 Console Application</code>, set project
 name to <code>xlladdin</code> and click <code>OK</code> :<br />
-<img src="/images/xlw2/xlladdin_project.png" alt="xlladdin project" /></li>
-<li>On the <em>Overview</em> page of the <em>Win32 Application Wizard</em> dialog box choose
-the <code>Next</code> button.</li>
-<li>On the <em>Application Settings</em>, under <em>Application type</em>, select <code>DLL</code> and
+<img src="/images/xlw2/xlladdin_project.png" alt="xlladdin project" /></p></li>
+
+<li><p>On the <em>Overview</em> page of the <em>Win32 Application Wizard</em> dialog box choose
+the <code>Next</code> button.</p></li>
+
+<li><p>On the <em>Application Settings</em>, under <em>Application type</em>, select <code>DLL</code> and
 check <code>Empty project</code> and press <code>Finish</code> button:<br />
-<img src="/images/xlw2/application_wizard.png" alt="Application Wizard" /></li>
+<img src="/images/xlw2/application_wizard.png" alt="Application Wizard" /></p></li>
 </ul>
 
 <h3 id="3-download-most-recent-version-of-xlw-and-add-it-to-the-project">3. Download most recent version of XLW and add it to the project</h3>
 
 <ul>
-<li>Right click on the solution in the <em>Solution Explorer</em> and select
+<li><p>Right click on the solution in the <em>Solution Explorer</em> and select
 <code>Open Folder in File Explorer</code>:<br />
-<img src="/images/xlw2/open-in-explorer.png" alt="Open the solution in Explorer" /></li>
-<li>Create <code>thirdparty</code> folder in the <code>mylib</code> solution folder. Then create
+<img src="/images/xlw2/open-in-explorer.png" alt="Open the solution in Explorer" /></p></li>
+
+<li><p>Create <code>thirdparty</code> folder in the <code>mylib</code> solution folder. Then create
 <code>xlw</code> folder in <code>mylib\thirdparty</code>. Create <code>include</code> and <code>lib</code>
 folders in <code>mylib\thirdparty\xlw</code>. Finally create <code>xlw</code> folder in
 <code>mylib\thirdparty\xlw\include\xlw</code>:<br />
-<img src="/images/xlw2/dir-tree.png" alt="dir tree" /></li>
-<li>Head to <a href="http://sourceforge.net/projects/xlw/">XLW download page</a> and
-download the most recent version of XLW, but <em>do not install it</em>.</li>
-<li>Use <a href="http://www.7-zip.org">7z</a> to open the downloaded file as an archive:<br />
-<img src="/images/xlw2/7z.png" alt="7z" /></li>
-<li>Copy header files from the archive&rsquo;s <code>$_OUTDIR\xlw</code> folder to
-<code>mylib\thirdparty\xlw\include\xlw</code>.</li>
-<li>Copy library files from the archive&rsquo;s <code>xlw\lib</code> folder to
+<img src="/images/xlw2/dir-tree.png" alt="dir tree" /></p></li>
+
+<li><p>Head to <a href="http://sourceforge.net/projects/xlw/">XLW download page</a> and
+download the most recent version of XLW, but <em>do not install it</em>.</p></li>
+
+<li><p>Use <a href="http://www.7-zip.org">7z</a> to open the downloaded file as an archive:<br />
+<img src="/images/xlw2/7z.png" alt="7z" /></p></li>
+
+<li><p>Copy header files from the archive&rsquo;s <code>$_OUTDIR\xlw</code> folder to
+<code>mylib\thirdparty\xlw\include\xlw</code>.</p></li>
+
+<li><p>Copy library files from the archive&rsquo;s <code>xlw\lib</code> folder to
 <code>mylib\thirdparty\xlw\lib</code>. Select library files that correspond to your
 environment. In the case of Visual Studio 2013 you need to choose files
 that start with <code>xlw-vc120-mt</code>:
     * <code>xlw-vc120-mt-5_0_2f0.lib</code>
     * <code>xlw-vc120-mt-gd-5_0_2f0.lib</code>
-    * <code>xlw-vc120-mt-gd-5_0_2f0.pdb</code></li>
-<li>At this moment the distribution does not contain libraries for
+    * <code>xlw-vc120-mt-gd-5_0_2f0.pdb</code></p></li>
+
+<li><p>At this moment the distribution does not contain libraries for
 Visual Studio 2015. You can download 5.0.2 version from
 <a href="/downloads/xlw.zip">here</a> (together with Visual Studio 2013 libraries
-and include files and <code>InterfaceGenerator.exe</code>).</li>
-<li>Rename these library files to remove version (<code>-5_0_2f0</code>) from their names.
+and include files and <code>InterfaceGenerator.exe</code>).</p></li>
+
+<li><p>Rename these library files to remove version (<code>-5_0_2f0</code>) from their names.
 This will enable you to update to a new version by just replacing the files
 without modifying solution build settings. I also create file with name
 corresponding to library version, so it is easier to track versions. I.e.
-I put <code>5_0_2f0.txt</code> in <code>lib</code> folder.</li>
-<li>Finally copy <code>InterfaceGenerator.exe</code> from the archive&rsquo;s
-<code>xlw\build\vc12\Release</code> folder to <code>mylib\thirdparty\xlw</code>.</li>
+I put <code>5_0_2f0.txt</code> in <code>lib</code> folder.</p></li>
+
+<li><p>Finally copy <code>InterfaceGenerator.exe</code> from the archive&rsquo;s
+<code>xlw\build\vc12\Release</code> folder to <code>mylib\thirdparty\xlw</code>.</p></li>
 </ul>
 
 <h3 id="4-configure-build-for-all-configurations">4. Configure build for <em>All Configurations</em></h3>
@@ -248,24 +260,29 @@ I put <code>5_0_2f0.txt</code> in <code>lib</code> folder.</li>
   <img src="/images/xlw2/all-config.png" alt="set configuration -&gt; all" /></p>
 
 <ul>
-<li>On the <em>Configuration Properties/General</em> sheet set <code>Target Extension</code> to
+<li><p>On the <em>Configuration Properties/General</em> sheet set <code>Target Extension</code> to
 <code>.xll</code>:<br />
-<img src="/images/xlw2/set-xll-ext.png" alt="set extension to .xll" /></li>
-<li>On the <em>Configuration Properties/Debugging</em> sheet set:<br />
-<img src="/images/xlw2/debug-config.png" alt="set debugging options" />
+<img src="/images/xlw2/set-xll-ext.png" alt="set extension to .xll" /></p></li>
+
+<li><p>On the <em>Configuration Properties/Debugging</em> sheet set:<br />
+<img src="/images/xlw2/debug-config.png" alt="set debugging options" /></p>
 
 <ul>
-<li><code>Command</code> to <code>OFFICE_PATH\excel.exe</code> (where <code>OFFICE_PATH</code> is a path
+<li><p><code>Command</code> to <code>OFFICE_PATH\excel.exe</code> (where <code>OFFICE_PATH</code> is a path
 to your installation of Microsoft Office (in my case it is
-<code>C:\Program Files (x86)\Microsoft Office\Office15\EXCEL.EXE</code>)</li>
-<li><code>Command Arguments</code> to <code>$(TargetPath)</code></li>
+<code>C:\Program Files (x86)\Microsoft Office\Office15\EXCEL.EXE</code>)</p></li>
+
+<li><p><code>Command Arguments</code> to <code>$(TargetPath)</code></p></li>
 </ul></li>
-<li>On the <em>C/C++</em> sheet set <code>Additional Include Directories</code> to
+
+<li><p>On the <em>C/C++</em> sheet (<em>Note</em>: if you don&rsquo;t have this sheet add an empty
+<code>mylib.cpp</code> file to your project) set <code>Additional Include Directories</code> to
 <code>$(SolutionDir)thirdparty\xlw\include;%(AdditionalIncludeDirectories)</code>:<br />
-<img src="/images/xlw2/include-dirs.png" alt="additional include dirs" /></li>
-<li>On the <em>Linker</em> sheet set <code>Additional Library Directories</code> to
+<img src="/images/xlw2/include-dirs.png" alt="additional include dirs" /></p></li>
+
+<li><p>On the <em>Linker</em> sheet set <code>Additional Library Directories</code> to
 <code>$(SolutionDir)thirdparty\xlw\lib\;%(AdditionalLibraryDirectories)</code>:<br />
-<img src="/images/xlw2/lib-dirs.png" alt="additional lib dirs" /></li>
+<img src="/images/xlw2/lib-dirs.png" alt="additional lib dirs" /></p></li>
 </ul>
 
 <h3 id="5-configure-build-for-debug">5. Configure build for <em>Debug</em></h3>
@@ -331,60 +348,76 @@ to your installation of Microsoft Office (in my case it is
 <h3 id="8-set-up-custom-build-step-to-generate-xlwmylib-cpp">8. Set up custom build step to generate <code>xlwmylib.cpp</code></h3>
 
 <ul>
-<li>In the <em>Solution Explorer</em> right click on <code>mylib.h</code> and select <code>Properties</code></li>
-<li>In the properties dialog box set configuration to <code>All Configurations</code>:<br />
-<img src="/images/xlw2/all-config.png" alt="set configuration -&gt; all" /></li>
-<li>On <em>General</em> sheet set <code>Item Type</code> to <code>Custom Build Tool</code> and hit <code>Apply</code>:<br />
-<img src="/images/xlw2/custom-type.png" alt="set custom build type" /></li>
-<li>On <em>Custom Build Tool</em> sheet (which appears after you hit <code>Apply</code> in the
+<li><p>In the <em>Solution Explorer</em> right click on <code>mylib.h</code> and select <code>Properties</code></p></li>
+
+<li><p>In the properties dialog box set configuration to <code>All Configurations</code>:<br />
+<img src="/images/xlw2/all-config.png" alt="set configuration -&gt; all" /></p></li>
+
+<li><p>On <em>General</em> sheet set <code>Item Type</code> to <code>Custom Build Tool</code> and hit <code>Apply</code>:<br />
+<img src="/images/xlw2/custom-type.png" alt="set custom build type" /></p></li>
+
+<li><p>On <em>Custom Build Tool</em> sheet (which appears after you hit <code>Apply</code> in the
 previous step) set the following (also make sure that the configuration is
 still set to <code>All Configurations</code>):<br />
-<img src="/images/xlw2/custom-build-tool.png" alt="custom build tool" />
+<img src="/images/xlw2/custom-build-tool.png" alt="custom build tool" /></p>
 
 <ul>
-<li><code>Command Line</code> to
-<code>$(SolutionDir)thirdparty\xlw\InterfaceGenerator.exe %(FullPath)</code></li>
-<li><code>Description</code> to <code>Generating xlw%(Filename).cpp</code></li>
-<li><code>Outputs</code> to <code>$(ProjectDir)xlw%(Filename).cpp;%(Outputs)</code></li>
-<li><code>Execute Before</code> to <code>PreBuildEvent</code> (this might be grayed out. Look at next
-step)</li>
+<li><p><code>Command Line</code> to
+<code>$(SolutionDir)thirdparty\xlw\InterfaceGenerator.exe %(FullPath)</code></p></li>
+
+<li><p><code>Description</code> to <code>Generating xlw%(Filename).cpp</code></p></li>
+
+<li><p><code>Outputs</code> to <code>$(ProjectDir)xlw%(Filename).cpp;%(Outputs)</code></p></li>
+
+<li><p><code>Execute Before</code> to <code>PreBuildEvent</code> (this might be grayed out. Look at next
+step)</p></li>
 </ul></li>
-<li>If you were not able to set <code>Execute Before</code> to <code>PreBuildEvent</code> on
+
+<li><p>If you were not able to set <code>Execute Before</code> to <code>PreBuildEvent</code> on
 the <em>Custom Build Tool</em> page for the <code>mylib.h</code> file open <em>Properties</em> dialog
 for the <code>xlladdin</code> project (right click on it and select <code>Properties</code>), and
 then head to the <em>Custom Build Step</em> sheet. Set <code>Execute Before</code> to
 <code>PreBuildEvent</code>:<br />
-<img src="/images/xlw2/custom-build-step.png" alt="custom build step" /></li>
+<img src="/images/xlw2/custom-build-step.png" alt="custom build step" /></p></li>
 </ul>
 
 <h3 id="9-test-addin-creation">9. Test addin creation</h3>
 
 <ul>
-<li>Set to reload files in Visual Studio automatically. Click on main menu
+<li><p>Set to reload files in Visual Studio automatically. Click on main menu
 &lsquo;TOOLS&rsquo; -&gt; &lsquo;Options&hellip;&rsquo; and check <code>Auto-load changes, if saved</code> on the
 <em>Environment/Document</em> sheet:<br />
-<img src="/images/xlw2/autoload.png" alt="autoload" /></li>
-<li>Press <code>F5</code> - the addin will be compiled and loaded in Excel (accept
+<img src="/images/xlw2/autoload.png" alt="autoload" /></p></li>
+
+<li><p>Press <code>F5</code> - the addin will be compiled and loaded in Excel (accept
 Excel&rsquo;s security warnings by pressing
 <code>Enable the add-in for this session only</code>). If you see an error that the
 file&rsquo;s content is not recognized - you are trying to open your 32 bit addin in
-64 bit Excel.</li>
-<li>Create a new spreadsheet and go to the <em>Funciton wizard</em>:<br />
-<img src="/images/xlw2/start-func-wiz.png" alt="start function wizart" /></li>
-<li>Find <em>MyLibrary</em>:<br />
-<img src="/images/xlw2/my-lib-in-wiz.png" alt="my library in wiz" /></li>
-<li>Select <em>MySqrt</em> function and put <code>3</code> as an argument.</li>
-<li>Save spreadsheet and exit Excel.</li>
+64 bit Excel.</p></li>
+
+<li><p>Create a new spreadsheet and go to the <em>Funciton wizard</em>:<br />
+<img src="/images/xlw2/start-func-wiz.png" alt="start function wizart" /></p></li>
+
+<li><p>Find <em>MyLibrary</em>:<br />
+<img src="/images/xlw2/my-lib-in-wiz.png" alt="my library in wiz" /></p></li>
+
+<li><p>Select <em>MySqrt</em> function and put <code>3</code> as an argument.</p></li>
+
+<li><p>Save spreadsheet and exit Excel.</p></li>
 </ul>
 
 <h3 id="10-debugging">10. Debugging</h3>
 
 <ul>
-<li>Press <code>F5</code> - Excel will start and load the addin.</li>
-<li>Open the spreadsheet saved in previous section.</li>
-<li>Put a breakpoint on <code>if(x &lt; 0.)</code> line in <code>mylib.cpp</code></li>
-<li>Select a cell with <code>MySqrt</code> function and press <code>Enter</code> to run it.</li>
-<li>The code will stop on the breakpoint.</li>
+<li><p>Press <code>F5</code> - Excel will start and load the addin.</p></li>
+
+<li><p>Open the spreadsheet saved in previous section.</p></li>
+
+<li><p>Put a breakpoint on <code>if(x &lt; 0.)</code> line in <code>mylib.cpp</code></p></li>
+
+<li><p>Select a cell with <code>MySqrt</code> function and press <code>Enter</code> to run it.</p></li>
+
+<li><p>The code will stop on the breakpoint.</p></li>
 </ul>
 
 <h3 id="11-happy-coding">11. Happy coding!</h3>
@@ -467,6 +500,8 @@ to adjust the path as described in
     </div>
     <div class="list-group">
       
+      <a href="https://blog.adaptiverisk.com/post/2016-12-01-64bit/" class="list-group-item">64bit</a>
+      
       <a href="https://blog.adaptiverisk.com/post/2016-11-26-intrinsic/" class="list-group-item">Intrinsic</a>
       
       <a href="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/10/04/deploy-static.html" class="list-group-item">Deployment Blues</a>
@@ -484,8 +519,6 @@ to adjust the path as described in
       <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part3.html" class="list-group-item">Writing Simple Excel Functions (XLW Part 3)</a>
       
       <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/15/xlw-part2.html" class="list-group-item">Setting up a Project in Visual Studio 2013 and 2015 (XLW Part 2)</a>
-      
-      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/08/xlw-part1.html" class="list-group-item">Building Excel Add-ins (XLW Part 1)</a>
       
     </div>
   </section>
@@ -514,13 +547,13 @@ to adjust the path as described in
       
       <a href="https://blog.adaptiverisk.com/tags/xll" class="list-group-item">xll</a>
       
-      <a href="https://blog.adaptiverisk.com/tags/excel" class="list-group-item">excel</a>
-      
       <a href="https://blog.adaptiverisk.com/tags/xlw" class="list-group-item">xlw</a>
       
-      <a href="https://blog.adaptiverisk.com/tags/energy" class="list-group-item">energy</a>
+      <a href="https://blog.adaptiverisk.com/tags/excel" class="list-group-item">excel</a>
       
       <a href="https://blog.adaptiverisk.com/tags/c&#43;&#43;" class="list-group-item">c&#43;&#43;</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/energy" class="list-group-item">energy</a>
       
       <a href="https://blog.adaptiverisk.com/tags/power" class="list-group-item">power</a>
       
