@@ -1,12 +1,24 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>The AdaptiveRisk Blog</title>
-    <link>https://blog.adaptiverisk.com/tags/c&#43;&#43;/index.xml</link>
-    <description>Recent content on The AdaptiveRisk Blog</description>
+    <title>c&#43;&#43; on The AdaptiveRisk Blog</title>
+    <link>https://blog.adaptiverisk.com/tags/c&#43;&#43;/</link>
+    <description>Recent content in c&#43;&#43; on The AdaptiveRisk Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="https://blog.adaptiverisk.com/tags/c&#43;&#43;/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 22 Aug 2023 00:20:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://blog.adaptiverisk.com/tags/c++/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>DataSlicer - DataFrame for Excel</title>
+      <link>https://blog.adaptiverisk.com/post/2023-08-22-dataslicer/</link>
+      <pubDate>Tue, 22 Aug 2023 00:20:00 +0000</pubDate>
+      
+      <guid>https://blog.adaptiverisk.com/post/2023-08-22-dataslicer/</guid>
+      <description>Introducing DataSlicer Add-In: Advanced Data Analysis in Excel DataSlicer brings over a hundred functions from the pandas DataFrames right into Excel, enhancing your data analysis capabilities. As an early prototype, we&amp;rsquo;re actively seeking feedback to refine its features and functionality. As we continue to enhance the user experience, we&amp;rsquo;re also in the process of adding new functions and refining our API. We would appreciate your insights and suggestions; please drop us a line at info@adaptiverisk.</description>
+    </item>
     
     <item>
       <title>64bit</title>
@@ -14,120 +26,8 @@
       <pubDate>Thu, 01 Dec 2016 00:20:00 +0000</pubDate>
       
       <guid>https://blog.adaptiverisk.com/post/2016-12-01-64bit/</guid>
-      <description>
-
-&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
-
-&lt;p&gt;In this post we describe a technique that allows your Excel addin to
-be loadable by 32 bit Excel, but lets you run calculations that require
-more than 2GB of RAM.&lt;/p&gt;
-
-&lt;p&gt;Most people in financial industry use 32 bit Excel even though they are running
-it on 64 bit Windows. The main reason for this is backward compatibility - if
-you have a set of 32 bit addins that you used with previous version of Excel
-you&amp;rsquo;ll stick to 32 bit Excel when upgrading. If you want to upgrade to 64 bit
-Excel you also need to upgrade all your addins. 32 bit Excel is also
-&lt;a href=&#34;https://technet.microsoft.com/en-us/library/ee681792.aspx#Anchor_0&#34;&gt;recomended by Microsoft.&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Why would you want 64 bit Excel? The main reason is when your spreadsheets
-are massive and require more than 2GB memory when loaded into Excel. It is
-also possible to have small spreadsheets but have addins that require
-large ammount of memory to accomplish calculations. Remember that the memory that
-addins use are in Excels address space which cannot exceed 2GB in 32 bit Excel.&lt;/p&gt;
-
-&lt;p&gt;What do you do if your clients use 32 bit Excel but your addin requires
-a lot of memory for calculations? Read further to learn about our approach.&lt;/p&gt;
-
-&lt;h1 id=&#34;calling-64-bit-calculations-from-32-bit-excel&#34;&gt;Calling 64 bit Calculations from 32 bit Excel&lt;/h1&gt;
-
-&lt;p&gt;We use the following workflow:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;We create a 64 bit executable that takes two arguments as inputs. The arguments
-are input and output files. The input file contains data for calculations.
-The output file contains result of the calculations. This way our calculations
-are performed by 64 bit executable that has access to all available memory.&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Create a 32 bit xll with a function that saves input data from a spreadsheet
-into temporary input file, calls 64 bit executable to do calculations and then
-load output file to display result in the spreadsheet.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://blog.adaptiverisk.com/downloads/bits.zip&#34;&gt;Download&lt;/a&gt; an example solution that implements this
-approach. The rest of the post will describe details of the code in the
-solution.&lt;/p&gt;
-
-&lt;h1 id=&#34;example-problem&#34;&gt;Example Problem&lt;/h1&gt;
-
-&lt;p&gt;For an example we consider a useless function that allocates huge vector puts
-random numbers into it and then computes mean value.&lt;/p&gt;
-
-&lt;h2 id=&#34;static-library&#34;&gt;Static Library&lt;/h2&gt;
-
-&lt;p&gt;We put the calculation into static library in project &lt;code&gt;bits&lt;/code&gt;. The function that
-does the calculations is &lt;code&gt;double func(double x, void(*progress)(double))&lt;/code&gt;.
-Notice that to make things more interesting the function accepts callback
-pointer to that allows to track function progress. This is usefull when your
-function takes long time to compute.&lt;/p&gt;
-
-&lt;p&gt;The library also includes one possible implementation of the progress callback
-that displays progress bar in a console.&lt;/p&gt;
-
-&lt;p&gt;Since we are going to save/load data to/from files using json format we
-included the header file of an excelent C++
-&lt;a href=&#34;https://github.com/nlohmann/js&#34;&gt;json library&lt;/a&gt; by Niels Lohmann.&lt;/p&gt;
-
-&lt;p&gt;Also we created a project &lt;code&gt;bitstest&lt;/code&gt; to unit test implementation of &lt;code&gt;func&lt;/code&gt;.
-We used &lt;a href=&#34;https://github.com/philsquared/Catch&#34;&gt;Catch testing framework for C++&lt;/a&gt;
-to write our test cases.&lt;/p&gt;
-
-&lt;h2 id=&#34;64-bit-executable&#34;&gt;64 Bit Executable&lt;/h2&gt;
-
-&lt;p&gt;Next we created project &lt;code&gt;bitsexe&lt;/code&gt; to build a 64 bit executable that will
-run out calculations. The project has just a single file (&lt;code&gt;main.cpp&lt;/code&gt;) that
-only has &lt;code&gt;main&lt;/code&gt; function to read data from input file, call &lt;code&gt;func&lt;/code&gt; and save
-data to output file.&lt;/p&gt;
-
-&lt;p&gt;Build this project in &lt;code&gt;Release/x64&lt;/code&gt; configuration. The resulting executable
-will be located in &lt;code&gt;Release\x64&lt;/code&gt; folder and later you will need to move it
-to same folder where &lt;code&gt;.xll&lt;/code&gt; is located.&lt;/p&gt;
-
-&lt;h2 id=&#34;xll&#34;&gt;XLL&lt;/h2&gt;
-
-&lt;p&gt;Finally we created project &lt;code&gt;xbits&lt;/code&gt; to build &lt;code&gt;.xll&lt;/code&gt; addin using
-&lt;a href=&#34;http://xlw.sourceforge.net/&#34;&gt;XLW&lt;/a&gt; framework.&lt;/p&gt;
-
-&lt;p&gt;The projects exports single function to Excel: &lt;code&gt;double myfunc(double x)&lt;/code&gt;.
-Remember that when &lt;code&gt;x&lt;/code&gt; is small enough our calculations will fit memory
-available in 32 bit Excel. In this case we can call &lt;code&gt;func()&lt;/code&gt; right away
-and return the result to Excel.&lt;/p&gt;
-
-&lt;p&gt;If &lt;code&gt;x&lt;/code&gt; is large we will be calling 64 bit executable. First we save the
-parameter in a temporary file. Next we find directory in which &lt;code&gt;xll&lt;/code&gt; file is
-located (using &lt;code&gt;GetXllDirectory()&lt;/code&gt; helper function provided by XLW framework.
-We assume that 64 bit executable is located in the same folder. Then we call
-&lt;code&gt;system()&lt;/code&gt; function that creates a process for our 64 bit executable. The
-executable will read data from temporary input file and will write results to
-temporary output file. In our case it will also show progress bar while it does
-calculations. Finally we read output file, delete temporary files and return the
-results to Excel.&lt;/p&gt;
-
-&lt;h2 id=&#34;instructions&#34;&gt;Instructions&lt;/h2&gt;
-
-&lt;p&gt;To run the example solution you need to do the following steps:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Build &lt;code&gt;xbits&lt;/code&gt; in &lt;code&gt;x86&lt;/code&gt; configuration (Release or Debug).&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Build &lt;code&gt;bitsexe&lt;/code&gt; in &lt;code&gt;Release/x64&lt;/code&gt; configuration and copy resulting &lt;code&gt;.exe&lt;/code&gt; file
-to &lt;code&gt;Release&lt;/code&gt; or &lt;code&gt;Debug&lt;/code&gt; folder where &lt;code&gt;.xll&lt;/code&gt; is located.&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Make &lt;code&gt;xbits&lt;/code&gt; an active projects and run it with &lt;code&gt;Ctrl+F5&lt;/code&gt; or &lt;code&gt;F5&lt;/code&gt; (note that
-you need to make sure that command for debuging property is set to &lt;code&gt;Excel.exe&lt;/code&gt;
-on your computer: i.e. xbits Properties &amp;gt; Configuration Properties &amp;gt; Debugging
-&amp;gt; Command should be set to full path of &lt;code&gt;Excel.exe&lt;/code&gt;).&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
+      <description>Introduction In this post we describe a technique that allows your Excel addin to be loadable by 32 bit Excel, but lets you run calculations that require more than 2GB of RAM.
+Most people in financial industry use 32 bit Excel even though they are running it on 64 bit Windows. The main reason for this is backward compatibility - if you have a set of 32 bit addins that you used with previous version of Excel you&amp;rsquo;ll stick to 32 bit Excel when upgrading.</description>
     </item>
     
     <item>
@@ -136,72 +36,7 @@ on your computer: i.e. xbits Properties &amp;gt; Configuration Properties &amp;g
       <pubDate>Tue, 04 Oct 2016 00:00:00 +0000</pubDate>
       
       <guid>https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/10/04/deploy-static.html</guid>
-      <description>
-
-&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
-
-&lt;p&gt;It happens often: you compile your xll addin and give it to yor client just to
-hear them complaining that they cannot load the xll into Excel. The error that
-they see is: &lt;em&gt;&amp;ldquo;The file you are trying to open, &amp;lsquo;MyAddin.xll&amp;rsquo;, is in a different
-format than specified by the file extension. Verify that the file is not
-corrupted and is in from a trusted source before opening the file. Do you want
-to open the file now?&amp;rdquo;&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;There are two reasons for this error:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;The client uses 32bit Excel while the addin is a 64bit xll or vise versa. The
-fix for this case is obvious - make sure that you send matching xll to the
-client.&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Your addin depends on some dll&amp;rsquo;s that are not available on the client&amp;rsquo;s
-computer. To fix this problem you need to add all necessary dll&amp;rsquo;s into
-the same folder as the addin. Although there are other locations where you can
-put dll&amp;rsquo;s to fix th problem, from our experience puting them into the same
-folder as xll is the most robust and straightforward way.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;How do you know which dll&amp;rsquo;s are missing? You need to open xll in the
-&lt;a href=&#34;http://www.dependencywalker.com/&#34;&gt;Dependency Walker&lt;/a&gt; on your client&amp;rsquo;s computer.
-The Dependency Walker will show which dll&amp;rsquo;s could not be located.&lt;/p&gt;
-
-&lt;h1 id=&#34;c-runtime-library&#34;&gt;C++ Runtime Library&lt;/h1&gt;
-
-&lt;p&gt;One of the more common cases is missing C++ runtime library. When you
-set up an addin project in Visual Studio it by default sets option for created
-code to use runtime dlls. The compiled addin xll will run on development
-computer without any issues, since runtime dll&amp;rsquo;s are properly installed. But
-these dll&amp;rsquo;s are often not installed on client computers and Excel will produce
-error while loading the addin.&lt;/p&gt;
-
-&lt;p&gt;You can resolve this issue using one of the three methods:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;Use the above approach by adding runtime dll&amp;rsquo;s to the same folder where xll
-is located on the client&amp;rsquo;s computer.&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Installing runtime dll&amp;rsquo;s using installer provided by Microsoft.&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Build you xll by using static linking to runtime library.&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;The third method is our prefered way to solve this issue. We&amp;rsquo;ll discuss how it
-works in the next section and then we&amp;rsquo;ll discuss what are its benefits and
-downsides.&lt;/p&gt;
-
-&lt;h1 id=&#34;static-linking&#34;&gt;Static Linking&lt;/h1&gt;
-
-&lt;p&gt;To ensure that your xll is statically linked to runtime library you need to
-set Runtime Library option to &lt;code&gt;Multi-threaded (/MT)&lt;/code&gt; (by default it is set to
-&lt;code&gt;Multi-threaded DLL&lt;/code&gt; &lt;br /&gt;
-&lt;img src=&#34;https://blog.adaptiverisk.com/images/runtime.png&#34; alt=&#34;Runtime Library Option&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Benefit - you can just deploy single xll file and not worry if the client
-has appropriate runtime dll installed.&lt;/p&gt;
-
-&lt;p&gt;Downside - any library that your project links to should be compiled with same
-value for Runtime Library option. Sometimes this is outside of your control.&lt;/p&gt;
-</description>
+      <description>Introduction It happens often: you compile your xll addin and give it to yor client just to hear them complaining that they cannot load the xll into Excel. The error that they see is: &amp;ldquo;The file you are trying to open, &amp;lsquo;MyAddin.xll&amp;rsquo;, is in a different format than specified by the file extension. Verify that the file is not corrupted and is in from a trusted source before opening the file.</description>
     </item>
     
     <item>
@@ -210,75 +45,8 @@ value for Runtime Library option. Sometimes this is outside of your control.&lt;
       <pubDate>Sat, 20 Aug 2016 00:00:00 +0000</pubDate>
       
       <guid>https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/08/20/timestamp.html</guid>
-      <description>&lt;p&gt;When you distribute your program, library, or xll addin it is usefull to
-have a function that can tell you when your project was compiled. This way you
-can ensure that the new program, library, or xll addin is correctly installed on
-a user&amp;rsquo;s system. In this post I will describe how to set up such function in
-your Visual Studio C++ project.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Create &lt;code&gt;timestamp.h&lt;/code&gt; with the following content:
-&lt;table class=&#34;highlighttable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;linenos&#34;&gt;&lt;div class=&#34;linenodiv&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;1
-2
-3&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;#include&lt;/span&gt; &lt;span class=&#34;cpf&#34;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;
-
-&lt;span class=&#34;n&#34;&gt;std&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;string&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;TestTimeStamp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Create &lt;code&gt;timestamp.cpp&lt;/code&gt; with the following content:
-&lt;table class=&#34;highlighttable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;linenos&#34;&gt;&lt;div class=&#34;linenodiv&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt; 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;#include&lt;/span&gt; &lt;span class=&#34;cpf&#34;&gt;&amp;quot;timestamp.h&amp;quot;&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;
-
-&lt;span class=&#34;n&#34;&gt;std&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;string&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;TestTimeStamp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
-&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-  &lt;span class=&#34;n&#34;&gt;std&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;string&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;date&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;__DATE__&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-  &lt;span class=&#34;n&#34;&gt;std&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;string&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;__TIME__&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-  &lt;span class=&#34;n&#34;&gt;std&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;string&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;res&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-  &lt;span class=&#34;n&#34;&gt;res&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;date&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;quot; | &amp;quot;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-  &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;res&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Add custom build step to make sure that &lt;code&gt;timestamp.cpp&lt;/code&gt; is compiled every
-time.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Right click on the project in the &lt;code&gt;Solution Explorer&lt;/code&gt; and select &lt;code&gt;Properties&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Make sure that &lt;code&gt;Configuration&lt;/code&gt; is set to &lt;code&gt;All Configurations&lt;/code&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Go to &lt;code&gt;Configuration Properties&lt;/code&gt; &amp;gt; &lt;code&gt;Custom Build Step&lt;/code&gt; &amp;gt; &lt;code&gt;General&lt;/code&gt; and
-fill out options as follows:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Command Line: &lt;code&gt;del $(ProjectDir)$(Configuration)\timestamp.obj&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Description: &lt;code&gt;Refresh timestamp&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Outputs: &lt;code&gt;fake.cpp&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Execute Before: &lt;code&gt;PreBuildEvent&lt;/code&gt;
-&lt;br /&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://blog.adaptiverisk.com/images/timestamp_opts.png&#34; alt=&#34;options&#34; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Now every time you compile the project the timestamp string returned by
-&lt;code&gt;TestTimeStamp()&lt;/code&gt; function is updated.
-
-&lt;br /&gt;
-&lt;br /&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
+      <description>When you distribute your program, library, or xll addin it is usefull to have a function that can tell you when your project was compiled. This way you can ensure that the new program, library, or xll addin is correctly installed on a user&amp;rsquo;s system. In this post I will describe how to set up such function in your Visual Studio C++ project.
+  Create timestamp.h with the following content: 1 2 3  #include &amp;lt;string&amp;gt;std::string TestTimeStamp();</description>
     </item>
     
   </channel>

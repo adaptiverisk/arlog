@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 <meta name="pinterest" content="nopin">
 <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
-<meta name="generator" content="Hugo 0.17" />
+<meta name="generator" content="Hugo 0.64.1" />
 
 
 
@@ -89,14 +89,17 @@
   <body>
     
     
-<script>
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-ga('create', 'UA-XXXXXXXX-XX', 'auto');
-ga('send', 'pageview');
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-XXXXXXXX-XX', 'auto');
+	
+	ga('send', 'pageview');
+}
 </script>
 
     
@@ -150,9 +153,7 @@ ga('send', 'pageview');
 
   
 
-  <div class="article-body">
-
-<p>In the <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part4.html">last post</a> I described how to
+  <div class="article-body"><p>In the <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part4.html">last post</a> I described how to
 write functions that can input/output arrays, matrices and ranges. For the
 introduction to XLW series take a look at the
 <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/08/xlw-part1.html">first post</a>. Today I am going to
@@ -160,13 +161,10 @@ describe several useful utilities that are available in XLW. There are many
 more utilities that are available but they do not work from UDF and only work
 from macros. This is Excel limitation. I will address creating macros
 in one of the future posts.</p>
-
 <p>The starting point of this post is the solution we set up
 <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part4.html">previously</a>. If you don&rsquo;t have set it
 up you can <a href="/downloads/xlw-part3-4.zip">download it</a>.</p>
-
 <h2 id="1-size-of-calling-range">1. Size of calling range</h2>
-
 <p>The calling range is a single cell when you input a scalar formula in Excel.
 However, when you use functions that output arrays or matrices, you need to input
 formula as an array formula. To do this type a formula as a regular scalar
@@ -176,25 +174,26 @@ the formula bar and press <code>Ctrl+Shift+Enter</code>. You will see curly brac
 appearing around your formula, this signifies that it is <em>array formula</em>.
 If you perform this operation with a simple scalar formula, then the same
 result will be copied to all output cells.</p>
-
 <p>Sometimes you want to adjust your computations based on the size of output range
 that a user selected. The following snippet shows how you can accomplish this:</p>
-
 <p>Add the following to <code>mylib.cpp</code>:
-<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><code class="language-c" data-lang="c">1
-2
-3
-4
-5</code></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;xlw/XlfServices.h&gt;</span><span class="cp"></span>
-
-<span class="c1">// ... inside a function:</span>
-  <span class="k">const</span> <span class="kt">size_t</span> <span class="n">nrows</span> <span class="o">=</span> <span class="n">XlfServices</span><span class="p">.</span><span class="n">Information</span><span class="p">.</span><span class="n">GetCallingCell</span><span class="p">().</span><span class="n">rows</span><span class="p">();</span>
-  <span class="k">const</span> <span class="kt">size_t</span> <span class="n">ncols</span> <span class="o">=</span> <span class="n">XlfServices</span><span class="p">.</span><span class="n">Information</span><span class="p">.</span><span class="n">GetCallingCell</span><span class="p">().</span><span class="n">columns</span><span class="p">();</span>
-</pre></div>
-</td></tr></table></p>
-
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&lt;xlw/XlfServices.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="c1">// ... inside a function:
+</span><span class="c1"></span>  <span class="k">const</span> <span class="n">size_t</span> <span class="n">nrows</span> <span class="o">=</span> <span class="n">XlfServices</span><span class="p">.</span><span class="n">Information</span><span class="p">.</span><span class="n">GetCallingCell</span><span class="p">(</span><span class="p">)</span><span class="p">.</span><span class="n">rows</span><span class="p">(</span><span class="p">)</span><span class="p">;</span>
+  <span class="k">const</span> <span class="n">size_t</span> <span class="n">ncols</span> <span class="o">=</span> <span class="n">XlfServices</span><span class="p">.</span><span class="n">Information</span><span class="p">.</span><span class="n">GetCallingCell</span><span class="p">(</span><span class="p">)</span><span class="p">.</span><span class="n">columns</span><span class="p">(</span><span class="p">)</span><span class="p">;</span></code></pre></td></tr></table>
+</div>
+</div></p>
 <h2 id="2-abort-function-when-a-user-presses-esc">2. Abort function when a user presses <code>Esc</code></h2>
-
 <p>Sometimes calculations in your function might take long time. For example
 suppose that your function runs Monte Carlo simulations with number of paths
 set by a user. If a user sets number of paths to be very large it might take
@@ -203,140 +202,148 @@ calculations without killing Excel. Excel users are used to press <code>Esc</cod
 in these cases. It is up to you to ensure that your function stops computation
 when <code>Esc</code> keypress is registered. To do that XLW provides <code>IsEscPressed</code>
 function:</p>
-
 <p>In <code>mylib.cpp</code>:
-<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><code class="language-c" data-lang="c">1
-2
-3
-4
-5
-6</code></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;xlw/XlfExcel&gt;</span><span class="cp"></span>
-
-<span class="k">if</span><span class="p">(</span> <span class="n">XlfExcel</span><span class="o">::</span><span class="n">Instance</span><span class="p">().</span><span class="n">IsEscPressed</span><span class="p">()</span> <span class="p">)</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&lt;xlw/XlfExcel&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="k">if</span><span class="p">(</span> <span class="n">XlfExcel</span><span class="o">:</span><span class="o">:</span><span class="n">Instance</span><span class="p">(</span><span class="p">)</span><span class="p">.</span><span class="n">IsEscPressed</span><span class="p">(</span><span class="p">)</span> <span class="p">)</span>
 <span class="p">{</span>
-  <span class="n">throw</span><span class="p">(</span><span class="s">&quot;#Aborted&quot;</span><span class="p">);</span>
-<span class="p">}</span>
-</pre></div>
-</td></tr></table></p>
-
+  <span class="n">throw</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;</span><span class="s">#Aborted</span><span class="s">&#34;</span><span class="p">)</span><span class="p">;</span>
+<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div></p>
 <h2 id="3-parallel-calculations">3. Parallel Calculations</h2>
-
 <p>Excel can compute cells in parallel if they are marked as thread safe.
 To mark a function as thread safe put the following directive before the
 function name in function declaration block:</p>
-
 <p>In <code>mylib.h</code>:
-<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><code class="language-c" data-lang="c">1
-2
-3
-4
-5</code></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kt">double</span> <span class="c1">//Sum of square roots of two numbers</span>
-<span class="c1">//&lt;xlw:threadsafe</span>
-<span class="n">SumSqrt</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="c1">//argument 1</span>
-  <span class="kt">double</span> <span class="n">y</span> <span class="c1">//argument 2</span>
-  <span class="p">);</span>
-</pre></div>
-</td></tr></table></p>
-
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">double</span> <span class="c1">//Sum of square roots of two numbers
+</span><span class="c1"></span><span class="c1">//&lt;xlw:threadsafe
+</span><span class="c1"></span><span class="n">SumSqrt</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="c1">//argument 1
+</span><span class="c1"></span>  <span class="kt">double</span> <span class="n">y</span> <span class="c1">//argument 2
+</span><span class="c1"></span>  <span class="p">)</span><span class="p">;</span></code></pre></td></tr></table>
+</div>
+</div></p>
 <h2 id="4-timing-functions">4. Timing Functions</h2>
-
 <p>It is trivial to add timing to a function, by adding <code>//&lt;xlw:time</code> directive:</p>
-
 <p>In <code>mylib.h</code>:
-<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><code class="language-c" data-lang="c">1
-2
-3
-4</code></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kt">double</span> <span class="c1">// Returns number of iterations performed</span>
-<span class="c1">//&lt;xlw:time</span>
-<span class="n">EscInterrupt</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span> <span class="c1">//max number of iterations</span>
-<span class="p">);</span>
-</pre></div>
-</td></tr></table></p>
-
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">double</span> <span class="c1">// Returns number of iterations performed
+</span><span class="c1"></span><span class="c1">//&lt;xlw:time
+</span><span class="c1"></span><span class="n">EscInterrupt</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span> <span class="c1">//max number of iterations
+</span><span class="c1"></span><span class="p">)</span><span class="p">;</span></code></pre></td></tr></table>
+</div>
+</div></p>
 <p>The comment &ldquo;//&lt;xlw:time&rdquo; instructs InterfaceGenerator to produce timing code.
 If the function is called with a scalar output, it produces just the original
 result. However, if the function is called with 2x2 array as a requested output
 (see array formulas in Excel), the bottom right cell of the array will contain
 number of seconds it took to compute the function.</p>
-
 <p>When timing functions returning MyArray, MyMatrix, CellMatrix or XlOper the
 timing information is appended to the output from below.</p>
-
 <h2 id="5-volatile-functions">5. Volatile Functions</h2>
-
 <p>A volatile function is a function whose value can change even if the arguments
 have not. Usually you apply volatile directive to a function which depends on
 random numbers or time. To specify that a function is volatile add
 <code>//&lt;xlw:volatile</code> before the function&rsquo;s name:</p>
-
 <p>In <code>mylib.h</code>:
-<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><code class="language-c" data-lang="c">1
-2
-3</code></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kt">double</span> <span class="c1">// Number of minutes since Jan 1, 2000</span>
-<span class="c1">//&lt;xlw:volatile</span>
-<span class="n">SysTime</span><span class="p">();</span>
-</pre></div>
-</td></tr></table></p>
-
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">double</span> <span class="c1">// Number of minutes since Jan 1, 2000
+</span><span class="c1"></span><span class="c1">//&lt;xlw:volatile
+</span><span class="c1"></span><span class="n">SysTime</span><span class="p">(</span><span class="p">)</span><span class="p">;</span></code></pre></td></tr></table>
+</div>
+</div></p>
 <p>In  <code>mylib.c</code>:
-<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><code class="language-c" data-lang="c"> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14</code></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;time.h&gt;</span><span class="cp"></span>
-
-<span class="kt">double</span> <span class="nf">SysTime</span><span class="p">()</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&lt;time.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="kt">double</span> <span class="nf">SysTime</span><span class="p">(</span><span class="p">)</span>
 <span class="p">{</span>
-  <span class="kt">time_t</span> <span class="n">timer</span> <span class="o">=</span> <span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+  <span class="n">time_t</span> <span class="n">timer</span> <span class="o">=</span> <span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">)</span><span class="p">;</span>
 
   <span class="k">struct</span> <span class="n">tm</span> <span class="n">y2k</span><span class="p">;</span>
   <span class="n">y2k</span><span class="p">.</span><span class="n">tm_hour</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>   <span class="n">y2k</span><span class="p">.</span><span class="n">tm_min</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">y2k</span><span class="p">.</span><span class="n">tm_sec</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
   <span class="n">y2k</span><span class="p">.</span><span class="n">tm_year</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span> <span class="n">y2k</span><span class="p">.</span><span class="n">tm_mon</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">y2k</span><span class="p">.</span><span class="n">tm_mday</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 
-  <span class="kt">double</span> <span class="n">seconds</span> <span class="o">=</span> <span class="n">difftime</span><span class="p">(</span><span class="n">timer</span><span class="p">,</span> <span class="n">mktime</span><span class="p">(</span><span class="o">&amp;</span><span class="n">y2k</span><span class="p">));</span>
+  <span class="kt">double</span> <span class="n">seconds</span> <span class="o">=</span> <span class="n">difftime</span><span class="p">(</span><span class="n">timer</span><span class="p">,</span> <span class="n">mktime</span><span class="p">(</span><span class="o">&amp;</span><span class="n">y2k</span><span class="p">)</span><span class="p">)</span><span class="p">;</span>
 
   <span class="k">return</span> <span class="n">seconds</span><span class="o">/</span><span class="mi">60</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
-</td></tr></table></p>
-
+<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div></p>
 <p>It is also possible to time the volatile function by adding the timing
 directive. The order of <code>//&lt;xlw:time</code> and <code>//&lt;xlw:volatile</code> directives is not
 important.</p>
-
 <h2 id="6-calling-add-in-functions-from-vba">6. Calling add-in functions from VBA</h2>
-
 <p>A function defined in an add-in can be called from VBA using <code>Application.Run</code>
 function:
 <code>&lt;Output Value&gt; = Application.Run(&quot;&lt;function name&gt;&quot;, &lt;input 1&gt;, &lt;input 2&gt;, ... &lt;input N&gt;)</code></p>
-
 <p><strong>Example:</strong></p>
-
 <p>Add a module to an Excel file with the following code:</p>
-
-<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><code class="language-basic" data-lang="basic">1
-2
-3</code></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="vg">Function</span><span class="w"> </span><span class="vg">vbaOuter1</span><span class="p">(</span><span class="vg">v</span><span class="w"> </span><span class="vg">As</span><span class="w"> </span><span class="vg">Variant</span><span class="p">)</span>
-<span class="w">  </span><span class="vg">vbaOuter1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">Application</span><span class="o">.</span><span class="vg">Run</span><span class="p">(</span><span class="s2">&quot;Outer1&quot;</span><span class="p">,</span><span class="w"> </span><span class="vg">v</span><span class="p">)</span>
-<span class="vg">End</span><span class="w"> </span><span class="vg">Function</span>
-</pre></div>
-</td></tr></table>
-
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-basic" data-lang="basic"><span class="vg">Function</span><span class="w"> </span><span class="vg">vbaOuter1</span><span class="p">(</span><span class="vg">v</span><span class="w"> </span><span class="vg">As</span><span class="w"> </span><span class="vg">Variant</span><span class="p">)</span><span class="w">
+</span><span class="w">  </span><span class="vg">vbaOuter1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">Application</span><span class="o">.</span><span class="vg">Run</span><span class="p">(</span><span class="s2">&#34;Outer1&#34;</span><span class="p">,</span><span class="w"> </span><span class="vg">v</span><span class="p">)</span><span class="w">
+</span><span class="w"></span><span class="vg">End</span><span class="w"> </span><span class="vg">Function</span></code></pre></td></tr></table>
+</div>
+</div>
 <p>This will create a VBA function that will behave in a similar way as add-in
 defined <code>Outer1</code> function (aside from the fact that it will lack descriptions
 in the function wizard).</p>
-
 <h2 id="7-happy-coding">7. Happy Coding!</h2>
-
 <p>If you want to see the code described in this post in action you can
 <a href="/downloads/xlw-part5.zip">download updated <code>mylib</code> library with example xls file</a>.</p>
 </div>
@@ -384,20 +391,25 @@ in the function wizard).</p>
 
 
     <div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_shortname = 'adaptiverisk';
-    var disqus_identifier = 'https:\/\/blog.adaptiverisk.com\/xll\/excel\/2015\/01\/21\/xlw-part5.html';
-    var disqus_title = 'UDF Services (XLW Part 5)';
-    var disqus_url = 'https:\/\/blog.adaptiverisk.com\/xll\/excel\/2015\/01\/21\/xlw-part5.html';
-
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
     (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "adaptiverisk" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
     })();
 </script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
   </div>
 
   <div class="col-md-4">
@@ -410,25 +422,25 @@ in the function wizard).</p>
     </div>
     <div class="list-group">
       
-      <a href="https://blog.adaptiverisk.com/post/2016-12-01-64bit/" class="list-group-item">64bit</a>
+      <a href="https://blog.adaptiverisk.com/tags/c&#43;&#43;/" class="list-group-item">c&#43;&#43;</a>
       
-      <a href="https://blog.adaptiverisk.com/post/2016-11-26-intrinsic/" class="list-group-item">Intrinsic</a>
+      <a href="https://blog.adaptiverisk.com/categories/" class="list-group-item">Categories</a>
       
-      <a href="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/10/04/deploy-static.html" class="list-group-item">Deployment Blues</a>
+      <a href="https://blog.adaptiverisk.com/tags/dataframe/" class="list-group-item">DataFrame</a>
       
-      <a href="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/08/20/timestamp.html" class="list-group-item">Time Stamp Your Library</a>
+      <a href="https://blog.adaptiverisk.com/post/2023-08-22-dataslicer/" class="list-group-item">DataSlicer - DataFrame for Excel</a>
       
-      <a href="https://blog.adaptiverisk.com/power/spot/2016/07/28/power-spot.html" class="list-group-item">Spot Price Dynamics in Power Markets</a>
+      <a href="https://blog.adaptiverisk.com/post/" class="list-group-item">Posts</a>
       
-      <a href="https://blog.adaptiverisk.com/power/volatility/2016/06/11/daily-opts.html" class="list-group-item">Daily Options</a>
+      <a href="https://blog.adaptiverisk.com/tags/" class="list-group-item">Tags</a>
       
-      <a href="https://blog.adaptiverisk.com/xll/excel/2015/01/21/xlw-part5.html" class="list-group-item">UDF Services (XLW Part 5)</a>
+      <a href="https://blog.adaptiverisk.com/" class="list-group-item">The AdaptiveRisk Blog</a>
       
-      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part4.html" class="list-group-item">Input/output arrays, vectors, matrices or ranges (XLW Part 4)</a>
+      <a href="https://blog.adaptiverisk.com/tags/xll/" class="list-group-item">xll</a>
       
-      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part3.html" class="list-group-item">Writing Simple Excel Functions (XLW Part 3)</a>
+      <a href="https://blog.adaptiverisk.com/categories/xll/" class="list-group-item">xll</a>
       
-      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/15/xlw-part2.html" class="list-group-item">Setting up a Project in Visual Studio 2013 and 2015 (XLW Part 2)</a>
+      <a href="https://blog.adaptiverisk.com/tags/xlw/" class="list-group-item">xlw</a>
       
     </div>
   </section>
@@ -464,6 +476,8 @@ in the function wizard).</p>
       <a href="https://blog.adaptiverisk.com/tags/energy" class="list-group-item">energy</a>
       
       <a href="https://blog.adaptiverisk.com/tags/power" class="list-group-item">power</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/dataframe" class="list-group-item">dataframe</a>
       
       <a href="https://blog.adaptiverisk.com/tags/derivatives" class="list-group-item">derivatives</a>
       

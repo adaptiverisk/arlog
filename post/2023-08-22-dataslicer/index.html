@@ -8,28 +8,28 @@
 
 
 
-<link rel="canonical" href="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/10/04/deploy-static.html">
+<link rel="canonical" href="https://blog.adaptiverisk.com/post/2023-08-22-dataslicer/">
 
 
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <title>Deployment Blues - The AdaptiveRisk Blog</title>
+    <title>DataSlicer - DataFrame for Excel - The AdaptiveRisk Blog</title>
     
-<meta name="description" content="Introduction It happens often: you compile your xll addin and give it to yor client just to hear them complaining that they cannot load the xll into Excel. The error that they see is: &amp;ldquo;The file you are trying to open, &amp;lsquo;MyAddin.xll&amp;rsquo;, is in a different format than specified by the file extension. Verify that the file is not corrupted and is in from a trusted source before opening the file.">
+<meta name="description" content="Introducing DataSlicer Add-In: Advanced Data Analysis in Excel DataSlicer brings over a hundred functions from the pandas DataFrames right into Excel, enhancing your data analysis capabilities. As an early prototype, we&amp;rsquo;re actively seeking feedback to refine its features and functionality. As we continue to enhance the user experience, we&amp;rsquo;re also in the process of adding new functions and refining our API. We would appreciate your insights and suggestions; please drop us a line at info@adaptiverisk.">
 
-<meta property="og:title" content="Deployment Blues - The AdaptiveRisk Blog">
+<meta property="og:title" content="DataSlicer - DataFrame for Excel - The AdaptiveRisk Blog">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/10/04/deploy-static.html">
+<meta property="og:url" content="https://blog.adaptiverisk.com/post/2023-08-22-dataslicer/">
 <meta property="og:image" content="https://blog.adaptiverisk.com/images/default.png">
 <meta property="og:site_name" content="The AdaptiveRisk Blog">
-<meta property="og:description" content="Introduction It happens often: you compile your xll addin and give it to yor client just to hear them complaining that they cannot load the xll into Excel. The error that they see is: &amp;ldquo;The file you are trying to open, &amp;lsquo;MyAddin.xll&amp;rsquo;, is in a different format than specified by the file extension. Verify that the file is not corrupted and is in from a trusted source before opening the file.">
+<meta property="og:description" content="Introducing DataSlicer Add-In: Advanced Data Analysis in Excel DataSlicer brings over a hundred functions from the pandas DataFrames right into Excel, enhancing your data analysis capabilities. As an early prototype, we&amp;rsquo;re actively seeking feedback to refine its features and functionality. As we continue to enhance the user experience, we&amp;rsquo;re also in the process of adding new functions and refining our API. We would appreciate your insights and suggestions; please drop us a line at info@adaptiverisk.">
 <meta property="og:locale" content="ja_JP">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="The AdaptiveRisk Blog">
-<meta name="twitter:url" content="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/10/04/deploy-static.html">
-<meta name="twitter:title" content="Deployment Blues - The AdaptiveRisk Blog">
-<meta name="twitter:description" content="Introduction It happens often: you compile your xll addin and give it to yor client just to hear them complaining that they cannot load the xll into Excel. The error that they see is: &amp;ldquo;The file you are trying to open, &amp;lsquo;MyAddin.xll&amp;rsquo;, is in a different format than specified by the file extension. Verify that the file is not corrupted and is in from a trusted source before opening the file.">
+<meta name="twitter:url" content="https://blog.adaptiverisk.com/post/2023-08-22-dataslicer/">
+<meta name="twitter:title" content="DataSlicer - DataFrame for Excel - The AdaptiveRisk Blog">
+<meta name="twitter:description" content="Introducing DataSlicer Add-In: Advanced Data Analysis in Excel DataSlicer brings over a hundred functions from the pandas DataFrames right into Excel, enhancing your data analysis capabilities. As an early prototype, we&amp;rsquo;re actively seeking feedback to refine its features and functionality. As we continue to enhance the user experience, we&amp;rsquo;re also in the process of adding new functions and refining our API. We would appreciate your insights and suggestions; please drop us a line at info@adaptiverisk.">
 <meta name="twitter:image" content="https://blog.adaptiverisk.com/images/default.png">
 
 
@@ -41,15 +41,15 @@
       "@type": "WebPage",
       "@id":"https:\/\/blog.adaptiverisk.com\/"
     },
-    "headline": "Deployment Blues - The AdaptiveRisk Blog",
+    "headline": "DataSlicer - DataFrame for Excel - The AdaptiveRisk Blog",
     "image": {
       "@type": "ImageObject",
       "url": "https:\/\/blog.adaptiverisk.com\/images\/default.png",
       "height": 800,
       "width": 800
     },
-    "datePublished": "2016-10-04T00:00:00JST",
-    "dateModified": "2016-10-04T00:00:00JST",
+    "datePublished": "2023-08-22T00:20:00JST",
+    "dateModified": "2023-08-22T00:20:00JST",
     "author": {
       "@type": "Person",
       "name": "The AdaptiveRisk Blog"
@@ -64,7 +64,7 @@
         "height": 60
       }
     },
-    "description": "Introduction It happens often: you compile your xll addin and give it to yor client just to hear them complaining that they cannot load the xll into Excel. The error that they see is: \x26ldquo;The file you are trying to open, \x26lsquo;MyAddin.xll\x26rsquo;, is in a different format than specified by the file extension. Verify that the file is not corrupted and is in from a trusted source before opening the file."
+    "description": "Introducing DataSlicer Add-In: Advanced Data Analysis in Excel DataSlicer brings over a hundred functions from the pandas DataFrames right into Excel, enhancing your data analysis capabilities. As an early prototype, we\x26rsquo;re actively seeking feedback to refine its features and functionality. As we continue to enhance the user experience, we\x26rsquo;re also in the process of adding new functions and refining our API. We would appreciate your insights and suggestions; please drop us a line at info@adaptiverisk."
   }
 </script>
 
@@ -136,80 +136,44 @@ if (!doNotTrack) {
         
         <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="https://blog.adaptiverisk.com/post/" itemprop="url"><span itemprop="title">post</span></a></li>
         
-        <li class="active">Deployment Blues</li>
+        <li class="active">DataSlicer - DataFrame for Excel</li>
       </ol>
     </nav>
 
     <article class="single">
   <header>
     <ul class="p-facts">
-      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2016-10-04T00:00:00JST">Oct 4, 2016</time></li>
+      <li><i class="fa fa-calendar" aria-hidden="true"></i><time datetime="2023-08-22T00:20:00JST">Aug 22, 2023</time></li>
       <li><i class="fa fa-bookmark" aria-hidden="true"></i><a href="https://blog.adaptiverisk.com/post/">post</a></li>
       
     </ul>
 
-    <h1 class="title">Deployment Blues</h1>
+    <h1 class="title">DataSlicer - DataFrame for Excel</h1>
   </header>
 
   
 
-  <div class="article-body"><h1 id="introduction">Introduction</h1>
-<p>It happens often: you compile your xll addin and give it to yor client just to 
-hear them complaining that they cannot load the xll into Excel. The error that
-they see is: <em>&ldquo;The file you are trying to open, &lsquo;MyAddin.xll&rsquo;, is in a different 
-format than specified by the file extension. Verify that the file is not 
-corrupted and is in from a trusted source before opening the file. Do you want 
-to open the file now?&quot;</em></p>
-<p>There are two reasons for this error:</p>
+  <div class="article-body"><p><img src="/images/dataslicer/data-slicer.png" alt="DataSlicer"></p>
+<h1 id="introducing-dataslicer-add-in-advanced-data-analysis-in-excel">Introducing DataSlicer Add-In: Advanced Data Analysis in Excel</h1>
+<p>DataSlicer brings over a hundred functions from the pandas DataFrames right into Excel, enhancing your data analysis capabilities. 
+As an early prototype, we&rsquo;re actively seeking feedback to refine its features and functionality. As we continue to enhance the user
+experience, we&rsquo;re also in the process of adding new functions and refining our API. We would appreciate your insights and suggestions; 
+please drop us a line at <a href="mailto:info@adaptiverisk.com">info@adaptiverisk.com</a>.</p>
+<p>Here are some quick highlights of the DataSlicer Add-In:</p>
 <ul>
-<li>
-<p>The client uses 32bit Excel while the addin is a 64bit xll or vise versa. The
-fix for this case is obvious - make sure that you send matching xll to the
-client.</p>
-</li>
-<li>
-<p>Your addin depends on some dll&rsquo;s that are not available on the client&rsquo;s
-computer. To fix this problem you need to add all necessary dll&rsquo;s into
-the same folder as the addin. Although there are other locations where you can 
-put dll&rsquo;s to fix th problem, from our experience puting them into the same 
-folder as xll is the most robust and straightforward way.</p>
-</li>
+<li>Built on C++: The add-in is developed in C++ and is contained within a single xll file.</li>
+<li>No Additional Dependencies: DataSlicer operates independently, without relying on other software.</li>
+<li>Compatibility: The add-in is designed exclusively for Windows, and it&rsquo;s compatible with newer versions 
+of Excel that support dynamic arrays.</li>
+<li>Easy Integration: No installation is required. Depending on your Excel version, simply download 
+the 32-bit or 64-bit version of the add-in to a location trusted by Excel. Launch the file in Excel, 
+and you&rsquo;re all set to incorporate the provided functions into your spreadsheets. To identify DataSlicer&rsquo;s 
+functions, look for the &ldquo;df&rdquo; prefix.</li>
 </ul>
-<p>How do you know which dll&rsquo;s are missing? You need to open xll in the 
-<a href="http://www.dependencywalker.com/">Dependency Walker</a> on your client&rsquo;s computer. 
-The Dependency Walker will show which dll&rsquo;s could not be located.</p>
-<h1 id="c-runtime-library">C++ Runtime Library</h1>
-<p>One of the more common cases is missing C++ runtime library. When you
-set up an addin project in Visual Studio it by default sets option for created
-code to use runtime dlls. The compiled addin xll will run on development
-computer without any issues, since runtime dll&rsquo;s are properly installed. But
-these dll&rsquo;s are often not installed on client computers and Excel will produce
-error while loading the addin.</p>
-<p>You can resolve this issue using one of the three methods:</p>
-<ol>
-<li>
-<p>Use the above approach by adding runtime dll&rsquo;s to the same folder where xll
-is located on the client&rsquo;s computer.</p>
-</li>
-<li>
-<p>Installing runtime dll&rsquo;s using installer provided by Microsoft.</p>
-</li>
-<li>
-<p>Build you xll by using static linking to runtime library.</p>
-</li>
-</ol>
-<p>The third method is our prefered way to solve this issue. We&rsquo;ll discuss how it
-works in the next section and then we&rsquo;ll discuss what are its benefits and
-downsides.</p>
-<h1 id="static-linking">Static Linking</h1>
-<p>To ensure that your xll is statically linked to runtime library you need to
-set Runtime Library option to <code>Multi-threaded (/MT)</code> (by default it is set to
-<code>Multi-threaded DLL</code> \<br>
-<img src="/images/runtime.png" alt="Runtime Library Option"></p>
-<p>Benefit - you can just deploy single xll file and not worry if the client
-has appropriate runtime dll installed.</p>
-<p>Downside - any library that your project links to should be compiled with same 
-value for Runtime Library option. Sometimes this is outside of your control.</p>
+<p>Downloads:</p>
+<p><a href="/downloads/dataslicer64.xll">DataSlicer 64-bit</a></p>
+<p><a href="/downloads/dataslicer32.xll">DataSlicer 32-bit</a></p>
+<p>We&rsquo;re excited about the possibilities DataSlicer can offer to the Excel community and look forward to hearing from you!</p>
 </div>
 
   <footer class="article-footer">
@@ -238,9 +202,13 @@ value for Runtime Library option. Sometimes this is outside of your control.</p>
       <div>
         <ul class="p-terms">
           
-          <li><a href="https://blog.adaptiverisk.com/tags/c&#43;&#43;/">c&#43;&#43;</a></li>
+          <li><a href="https://blog.adaptiverisk.com/tags/xlw/">xlw</a></li>
           
           <li><a href="https://blog.adaptiverisk.com/tags/xll/">xll</a></li>
+          
+          <li><a href="https://blog.adaptiverisk.com/tags/c&#43;&#43;/">c&#43;&#43;</a></li>
+          
+          <li><a href="https://blog.adaptiverisk.com/tags/dataframe/">DataFrame</a></li>
           
         </ul>
       </div>

@@ -1,14 +1,75 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://blog.adaptiverisk.com/tags/c&#43;&#43;/</loc>
+    <lastmod>2023-08-22T00:20:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.adaptiverisk.com/categories/</loc>
+    <lastmod>2023-08-22T00:20:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.adaptiverisk.com/tags/dataframe/</loc>
+    <lastmod>2023-08-22T00:20:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.adaptiverisk.com/post/2023-08-22-dataslicer/</loc>
+    <lastmod>2023-08-22T00:20:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.adaptiverisk.com/post/</loc>
+    <lastmod>2023-08-22T00:20:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.adaptiverisk.com/tags/</loc>
+    <lastmod>2023-08-22T00:20:00+00:00</lastmod>
+  </url>
   
   <url>
     <loc>https://blog.adaptiverisk.com/</loc>
-    <lastmod>2016-12-01T00:20:00+00:00</lastmod>
+    <lastmod>2023-08-22T00:20:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.adaptiverisk.com/tags/xll/</loc>
+    <lastmod>2023-08-22T00:20:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.adaptiverisk.com/categories/xll/</loc>
+    <lastmod>2023-08-22T00:20:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.adaptiverisk.com/tags/xlw/</loc>
+    <lastmod>2023-08-22T00:20:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://blog.adaptiverisk.com/post/2016-12-01-64bit/</loc>
     <lastmod>2016-12-01T00:20:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.adaptiverisk.com/tags/derivatives/</loc>
+    <lastmod>2016-11-26T00:20:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.adaptiverisk.com/tags/energy/</loc>
+    <lastmod>2016-11-26T00:20:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.adaptiverisk.com/categories/energy/</loc>
+    <lastmod>2016-11-26T00:20:00+00:00</lastmod>
   </url>
   
   <url>
@@ -27,6 +88,11 @@
   </url>
   
   <url>
+    <loc>https://blog.adaptiverisk.com/tags/power/</loc>
+    <lastmod>2016-07-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://blog.adaptiverisk.com/power/spot/2016/07/28/power-spot.html</loc>
     <lastmod>2016-07-28T00:00:00+00:00</lastmod>
   </url>
@@ -34,6 +100,16 @@
   <url>
     <loc>https://blog.adaptiverisk.com/power/volatility/2016/06/11/daily-opts.html</loc>
     <lastmod>2016-06-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.adaptiverisk.com/tags/volatility/</loc>
+    <lastmod>2016-06-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.adaptiverisk.com/tags/excel/</loc>
+    <lastmod>2015-01-21T00:00:00+00:00</lastmod>
   </url>
   
   <url>

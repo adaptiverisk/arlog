@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 <meta name="pinterest" content="nopin">
 <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
-<meta name="generator" content="Hugo 0.17" />
+<meta name="generator" content="Hugo 0.64.1" />
 
 
 
@@ -89,14 +89,17 @@
   <body>
     
     
-<script>
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-ga('create', 'UA-XXXXXXXX-XX', 'auto');
-ga('send', 'pageview');
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-XXXXXXXX-XX', 'auto');
+	
+	ga('send', 'pageview');
+}
 </script>
 
     
@@ -150,101 +153,106 @@ ga('send', 'pageview');
 
   
 
-  <div class="article-body">
-
-<p>In the <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/15/xlw-part2.html">last post</a> I described how to set
-up a Visual Studio solution to build xll addins using XLW.
+  <div class="article-body"><p>In the <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/15/xlw-part2.html">last post</a> I described how to set 
+up a Visual Studio solution to build xll addins using XLW. 
 For the introduction to XLW series take a look at the
 <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/08/xlw-part1.html">first post</a>. Today I am going to show
 how easy it is to create user defined functions (UDF) for Excel using XLW.</p>
-
 <p>The starting point will be the solution we set up in the
 <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/15/xlw-part2.html">previous post</a>. If you don&rsquo;t have set it
 up you can <a href="/downloads/xlw-part2.zip">download it</a>.</p>
-
 <p>The project contains two files that we are going to modify to add new functions:</p>
-
 <ul>
-<li><p><code>mylib.h</code>
-<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><code class="language-c" data-lang="c"> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12</code></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#ifndef _mylib_h_</span>
-<span class="cp">#define _mylib_h_</span>
+<li>
+<p><code>mylib.h</code>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="cp">#</span><span class="cp">ifndef _mylib_h_</span><span class="cp">
+</span><span class="cp"></span><span class="cp">#</span><span class="cp">define _mylib_h_</span><span class="cp">
+</span><span class="cp"></span>
+<span class="cp">#</span><span class="cp">include</span> <span class="cpf">&lt;xlw/xlw.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="c1">//&lt;xlw:libraryname=MyLibrary
+</span><span class="c1"></span>
+<span class="kt">double</span> <span class="c1">//Square root of an argument
+</span><span class="c1"></span><span class="n">MySqrt</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span> <span class="c1">//argument
+</span><span class="c1"></span>       <span class="p">)</span><span class="p">;</span>
 
-<span class="cp">#include</span> <span class="cpf">&lt;xlw/xlw.h&gt;</span><span class="cp"></span>
-
-<span class="c1">//&lt;xlw:libraryname=MyLibrary</span>
-
-<span class="kt">double</span> <span class="c1">//Square root of an argument</span>
-<span class="n">MySqrt</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span> <span class="c1">//argument</span>
-       <span class="p">);</span>
-
-<span class="cp">#endif</span>
-</pre></div>
-</td></tr></table></p></li>
-
-<li><p><code>mylib.cpp</code>
-<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><code class="language-c" data-lang="c"> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11</code></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;mylib.h&quot;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;math.h&gt;</span><span class="cp"></span>
-
+<span class="cp">#</span><span class="cp">endif</span></code></pre></td></tr></table>
+</div>
+</div></p>
+</li>
+<li>
+<p><code>mylib.cpp</code>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&#34;mylib.h&#34;</span><span class="cp">
+</span><span class="cp"></span><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&lt;math.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
 <span class="kt">double</span> <span class="nf">MySqrt</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">)</span>
 <span class="p">{</span>
   <span class="k">if</span><span class="p">(</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mf">0.</span> <span class="p">)</span>
   <span class="p">{</span>
-    <span class="n">throw</span><span class="p">(</span><span class="s">&quot;#Negative argument&quot;</span><span class="p">);</span>
+    <span class="n">throw</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;</span><span class="s">#Negative argument</span><span class="s">&#34;</span><span class="p">)</span><span class="p">;</span>
   <span class="p">}</span>
-  <span class="k">return</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
-<span class="p">}</span>
-</pre></div>
-</td></tr></table></p></li>
+  <span class="k">return</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="p">;</span>
+<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div></p>
+</li>
 </ul>
-
 <p>The third file (<code>xlwmylib.cpp</code>) is autogenerated by the build process.</p>
-
 <h2 id="1-library-name">1. Library Name</h2>
-
 <p><em>Library Name</em> is a term XLW uses to tell in which <em>category</em> you can find your
-functions in the <em>Function Wizard</em>: <br />
-<img src="/images/xlw2/my-lib-in-wiz.png" alt="my library in wiz" /><br />
+functions in the <em>Function Wizard</em>: \<br>
+<img src="/images/xlw2/my-lib-in-wiz.png" alt="my library in wiz">\<br>
 The name of the library is specified in the file <code>mylib.h</code> on the line 6:
-<div class="highlight"><pre><code class="language-c" data-lang="c"><span></span><span class="c1">//&lt;xlw:libraryname=MyLibrary</span>
-</code></pre></div>
-</p>
-
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="o">/</span><span class="o">/</span><span class="o">&lt;</span><span class="nl">xlw</span><span class="p">:</span><span class="n">libraryname</span><span class="o">=</span><span class="n">MyLibrary</span></code></pre></div></p>
 <h2 id="2-basic-function">2. Basic Function</h2>
-
 <p>Consider a function definition, which should be placed in <code>mylib.h</code> file:</p>
-
-<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><code class="language-c" data-lang="c">1
-2
-3
-4</code></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kt">double</span> <span class="c1">//Sum of square roots of two numbers</span>
-<span class="n">SumSqrt</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="c1">//argument 1</span>
-  <span class="kt">double</span> <span class="n">y</span> <span class="c1">//argument 2</span>
-  <span class="p">);</span>
-</pre></div>
-</td></tr></table>
-
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">double</span> <span class="c1">//Sum of square roots of two numbers
+</span><span class="c1"></span><span class="n">SumSqrt</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="c1">//argument 1
+</span><span class="c1"></span>  <span class="kt">double</span> <span class="n">y</span> <span class="c1">//argument 2
+</span><span class="c1"></span>  <span class="p">)</span><span class="p">;</span></code></pre></td></tr></table>
+</div>
+</div>
 <dl>
+<dt>{:.dl-lines}</dt>
 <dt>Line 1</dt>
 <dd>contains type of results the function returns and comment with function
 description as it will appear in Excel&rsquo;s function wizard</dd>
@@ -259,53 +267,48 @@ backslash, e.g.: <code>// argument \&quot;1\&quot;</code></dd>
 <dt>Line 4</dt>
 <dd>ends function definition</dd>
 </dl>
-
-<p>definition</p>
-
 <h2 id="3-handling-errors">3. Handling Errors</h2>
-
 <p>It is possible to return an error message to Excel from a function. Consider
 the example with <code>SumSqrt</code> function. Put the following code in <code>mylib.cpp</code>:</p>
-
-<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><code class="language-c" data-lang="c"> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11</code></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;mylib.h&quot;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;math.h&gt;</span><span class="cp"></span>
-
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&#34;mylib.h&#34;</span><span class="cp">
+</span><span class="cp"></span><span class="cp">#</span><span class="cp">include</span> <span class="cpf">&lt;math.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
 <span class="kt">double</span> <span class="nf">SumSqrt</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">)</span>
 <span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span>
+  <span class="k">if</span><span class="p">(</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">|</span><span class="o">|</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span>
   <span class="p">{</span>
-    <span class="n">throw</span><span class="p">(</span><span class="s">&quot;#Negative argument&quot;</span><span class="p">);</span>
+    <span class="n">throw</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;</span><span class="s">#Negative argument</span><span class="s">&#34;</span><span class="p">)</span><span class="p">;</span>
   <span class="p">}</span>
-  <span class="k">return</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
-<span class="p">}</span>
-</pre></div>
-</td></tr></table>
-
+  <span class="k">return</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="p">;</span>
+<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
 <dl>
+<dt>{:.dl-lines}</dt>
 <dt>Line 6</dt>
 <dd>check if any of the arguments is negative</dd>
 <dt>Line 8</dt>
 <dd>if we have a negative argument we throw an error with message
 <code>#Negative argument</code></dd>
 </dl>
-
-<p>e argument`</p>
-
 <p>As a result, the Excel function displays string <code>#Negative argument</code> if any of
 the arguments is negative or numeric result if both numbers are non-negative.</p>
-
-<h2 id="4-basic-input-output-data-types">4. Basic input/output data types</h2>
-
+<h2 id="4-basic-inputoutput-data-types">4. Basic input/output data types</h2>
 <ul>
 <li><code>double</code></li>
 <li><code>bool</code></li>
@@ -313,9 +316,7 @@ the arguments is negative or numeric result if both numbers are non-negative.</p
 <li><code>int</code> - although it can be used as an input type it cannot be an output type.
 Convert it to <code>double</code> for output.</li>
 </ul>
-
 <h2 id="5-happy-coding">5. Happy Coding!</h2>
-
 <p>If you want to see the code described in this post in action you can
 <a href="/downloads/xlw-part3-4.zip">download updated <code>mylib</code> library</a>. It also
 contains changes introduced in the next post.</p>
@@ -364,20 +365,25 @@ contains changes introduced in the next post.</p>
 
 
     <div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_shortname = 'adaptiverisk';
-    var disqus_identifier = 'https:\/\/blog.adaptiverisk.com\/xll\/excel\/2014\/12\/19\/xlw-part3.html';
-    var disqus_title = 'Writing Simple Excel Functions (XLW Part 3)';
-    var disqus_url = 'https:\/\/blog.adaptiverisk.com\/xll\/excel\/2014\/12\/19\/xlw-part3.html';
-
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
     (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "adaptiverisk" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
     })();
 </script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
   </div>
 
   <div class="col-md-4">
@@ -390,25 +396,25 @@ contains changes introduced in the next post.</p>
     </div>
     <div class="list-group">
       
-      <a href="https://blog.adaptiverisk.com/post/2016-12-01-64bit/" class="list-group-item">64bit</a>
+      <a href="https://blog.adaptiverisk.com/tags/c&#43;&#43;/" class="list-group-item">c&#43;&#43;</a>
       
-      <a href="https://blog.adaptiverisk.com/post/2016-11-26-intrinsic/" class="list-group-item">Intrinsic</a>
+      <a href="https://blog.adaptiverisk.com/categories/" class="list-group-item">Categories</a>
       
-      <a href="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/10/04/deploy-static.html" class="list-group-item">Deployment Blues</a>
+      <a href="https://blog.adaptiverisk.com/tags/dataframe/" class="list-group-item">DataFrame</a>
       
-      <a href="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/08/20/timestamp.html" class="list-group-item">Time Stamp Your Library</a>
+      <a href="https://blog.adaptiverisk.com/post/2023-08-22-dataslicer/" class="list-group-item">DataSlicer - DataFrame for Excel</a>
       
-      <a href="https://blog.adaptiverisk.com/power/spot/2016/07/28/power-spot.html" class="list-group-item">Spot Price Dynamics in Power Markets</a>
+      <a href="https://blog.adaptiverisk.com/post/" class="list-group-item">Posts</a>
       
-      <a href="https://blog.adaptiverisk.com/power/volatility/2016/06/11/daily-opts.html" class="list-group-item">Daily Options</a>
+      <a href="https://blog.adaptiverisk.com/tags/" class="list-group-item">Tags</a>
       
-      <a href="https://blog.adaptiverisk.com/xll/excel/2015/01/21/xlw-part5.html" class="list-group-item">UDF Services (XLW Part 5)</a>
+      <a href="https://blog.adaptiverisk.com/" class="list-group-item">The AdaptiveRisk Blog</a>
       
-      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part4.html" class="list-group-item">Input/output arrays, vectors, matrices or ranges (XLW Part 4)</a>
+      <a href="https://blog.adaptiverisk.com/tags/xll/" class="list-group-item">xll</a>
       
-      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part3.html" class="list-group-item">Writing Simple Excel Functions (XLW Part 3)</a>
+      <a href="https://blog.adaptiverisk.com/categories/xll/" class="list-group-item">xll</a>
       
-      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/15/xlw-part2.html" class="list-group-item">Setting up a Project in Visual Studio 2013 and 2015 (XLW Part 2)</a>
+      <a href="https://blog.adaptiverisk.com/tags/xlw/" class="list-group-item">xlw</a>
       
     </div>
   </section>
@@ -444,6 +450,8 @@ contains changes introduced in the next post.</p>
       <a href="https://blog.adaptiverisk.com/tags/energy" class="list-group-item">energy</a>
       
       <a href="https://blog.adaptiverisk.com/tags/power" class="list-group-item">power</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/dataframe" class="list-group-item">dataframe</a>
       
       <a href="https://blog.adaptiverisk.com/tags/derivatives" class="list-group-item">derivatives</a>
       

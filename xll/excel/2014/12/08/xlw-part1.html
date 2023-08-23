@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 <meta name="pinterest" content="nopin">
 <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
-<meta name="generator" content="Hugo 0.17" />
+<meta name="generator" content="Hugo 0.64.1" />
 
 
 
@@ -89,14 +89,17 @@
   <body>
     
     
-<script>
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-ga('create', 'UA-XXXXXXXX-XX', 'auto');
-ga('send', 'pageview');
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-XXXXXXXX-XX', 'auto');
+	
+	ga('send', 'pageview');
+}
 </script>
 
     
@@ -150,32 +153,23 @@ ga('send', 'pageview');
 
   
 
-  <div class="article-body">
-
-<p>This is a first post from a series devoted to building xll add-ins for Excel.</p>
-
+  <div class="article-body"><p>This is a first post from a series devoted to building xll add-ins for Excel.</p>
 <p>Add-ins are used to extend Excel functionality. It is possible to extend Excel
 using VBA in the same spreadsheet. However this way VBA code is tightly coupled
 with the spreadsheet, which makes it difficult to keep track of code
 versions or update code for all copies of a spreadsheet.</p>
-
 <p>Users often make copies of spreadsheets because they want to modify something
 but want to keep original around. Unfortunately it is never clear what they
 modify - it can be data, code or both. As a result often there are many slightly
 different spreadsheets floating around. In this scenario updating your code
 to fix a bug or add an enhancement if almost impossible.</p>
-
 <p>Add-ins let us separate code from spreadsheet data. This allows us to resolve
 all problems that we encounter when using spreadsheets with embedded code.</p>
-
 <h2 id="ways-to-build-an-add-in-for-excel">Ways to build an add-in for Excel</h2>
-
 <p>There are many ways to build add-ins. Here is a list of of the ways that I
 have tried (I prefer open source or at least free tools):</p>
-
 <ul>
 <li><strong>VBA</strong>
-
 <ul>
 <li><strong>Pros</strong>: You just need Excel and don&rsquo;t need to install any other tool - it
 includes VBE (Visual Basic Editor).
@@ -184,9 +178,9 @@ VBE is a decent development environment with integrated debugger.</li>
 lives inside add-in, which prevents regular use of source control with it.
 Source code is available to any user (it is trivial to remove password
 protection if you set up one).</li>
-</ul></li>
+</ul>
+</li>
 <li><strong><a href="http://exceldna.codeplex.com">Excel-DNA</a></strong>
-
 <ul>
 <li><strong>Pros</strong>: Mature and free environment to develop add-ins using C#. It has
 very good documentation and active support forum.</li>
@@ -194,26 +188,23 @@ very good documentation and active support forum.</li>
 from Excel as well as on a server this might be an obstacle). Even though
 it is possible to call unmanaged dll&rsquo;s from C# setting up development and
 debugging process is challenging.</li>
-</ul></li>
+</ul>
+</li>
 <li><strong><a href="http://xlw.sourceforge.net">XLW</a></strong>
-
 <ul>
 <li><strong>Pros</strong>: Thin wrapper for Excel C API - easy to setup, use, debug. Very
 fast. Can be used with C++, C# or VB.NET</li>
 <li><strong>Cons</strong>: The documentation is not well maintained and not very detailed.</li>
-</ul></li>
 </ul>
-
+</li>
+</ul>
 <p>If you are a fan of C# take a close look at Excel-DNA. If you prefer using C/C++
 XLW is a better alternative. For my projects I prefer to use C/C++. I create
 simple C-type dll or static library with core functions. The library can be used
 in any other environment (Matlab, Mathematica, VBA, etc.). Then I use XLW
 wrapper to interface the functions with Excel.</p>
-
 <h2 id="topics">Topics</h2>
-
 <p>In this series of posts I plan to cover the following topics:</p>
-
 <ul>
 <li><a href="https://blog.adaptiverisk.com/xll/excel/2014/12/15/xlw-part2.html">Setting up a project with XLW</a></li>
 <li><a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part3.html">Writing simple functions callable from Excel</a></li>
@@ -226,7 +217,6 @@ wrapper to interface the functions with Excel.</p>
 <li><a href="https://blog.adaptiverisk.com/xll/c++/2016/10/04/deploy-static.html">Deployment tips</a></li>
 <li>Writing macros.</li>
 </ul>
-
 <p>As I go over these topics I will share the best practices that I converged to
 over the years of using XLW to write add-ins.</p>
 </div>
@@ -274,20 +264,25 @@ over the years of using XLW to write add-ins.</p>
 
 
     <div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_shortname = 'adaptiverisk';
-    var disqus_identifier = 'https:\/\/blog.adaptiverisk.com\/xll\/excel\/2014\/12\/08\/xlw-part1.html';
-    var disqus_title = 'Building Excel Add-ins (XLW Part 1)';
-    var disqus_url = 'https:\/\/blog.adaptiverisk.com\/xll\/excel\/2014\/12\/08\/xlw-part1.html';
-
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
     (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "adaptiverisk" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
     })();
 </script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
   </div>
 
   <div class="col-md-4">
@@ -300,25 +295,25 @@ over the years of using XLW to write add-ins.</p>
     </div>
     <div class="list-group">
       
-      <a href="https://blog.adaptiverisk.com/post/2016-12-01-64bit/" class="list-group-item">64bit</a>
+      <a href="https://blog.adaptiverisk.com/tags/c&#43;&#43;/" class="list-group-item">c&#43;&#43;</a>
       
-      <a href="https://blog.adaptiverisk.com/post/2016-11-26-intrinsic/" class="list-group-item">Intrinsic</a>
+      <a href="https://blog.adaptiverisk.com/categories/" class="list-group-item">Categories</a>
       
-      <a href="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/10/04/deploy-static.html" class="list-group-item">Deployment Blues</a>
+      <a href="https://blog.adaptiverisk.com/tags/dataframe/" class="list-group-item">DataFrame</a>
       
-      <a href="https://blog.adaptiverisk.com/xll/c&#43;&#43;/2016/08/20/timestamp.html" class="list-group-item">Time Stamp Your Library</a>
+      <a href="https://blog.adaptiverisk.com/post/2023-08-22-dataslicer/" class="list-group-item">DataSlicer - DataFrame for Excel</a>
       
-      <a href="https://blog.adaptiverisk.com/power/spot/2016/07/28/power-spot.html" class="list-group-item">Spot Price Dynamics in Power Markets</a>
+      <a href="https://blog.adaptiverisk.com/post/" class="list-group-item">Posts</a>
       
-      <a href="https://blog.adaptiverisk.com/power/volatility/2016/06/11/daily-opts.html" class="list-group-item">Daily Options</a>
+      <a href="https://blog.adaptiverisk.com/tags/" class="list-group-item">Tags</a>
       
-      <a href="https://blog.adaptiverisk.com/xll/excel/2015/01/21/xlw-part5.html" class="list-group-item">UDF Services (XLW Part 5)</a>
+      <a href="https://blog.adaptiverisk.com/" class="list-group-item">The AdaptiveRisk Blog</a>
       
-      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part4.html" class="list-group-item">Input/output arrays, vectors, matrices or ranges (XLW Part 4)</a>
+      <a href="https://blog.adaptiverisk.com/tags/xll/" class="list-group-item">xll</a>
       
-      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/19/xlw-part3.html" class="list-group-item">Writing Simple Excel Functions (XLW Part 3)</a>
+      <a href="https://blog.adaptiverisk.com/categories/xll/" class="list-group-item">xll</a>
       
-      <a href="https://blog.adaptiverisk.com/xll/excel/2014/12/15/xlw-part2.html" class="list-group-item">Setting up a Project in Visual Studio 2013 and 2015 (XLW Part 2)</a>
+      <a href="https://blog.adaptiverisk.com/tags/xlw/" class="list-group-item">xlw</a>
       
     </div>
   </section>
@@ -354,6 +349,8 @@ over the years of using XLW to write add-ins.</p>
       <a href="https://blog.adaptiverisk.com/tags/energy" class="list-group-item">energy</a>
       
       <a href="https://blog.adaptiverisk.com/tags/power" class="list-group-item">power</a>
+      
+      <a href="https://blog.adaptiverisk.com/tags/dataframe" class="list-group-item">dataframe</a>
       
       <a href="https://blog.adaptiverisk.com/tags/derivatives" class="list-group-item">derivatives</a>
       
