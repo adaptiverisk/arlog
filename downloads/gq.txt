@@ -1,0 +1,1 @@
+https://stytch.com/v1/magic_links/redirect?public_token=public-token-live-26a89f59-09f8-48be-91ff-ce70e6000cb5&stytch_token_type=magic_links&token=jRXp6pVdS0llM2Ssrwg08wOxC91GGqxzakpSFGRyoqal
